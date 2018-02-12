@@ -21,7 +21,9 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
+	<!-- 패키지에 있는 자바 파일들을 web.xml에 따로 등록하지 않아도 component-scan을 이용하면 바로 사용가능 -->
 	<context:component-scan base-package="com.spring.RNews" />
+	<context:component-scan base-package="com.mongo.controller" />
 	
 	
 	
