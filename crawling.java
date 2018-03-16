@@ -25,7 +25,7 @@
  }
  public class crawling{
  	public String field = "키워드, 날짜, URL, 분류, 내용 \r\n";
- 	public String csvFileName = "c:/2015.csv";
+ 	public String csvFileName = "c:/2018.csv";
  	public String dateTag = "BUILD";
  	public String category = "KEYWORDS";
  	public String keyword = "NEWS-KEYWORDS";
@@ -41,7 +41,7 @@
  		
  	}
  	public void run(){//54500
- 		for(int i = 1 ; i< 10 ; i++){
+ 		for(int i = 1 ; i< 30 ; i++){
  			format.resetData();
  			try{
  				setURL(i);
@@ -53,7 +53,7 @@
  				setArticleDate();
  				setArticleContent();
  					
- 				writer.write(format.keyword+" , "+format.articleDate+" , "+i+" , "+format.articleCategory +" , "+format.articleContent +"\r\n");
+ 				writer.write(format.keyword+" , "+format.articleDate+" , "+url+" , "+format.articleCategory +" , "+format.articleContent +"\r\n");
  				
  				}
  			}catch(Exception e){
@@ -68,7 +68,7 @@
  		}
  	}
  	public void setURL(int i) throws Exception{
- 		url = "http://www.imaeil.com/sub_news/sub_news_view.php?news_id="+i+"&yy=2014";
+ 		url = "http://www.imaeil.com/sub_news/sub_news_view.php?news_id="+i+"&yy=2018";
  		doc = Jsoup.connect(url).get();
  	}
  	public void setKeyword(){
@@ -76,8 +76,8 @@
  		for(Element e : ele)
  			if(e.attr("NAME").equals(keyword))
  				format.keyword = e.attr("CONTENT");
- 		if(format.keyword.contains("올림픽"))
- 			format.keyword ="올림픽";
+ 		if(format.keyword.contains("평창"))
+ 			format.keyword ="평창";
  		else
  			format.keyword = null;
  				
@@ -86,12 +86,14 @@
  		ele = doc.select("meta");
  		for(Element e : ele)
  			{
- 				if(e.attr("content").equals("사회"))
- 					format.articleCategory = e.attr("content");
+ 				if(e.attr("content").equals("스포츠"))
+ 					format.articleCategory = "스포츠";
  				else if(e.attr("content").equals("경제"))
- 					format.articleCategory = e.attr("content");
+ 					format.articleCategory = "경제";
  				else if(e.attr("content").equals("문화"))
- 					format.articleCategory = e.attr("content");
+ 					format.articleCategory = "문화";
+ 				else if(e.attr("content").equals("정치"))
+ 					format.articleCategory = "정치";
  				//종류 계속 추가..
  			}
  				
