@@ -1,0 +1,60 @@
+package com.spring.RNews;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.rosuda.REngine.REXP;
+import org.rosuda.REngine.Rserve.RConnection;
+import org.rosuda.REngine.Rserve.RserveException;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+/**
+ * Handles requests for the application home page.
+ */
+@Controller
+
+public class WordcloudController {
+	@RequestMapping("/wordcloud")
+	public String Insert(Model model) throws Exception { 
+		String page = "WC_sample";
+		System.out.println("wordcloud controller access");
+		RConnection connection = null;
+		String names[];
+		String counts[];
+		REXP rexpNames;
+		REXP rexpCounts;
+		
+		//R¿ª ≈Î«ÿ ∫–ºÆ«— ∞·∞˙∏¶ word cloud «¸Ωƒø° ∏¬¥¬ πËø≠ø° ¿˙¿Â
+		
+		List<WCform> list = new ArrayList<WCform>();
+		
+        try {
+            connection = new RConnection();
+            connection.eval("wordcount_top <-head(sort(wordcount, decreasing = T), 100)");
+            rexpNames = connection.eval("names(wordcount_top)");
+            rexpCounts = connection.eval("wordcount_top");
+            
+            names = rexpNames.asStrings();
+            counts = rexpCounts.asStrings();
+            
+            for (int i = 0; i < counts.length; i++) {
+                WCform temp = new WCform(names[i], counts[i]);
+                list.add(temp);
+            }
+            
+        } catch(RserveException e) {
+            e.printStackTrace();
+        }
+        
+		//¿”Ω√∑Œ ∑£¥˝∞™¿ª ¡˝æÓ≥÷¿Ω
+
+		
+		model.addAttribute("wordcloud",list);
+		
+		return page;
+	}
+
+	
+}
+

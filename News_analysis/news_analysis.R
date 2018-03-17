@@ -1,9 +1,16 @@
+# install.packages("Rserve") // spring과 R 연동을 위한 라이브러리
+# library(Rserve)
+# Rserve(args="--no-save")
+# Rserve(FALSE,port=6311,args='--RS-encoding utf8 --no-save --slave --encoding utf8')
+
 library("rJava")
 library("KoNLP")
 library("wordcloud")
 library("RColorBrewer")
 #useSejongDic()  # 사전등록
 useNIADic()      # sejonDic보다 단어가 더 많음
+
+par(family="AppleGothic") # 한글 글씨체 설정
 
 
 # buildDictionary(ext_dic = "woorimalsam", user_dic = data.frame("가상화폐", "ncn"), replace_usr_dic = T)
@@ -45,7 +52,11 @@ wordcloud(names(wordcount_top),             # 단어
           scale = c(4, 0.5),                # 단어의 크기
           rot.per = 0.1,                    # 90도 회전시킨 단어 비율
           min.freq = 1,                     # 최소 단어 빈도
-          random.order = F,                  # 고빈도 단어 중앙에 배치
+          random.order = F,                 # 고빈도 단어 중앙에 배치
           colors = palete,                  # 색상 목록
           family="AppleGothic")             # family="AppleGothic" : 폰트 지정
 
+
+# pie(wordcount_top)                        # 원형 그래프
+
+# barplot(wordcount_top)
