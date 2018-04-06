@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/data/mongo
+        http://www.springframework.org/schema/data/mongo/spring-mongo.xsd"> 
+ 	<!-- 
+		mongodb에 접속하기 위한 설정.
+		아이디와 계정을 설정할 경우 이 부분에 적어주면 됨
+		현재는 기본 주소인 localhost:27017에 접속
+	-->
+  <mongo:mongo-client host="localhost" port="27017"/>
+	
+	<!--
+		mongoTemplate 기능을 위한 설정. 
+	 -->
+  <mongo:db-factory dbname="project" mongo-ref="mongoClient"/>
+  <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+    <constructor-arg ref="mongo"/>
+    <constructor-arg name="databaseName" value="project"/>
+  </bean>
+  
+</beans>
