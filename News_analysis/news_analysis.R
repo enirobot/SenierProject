@@ -1,3 +1,5 @@
+# if (! ("mongolite" %in% rownames(installed.packages()))) { install.packages("mongolite") } # R과 mongoDB 연동에 필요한 라이브러리 설치
+# library(mongolite)
 # install.packages("Rserve") // spring과 R 연동을 위한 라이브러리
 # library(Rserve)
 # Rserve(args="--no-save")
@@ -22,10 +24,28 @@ par(family="AppleGothic") # 한글 글씨체 설정
 # buildDictionary(ext_dic = "woorimalsam", user_dic = data.frame("코스닥", "ncn"), replace_usr_dic = T)
 
 
-DF <- read.csv('/Users/Enirobot/SenierProject/Web_scraping/news.csv',
-               stringsAsFactors = FALSE)                             # stringsAsFactors = FALSE : 문자형으로 가져옴, True면 요인(factor)형으로 가져옴
+# DF <- read.csv('/Users/Enirobot/SenierProject/Web_scraping/news.csv',
+#                stringsAsFactors = FALSE)                             # stringsAsFactors = FALSE : 문자형으로 가져옴, True면 요인(factor)형으로 가져옴
 
-data <- sapply( unique(DF["Title"]), # unique() : 중복된 행 삭제
+
+# ?mongolite::mongo 입력시 메소드에 대한 설명 볼 수 있다.
+con <- mongolite::mongo(collection = "news",          # collection의 이름
+                        db = "project",               # DB의 이름
+                        url = "mongodb://localhost",  # url 주소
+                        verbose = TRUE)               # emit some more output
+                              # additional connection options such as SSL keys/certs.
+
+# # 정치 카테고리 다 가져옴
+# df <- con$find(query = '{"articleCategory": "정치"}')
+# 
+#테이블의 모든 정보 가져옴
+df <- con$find(query = '{}')
+
+# data <- sapply( unique(DF["Title"]), # unique() : 중복된 행 삭제
+#                 extractNoun,         # extractNoun : 명사 추출
+#                 USE.NAMES = F )      # USE.NAMES = F : 원문장 제외
+
+data <- sapply( unique(df["articleContent"]), # unique() : 중복된 행 삭제
                 extractNoun,         # extractNoun : 명사 추출
                 USE.NAMES = F )      # USE.NAMES = F : 원문장 제외
 

@@ -1,14 +1,2 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="javax.servlet.http.HttpServletRequest"/>
-<fullyQualifiedTypeName name="org.springframework.web.servlet.ModelAndView"/>
-<fullyQualifiedTypeName name="java.io.File"/>
-<fullyQualifiedTypeName name="org.rosuda.REngine.REXPExpressionVector"/>
-<fullyQualifiedTypeName name="org.rosuda.REngine.REXPMismatchException"/>
-<fullyQualifiedTypeName name="org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMethodMappingNamingStrategy"/>
-<fullyQualifiedTypeName name="java.lang.String"/>
-<fullyQualifiedTypeName name="org.rosuda.REngine.REXP"/>
-<fullyQualifiedTypeName name="java.util.ArrayList"/>
-<fullyQualifiedTypeName name="org.rosuda.REngine.Rserve.RConnection"/>
-<fullyQualifiedTypeName name="org.rosuda.REngine.Rserve.RserveException"/>
-</qualifiedTypeNameHistroy>
+<qualifiedTypeNameHistroy/>

@@ -28,8 +28,8 @@
 	canvas.width  = div.offsetWidth;
 	
 	var arr = [];
-	<c:forEach items="${wordCloud}" var="item">
-		arr.push(["${item.word}", "${item.count}"]);
+	<c:forEach items="${wordcloud}" var="item">
+		arr.push(["${item.word}", "${item.size}"]);
 	</c:forEach>
 	
 
@@ -40,7 +40,7 @@
   		weightFactor: 3,
  		shape : "circle",
  		click: function(item) {
- 			    alert("word : "+ item[0] +" count : " + item[1]);
+ 			    alert("word : "+ item[0] +" size : " + item[1]);
  		}
 	}
 
