@@ -1,4 +1,4 @@
-package com.team.news.MongoDB;
+package com.team.news.mongoDB;
 
 import org.springframework.data.annotation.Id;
 

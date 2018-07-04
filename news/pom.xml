@@ -43,6 +43,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180130</version>
+        </dependency>
+
         <!--java 형태소 분석 라이브러리 -->
         <dependency>
             <groupId>org.bitbucket.eunjeon</groupId>
