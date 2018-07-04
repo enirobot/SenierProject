@@ -13,7 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class MainPageController {
@@ -23,22 +25,21 @@ public class MainPageController {
 
     @GetMapping("/main")
     public String main(Model model) {
-        List<News> news = repository.findByArticleDateGreaterThanEqual("2018/07/03 20:59");
-        List<WCForm> wcForms = new ArrayList<>();
+//        List<News> news = repository.findByArticleDateGreaterThanEqual("2018/07/03 20:59");
+        List list = new ArrayList<>();
 
 
 
-        for (int i = 0; i < news.size(); i++) {
-
-            wcForms.add( new WCForm( String.valueOf(i), String.valueOf(i)) );
+        for (int i = 0; i < 10; i++) {
+            Map map = new HashMap();
+            map.put("word", String.valueOf(i));
+            map.put("size", String.valueOf(i));
+            list.add(map);
         }
 
+        JSONArray jsonArray = new JSONArray(list);
 
-        JSONArray mapResult = new JSONArray(wcForms);
-
-        System.out.println(mapResult.get(0));
-
-//        model.addAttribute( "wordcloud", jsonText );
+        model.addAttribute( "json", jsonArray );
 
 //        model.addAttribute("wordcloud", wcForms);
 
