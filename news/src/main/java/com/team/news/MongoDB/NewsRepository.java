@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface NewsRepository extends MongoRepository<News, String> {
 
-    List<News> findAll();
-    List<News> findByArticleDateGreaterThanEqual(String ArticleDate);
+    List<News> findAll();   // 모든 내용
+    List<News> findByDateGreaterThanEqual(String date); // date 날짜 이후의 내용
 }

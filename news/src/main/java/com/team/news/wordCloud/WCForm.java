@@ -1,13 +1,16 @@
 package com.team.news.wordCloud;
 
+/**
+ * 클라이언트에 정보 보낼 때 사용되는 모델
+ */
 public class WCForm {
     private String word;
-    private String size;
+    private String counts;
 
-    public WCForm(String word, String size)
+    public WCForm(String word, String counts)
     {
         this.word = word;
-        this.size = size;
+        this.counts = counts;
     }
 
     public String getWord() {
@@ -18,11 +21,11 @@ public class WCForm {
         this.word = word;
     }
 
-    public String getSize() {
-        return size;
+    public String getCounts() {
+        return counts;
     }
 
-    public void setSize(String size) {
-        this.size = size;
+    public void setCount(String counts) {
+        this.counts = counts;
     }
 }

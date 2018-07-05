@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * Handles requests for the application home page.
- */
 
 @RestController
 public class findController {
@@ -26,6 +23,6 @@ public class findController {
 
 	@GetMapping("/findNew")
     public List<News> find() {
-	    return repository.findByArticleDateGreaterThanEqual("2018/07/03 20:59");
+	    return repository.findByDateGreaterThanEqual("2018/07/03 20:59");
     }
 }

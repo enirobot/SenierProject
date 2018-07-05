@@ -10,7 +10,6 @@ public class HomeController {
 
     @GetMapping("/home")
     public String index(Model model) {
-        model.addAttribute("name", "SpringBlog from Millky");
 
         return "home";
     }

@@ -1,21 +1,19 @@
 package com.team.news.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.news.mongoDB.News;
 import com.team.news.mongoDB.NewsRepository;
 import com.team.news.wordCloud.WCForm;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.bitbucket.eunjeon.seunjeon.Analyzer;
+import org.bitbucket.eunjeon.seunjeon.LNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 
 @Controller
 public class MainPageController {
@@ -23,25 +21,40 @@ public class MainPageController {
     @Autowired
     private NewsRepository repository;
 
-    @GetMapping("/main")
-    public String main(Model model) {
-//        List<News> news = repository.findByArticleDateGreaterThanEqual("2018/07/03 20:59");
-        List list = new ArrayList<>();
+    @ResponseBody
+    @PostMapping("/WordCloud")
+    public List<WCForm> wc() {
+        List<News> news = repository.findAll();
+//        List<News> news = repository.findByDateGreaterThanEqual("2018/07/03 20:00");
+        List<WCForm> list = new ArrayList<>();
+        HashMap<String, Integer> wordList = new HashMap<>();
+        String temp = null;
 
+        // 형태소 분석
+        for (News item : news) {
+            for (LNode node : Analyzer.parseJava(item.title)) {
+                if (node.morpheme().getFeatureHead().equalsIgnoreCase("NNG")) {
+                    temp = node.morpheme().getSurface();
 
+                    if (!wordList.containsKey(temp)) {
+                        wordList.put(temp, 1);
 
-        for (int i = 0; i < 10; i++) {
-            Map map = new HashMap();
-            map.put("word", String.valueOf(i));
-            map.put("size", String.valueOf(i));
-            list.add(map);
+                    } else {
+                        wordList.put(temp, wordList.get(temp) + 1);
+                    }
+                }
+            }
         }
 
-        JSONArray jsonArray = new JSONArray(list);
+        wordList.entrySet().stream()
+                .sorted((k1, k2) -> -k1.getValue().compareTo(k2.getValue()))
+                .forEach(k -> list.add(new WCForm(k.getKey(), String.valueOf(k.getValue()))));
 
-        model.addAttribute( "json", jsonArray );
+        return list;
+    }
 
-//        model.addAttribute("wordcloud", wcForms);
+    @GetMapping("/main")
+    public String main(Model model) {
 
         return "main";
     }
