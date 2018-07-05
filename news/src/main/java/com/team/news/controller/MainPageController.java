@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.*;
 
+/**
+ * 메인 페이지
+ */
 
 @Controller
 public class MainPageController {

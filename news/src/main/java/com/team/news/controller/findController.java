@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 
+/**
+ * DB 테스트할 때 사용되는 컨트롤러
+ */
+
 @RestController
 public class findController {
 
