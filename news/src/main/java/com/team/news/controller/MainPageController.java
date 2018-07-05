@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -27,11 +28,21 @@ public class MainPageController {
     @ResponseBody
     @PostMapping("/WordCloud")
     public List<WCForm> wc() {
-        List<News> news = repository.findAll();
-//        List<News> news = repository.findByDateGreaterThanEqual("2018/07/03 20:00");
         List<WCForm> list = new ArrayList<>();
         HashMap<String, Integer> wordList = new HashMap<>();
         String temp = null;
+
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
+        Calendar cal = Calendar.getInstance();
+        cal.add( Calendar.HOUR_OF_DAY, -1 );
+        Date before = cal.getTime();
+        System.out.println( before );
+        System.out.println( date.format( before ) );
+//        List<News> news = repository.findByDateGreaterThanEqual( date.format( before ) );
+        List<News> news = repository.findByDateGreaterThanEqual("2018/07/04 20:00");
+
+        if (news.size() <= 0)
+            return null;
 
         // 형태소 분석
         for (News item : news) {
