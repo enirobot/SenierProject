@@ -71,7 +71,7 @@
             success: function(result) {
 
                 for (var i = 0; i < result.length; i++) {
-                    arr.push( [ result[i].word, result[i].counts ] );
+                    arr.push( [ result[i].word, result[i].counts, result[i].urlList ] );
                 }
 
                 var options = {
@@ -84,12 +84,15 @@
                     minSize: 3,
                     figPath: "circle",
                     click: function(item) {
-                        alert("word : "+ item[0] +" count : " + item[1]);
+                        alert("word : " + item[0] + " count : " + item[1] + " list : " + item[2]);
                     }
                 }
 
                 WordCloud(document.getElementById('canvas_cloud'), options);
 
+            },
+            error : function () {
+                alert("fail");
             }
         })
 

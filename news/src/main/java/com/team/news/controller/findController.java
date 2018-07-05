@@ -17,10 +17,14 @@ import java.util.List;
 @RestController
 public class findController {
 
-    @Autowired
-	private NewsRepository repository;
+    private final NewsRepository repository;
 
-	@GetMapping("/findAll")
+    @Autowired
+    public findController(NewsRepository repository) {
+        this.repository = repository;
+    }
+
+    @GetMapping("/findAll")
 	public List<News> findAll() {
 	    return repository.findAll();
 	}

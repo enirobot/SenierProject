@@ -3,6 +3,7 @@ package com.team.news.controller;
 import com.team.news.mongoDB.News;
 import com.team.news.mongoDB.NewsRepository;
 import com.team.news.wordCloud.WCForm;
+import com.team.news.wordCloud.WCNode;
 import org.bitbucket.eunjeon.seunjeon.Analyzer;
 import org.bitbucket.eunjeon.seunjeon.LNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,27 +23,30 @@ import java.util.*;
 @Controller
 public class MainPageController {
 
+    private final NewsRepository repository;
+
     @Autowired
-    private NewsRepository repository;
+    public MainPageController(NewsRepository repository) {
+        this.repository = repository;
+    }
+
+    @GetMapping("/main")
+    public String main(Model model) {
+
+        return "main";
+    }
 
     @ResponseBody
     @PostMapping("/WordCloud")
     public List<WCForm> wc() {
         List<WCForm> list = new ArrayList<>();
-        HashMap<String, Integer> wordList = new HashMap<>();
+        HashMap<String, WCNode> wordList = new HashMap<>();
         String temp = null;
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.HOUR_OF_DAY, -1 );
-        Date before = cal.getTime();
-        System.out.println( before );
-        System.out.println( date.format( before ) );
-//        List<News> news = repository.findByDateGreaterThanEqual( date.format( before ) );
-        List<News> news = repository.findByDateGreaterThanEqual("2018/07/04 20:00");
-
-        if (news.size() <= 0)
-            return null;
+        cal.add( Calendar.HOUR_OF_DAY, -7 );    // 7시간 이내
+        List<News> news = repository.findByDateGreaterThanEqual( date.format( cal.getTime() ) );
 
         // 형태소 분석
         for (News item : news) {
@@ -51,25 +55,47 @@ public class MainPageController {
                     temp = node.morpheme().getSurface();
 
                     if (!wordList.containsKey(temp)) {
-                        wordList.put(temp, 1);
+                        wordList.put(temp, new WCNode(1, new ArrayList<>()));
+                        wordList.get(temp).add(item.url);
 
                     } else {
-                        wordList.put(temp, wordList.get(temp) + 1);
+                        WCNode wcTemp = wordList.get(temp);
+                        wcTemp.setCounts( wcTemp.getCounts() + 1 );
+                        wcTemp.add( item.url );
+                        wordList.put(temp, wcTemp);
                     }
                 }
             }
         }
 
+        WCFormComparator wcFormComparator = new WCFormComparator();
+
+        // 오름차순 정렬
         wordList.entrySet().stream()
-                .sorted((k1, k2) -> -k1.getValue().compareTo(k2.getValue()))
-                .forEach(k -> list.add(new WCForm(k.getKey(), String.valueOf(k.getValue()))));
+                .sorted((k1, k2) ->
+                        wcFormComparator.compare(k1.getValue(), k2.getValue()))
+                .forEach(k ->
+                        list.add(new WCForm(k.getKey(),
+                                String.valueOf(k.getValue().getCounts()),
+                                k.getValue().getUrlList())));
 
-        return list;
+        return list.subList(0, 30);     // 상위 30개
     }
 
-    @GetMapping("/main")
-    public String main(Model model) {
+    // 정렬할 때 사용할 comparator 정의
+    class WCFormComparator implements Comparator<WCNode> {
 
-        return "main";
+        @Override
+        public int compare(WCNode o1, WCNode o2) {
+
+            if (o1.getCounts() > o2.getCounts()) {
+                return -1;
+            } else if (o1.getCounts() < o2.getCounts()) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
     }
+
 }
