@@ -36,7 +36,11 @@ public class MainPageController {
         Calendar cal = Calendar.getInstance();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         cal.add( Calendar.HOUR_OF_DAY, -10 );    // 1시간 이내
+=======
+        cal.add( Calendar.HOUR_OF_DAY, -1 );    // 1시간 이내
+>>>>>>> parent of 9229125... 내용없음
 =======
         cal.add( Calendar.HOUR_OF_DAY, -1 );    // 1시간 이내
 >>>>>>> parent of 9229125... 내용없음
