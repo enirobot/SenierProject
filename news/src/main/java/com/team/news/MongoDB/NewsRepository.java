@@ -8,4 +8,5 @@ public interface NewsRepository extends MongoRepository<News, String> {
 
     List<News> findAll();   // 모든 내용
     List<News> findByDateGreaterThanEqual(String date); // date 날짜 이후의 내용
+    int countByCategoryAndCompany(String category, String company);
 }
