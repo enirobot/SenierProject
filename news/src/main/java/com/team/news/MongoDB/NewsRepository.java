@@ -1,4 +1,4 @@
-package com.team.news.mongoDB;
+package com.team.news.MongoDB;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

@@ -1,7 +1,7 @@
 package com.team.news.controller;
 
-import com.team.news.mongoDB.News;
-import com.team.news.mongoDB.NewsRepository;
+import com.team.news.MongoDB.News;
+import com.team.news.MongoDB.NewsRepository;
 import com.team.news.wordCloud.WCForm;
 import com.team.news.wordCloud.WCNode;
 import org.bitbucket.eunjeon.seunjeon.Analyzer;
@@ -45,23 +45,23 @@ public class MainPageController {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.HOUR_OF_DAY, -7 );    // 7시간 이내
+        cal.add( Calendar.HOUR_OF_DAY, -1 );    // 1시간 이내
         List<News> news = repository.findByDateGreaterThanEqual( date.format( cal.getTime() ) );
 
         // 형태소 분석
         for (News item : news) {
-            for (LNode node : Analyzer.parseJava(item.title)) {
+            for (LNode node : Analyzer.parseJava(item.getTitle())) {
                 if (node.morpheme().getFeatureHead().equalsIgnoreCase("NNG")) {
                     temp = node.morpheme().getSurface();
 
                     if (!wordList.containsKey(temp)) {
                         wordList.put(temp, new WCNode(1, new ArrayList<>()));
-                        wordList.get(temp).add(item.url);
+                        wordList.get(temp).add(item.getUrl());
 
                     } else {
                         WCNode wcTemp = wordList.get(temp);
-                        wcTemp.setCounts( wcTemp.getCounts() + 1 );
-                        wcTemp.add( item.url );
+                        wcTemp.setCounts(wcTemp.getCounts() + 1);
+                        wcTemp.add(item.getUrl());
                         wordList.put(temp, wcTemp);
                     }
                 }
