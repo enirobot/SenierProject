@@ -33,4 +33,5 @@ public class findController {
     public List<News> find() {
 	    return repository.findByDateGreaterThanEqual("2018/07/03 20:59");
     }
+    
 }
