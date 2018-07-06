@@ -18,10 +18,14 @@ import java.util.*;
 public class GraphController {
 
 
+    private final NewsRepository repository;
+    final MongoTemplate mongoTemplate;
+
     @Autowired
-    private NewsRepository repository;
-    @Autowired
-    MongoTemplate mongoTemplate;
+    public GraphController(NewsRepository repository, MongoTemplate mongoTemplate) {
+        this.repository = repository;
+        this.mongoTemplate = mongoTemplate;
+    }
 
     @ResponseBody
     @PostMapping("/sankey_post")
@@ -54,7 +58,7 @@ public class GraphController {
                 SankeyForm tmp = new SankeyForm();
                 tmp.source = company.get(i);
                 tmp.destination = category.get(j);
-                tmp.value = repository.countByCategoryAndCompany(company.get(i),category.get(j));
+                tmp.value = repository.countByCategoryAndCompany(category.get(j), company.get(i));
 
                 System.out.println(tmp.toString());
                 list.add(tmp);
