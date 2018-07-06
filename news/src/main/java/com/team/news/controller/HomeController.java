@@ -13,7 +13,8 @@ public class HomeController {
 
     @GetMapping("/home")
     public String index(Model model) {
-
         return "home";
     }
+
+
 }
