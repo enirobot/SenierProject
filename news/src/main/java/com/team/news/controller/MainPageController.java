@@ -45,7 +45,7 @@ public class MainPageController {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.HOUR_OF_DAY, -1 );    // 1시간 이내
+        cal.add( Calendar.HOUR_OF_DAY, -10 );    // 1시간 이내
         List<News> news = repository.findByDateGreaterThanEqual( date.format( cal.getTime() ) );
 
         // 형태소 분석
