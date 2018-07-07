@@ -1,5 +1,6 @@
 package com.team.news.controller;
 
+import com.team.news.Form.MainNewsList;
 import com.team.news.Form.News;
 import com.team.news.Repository.NewsRepository;
 import com.team.news.Form.WCForm;
@@ -11,8 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -45,9 +48,8 @@ public class MainPageController {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.HOUR_OF_DAY, -1 );    // 1시간 이내
+        cal.add( Calendar.HOUR_OF_DAY, -23 );    // 1시간 이내
         List<News> news = repository.findByDateGreaterThanEqual( date.format( cal.getTime() ) );
-
         // 형태소 분석
         for (News item : news) {
             for (LNode node : Analyzer.parseJava(item.getTitle())) {
@@ -56,12 +58,12 @@ public class MainPageController {
 
                     if (!wordList.containsKey(temp)) {
                         wordList.put(temp, new WCNode(1, new ArrayList<>()));
-                        wordList.get(temp).add(item.getUrl());
+                        wordList.get(temp).add(item.getId());
 
                     } else {
                         WCNode wcTemp = wordList.get(temp);
                         wcTemp.setCounts(wcTemp.getCounts() + 1);
-                        wcTemp.add(item.getUrl());
+                        wcTemp.add(item.getId());
                         wordList.put(temp, wcTemp);
                     }
                 }
@@ -77,7 +79,7 @@ public class MainPageController {
                 .forEach(k ->
                         list.add(new WCForm(k.getKey(),
                                 String.valueOf(k.getValue().getCounts()),
-                                k.getValue().getUrlList())));
+                                k.getValue().getIdList())));
 
         return list.subList(0, 30);     // 상위 30개
     }
@@ -96,6 +98,24 @@ public class MainPageController {
                 return 0;
             }
         }
+    }
+
+    @ResponseBody
+    @PostMapping("/newsList")
+    public List<MainNewsList> NewsList(HttpServletRequest request) {
+        List<News> newsList;
+        List<MainNewsList> mainNewsList = new ArrayList<>();
+
+        System.out.println( request.getAttribute("idList") );
+//        System.out.println( repository.findAllById(itemList) );
+//
+//        newsList = repository.findAllById(itemList);
+//
+//        for(News item : newsList) {
+//            mainNewsList.add(new MainNewsList(item.getTitle(), item.getUrl()));
+//        }
+
+        return mainNewsList;
     }
 
 }

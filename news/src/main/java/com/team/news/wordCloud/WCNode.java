@@ -8,11 +8,11 @@ import java.util.List;
 
 public class WCNode {
     private int counts;
-    private List<String> urlList;
+    private List<String> idList;
 
-    public WCNode(int counts, List<String> urlList) {
+    public WCNode(int counts, List<String> idList) {
         this.counts = counts;
-        this.urlList = urlList;
+        this.idList = idList;
     }
 
     public int getCounts() {
@@ -23,15 +23,15 @@ public class WCNode {
         this.counts = counts;
     }
 
-    public List<String> getUrlList() {
-        return urlList;
+    public List<String> getIdList() {
+        return idList;
     }
 
-    public void setUrlList(List<String> urlList) {
-        this.urlList = urlList;
+    public void setIdList(List<String> idList) {
+        this.idList = idList;
     }
 
     public void add(String id) {
-        urlList.add(id);
+        idList.add(id);
     }
 }

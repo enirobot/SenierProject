@@ -8,14 +8,16 @@ import java.util.List;
 public class WCForm {
     private String word;
     private String counts;
-    private List<String> urlList;
+    private List<String> idList;
 
-    public WCForm(String word, String counts, List<String> urlList)
+    public WCForm(String word, String counts, List<String> idList)
     {
         this.word = word;
         this.counts = counts;
-        this.urlList = urlList;
+        this.idList = idList;
     }
+
+    public WCForm() {}
 
     public String getWord() {
         return word;
@@ -33,11 +35,11 @@ public class WCForm {
         this.counts = counts;
     }
 
-    public List<String> getUrlList() {
-        return urlList;
+    public List<String> getIdList() {
+        return idList;
     }
 
-    public void setUrlList(List<String> urlList) {
-        this.urlList = urlList;
+    public void setIdList(List<String> idList) {
+        this.idList = idList;
     }
 }

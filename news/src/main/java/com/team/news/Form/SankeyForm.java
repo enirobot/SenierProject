@@ -5,6 +5,8 @@ public class SankeyForm {
     public String destination;
     public int value;
 
+    public SankeyForm() {}
+
     @Override
     public String toString()
     {
