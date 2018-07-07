@@ -1,5 +1,6 @@
 package com.team.news.controller;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
 import com.mongodb.client.DistinctIterable;
 import com.team.news.Form.SankeyForm;
@@ -31,7 +32,7 @@ public class GraphController {
     @PostMapping("/sankey_post")
     public List<SankeyForm> sankey() {
 
-        System.out.println("efeeefe");
+        System.out.println("sankey");
         List<SankeyForm> list = new ArrayList<>();
 
         DistinctIterable<String> distinct = mongoTemplate.getCollection("news").distinct("company", String.class);
@@ -52,6 +53,45 @@ public class GraphController {
             }
         });
 
+        addList(list, company, category);
+
+        return list;
+    }
+
+
+    @ResponseBody
+    @PostMapping("/sankey_sports_post")
+    public List<SankeyForm> sankey_sports() {
+
+        System.out.println("sankey_sports");
+        List<SankeyForm> list = new ArrayList<>();
+
+        DistinctIterable<String> distinct = mongoTemplate.getCollection("news").distinct("company", String.class);
+        ArrayList<String> company = new ArrayList<String>();
+        distinct.forEach(new Block<String>() {
+            @Override
+            public void apply(final String result) {
+                company.add(result);
+            }
+        });
+
+
+        BasicDBObject querry = new BasicDBObject();
+        querry.put("category",java.util.regex.Pattern.compile("스포츠"));
+        distinct = mongoTemplate.getCollection("news").distinct("category",querry, String.class);
+        ArrayList<String> category = new ArrayList<String>();
+        distinct.forEach(new Block<String>() {
+            @Override
+            public void apply(final String result) {
+                category.add(result);
+            }
+        });
+
+        addList(list, company, category);
+
+        return list;
+    }
+    private void addList(List<SankeyForm> list, ArrayList<String> company, ArrayList<String> category) {
         for(int i=0;i<company.size();i++){
             for(int j=0;j<category.size();j++)
             {
@@ -60,14 +100,11 @@ public class GraphController {
                 tmp.destination = category.get(j);
                 tmp.value = repository.countByCategoryAndCompany(category.get(j), company.get(i));
 
-//                System.out.println(tmp.toString());
-                list.add(tmp);
+                if(tmp.value != 0)
+                    list.add(tmp);
             }
         }
-
-        return list;
     }
-
     @GetMapping("/sankey")
     public String main(Model model) {
 
