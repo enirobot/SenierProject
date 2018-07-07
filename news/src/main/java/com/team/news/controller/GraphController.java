@@ -3,7 +3,7 @@ package com.team.news.controller;
 import com.mongodb.Block;
 import com.mongodb.client.DistinctIterable;
 import com.team.news.Form.SankeyForm;
-import com.team.news.MongoDB.NewsRepository;
+import com.team.news.Repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ public class GraphController {
 
 
     private final NewsRepository repository;
-    final MongoTemplate mongoTemplate;
+    private final MongoTemplate mongoTemplate;
 
     @Autowired
     public GraphController(NewsRepository repository, MongoTemplate mongoTemplate) {
@@ -60,7 +60,7 @@ public class GraphController {
                 tmp.destination = category.get(j);
                 tmp.value = repository.countByCategoryAndCompany(category.get(j), company.get(i));
 
-                System.out.println(tmp.toString());
+//                System.out.println(tmp.toString());
                 list.add(tmp);
             }
         }

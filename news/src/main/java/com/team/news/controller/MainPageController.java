@@ -1,8 +1,8 @@
 package com.team.news.controller;
 
-import com.team.news.MongoDB.News;
-import com.team.news.MongoDB.NewsRepository;
-import com.team.news.wordCloud.WCForm;
+import com.team.news.Form.News;
+import com.team.news.Repository.NewsRepository;
+import com.team.news.Form.WCForm;
 import com.team.news.wordCloud.WCNode;
 import org.bitbucket.eunjeon.seunjeon.Analyzer;
 import org.bitbucket.eunjeon.seunjeon.LNode;

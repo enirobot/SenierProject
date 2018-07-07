@@ -33,10 +33,22 @@
             data.addColumn('number', 'Weight');
             data.addRows(inputdata);
 
+            var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
+                '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];
+
             // Sets chart options.
             var options = {
                 width: 1280,
-                height: 1980
+                height: 1980,
+                sankey: {
+                    node: {
+                        colors: colors
+                    },
+                    link: {
+                        colorMode: 'gradient',
+                        colors: colors
+                    }
+                }
             };
 
             // Instantiates and draws our chart, passing in some options.

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.team.news.MongoDB.News;
+import com.team.news.Form.News;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

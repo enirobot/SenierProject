@@ -1,10 +1,10 @@
 package com.team.news.controller;
 
-import com.team.news.MongoDB.NewsRepository;
+import com.team.news.Repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.team.news.MongoDB.News;
+import com.team.news.Form.News;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -33,4 +33,6 @@ public class findController {
     public List<News> find() {
 	    return repository.findByDateGreaterThanEqual("2018/07/03 20:59");
     }
+
+
 }
