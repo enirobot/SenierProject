@@ -48,7 +48,7 @@ public class MainPageController {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.HOUR_OF_DAY, -23 );    // 1시간 이내
+        cal.add( Calendar.HOUR_OF_DAY, -900 );    // 1시간 이내
         List<News> news = repository.findByDateGreaterThanEqual( date.format( cal.getTime() ) );
         // 형태소 분석
         for (News item : news) {
@@ -81,7 +81,7 @@ public class MainPageController {
                                 String.valueOf(k.getValue().getCounts()),
                                 k.getValue().getIdList())));
 
-        return list.subList(0, 30);     // 상위 30개
+        return list.subList(0, 50);     // 상위 30개
     }
 
     // 정렬할 때 사용할 comparator 정의

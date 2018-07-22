@@ -91,6 +91,8 @@ public class GraphController {
 
         return list;
     }
+
+
     private void addList(List<SankeyForm> list, ArrayList<String> company, ArrayList<String> category) {
         for(int i=0;i<company.size();i++){
             for(int j=0;j<category.size();j++)
@@ -105,6 +107,8 @@ public class GraphController {
             }
         }
     }
+
+
     @GetMapping("/sankey")
     public String main(Model model) {
 
