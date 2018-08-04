@@ -1,4 +1,4 @@
-package com.team.news.webCrawler;
+package com.team.news.WebCrawler;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.team.news.Form.News;
 
+import com.team.news.Repository.NewsRepository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -23,6 +24,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 
 public class Crawling_naver{
+
     private String url;
     private Document doc;
     private Elements ele;// = doc.select("div.article");
@@ -54,9 +56,9 @@ public class Crawling_naver{
     public int run(int num, String category) {
         int cnt = 0;
         String tmp_hour;
-        System.out.println("--------"+category+"--------");
+//        System.out.println("--------"+category+"--------");
         for(int i=1;i<30;i++) {
-            System.out.println("page : "+i);
+//            System.out.println("page : "+i);
 
             try {
 
@@ -88,11 +90,11 @@ public class Crawling_naver{
                             //System.out.println(ele.text());
                         }
                         catch(Exception e2) {
-                            System.out.println("content error!");
+//                            System.out.println("content error!");
                         }
                         finally {
                             if(!tmp_hour.contains("분전")) {
-                                System.out.println("기사 개수 : "+cnt);
+//                                System.out.println("기사 개수 : "+cnt);
                                 return cnt;
                             }
                             else {
@@ -109,7 +111,7 @@ public class Crawling_naver{
                 e1.printStackTrace();
             }
         }
-        System.out.println("기사 개수 : "+cnt);
+//        System.out.println("기사 개수 : "+cnt);
         return cnt;
     }
 
@@ -120,10 +122,10 @@ public class Crawling_naver{
         String tmp_hour;
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
         String attach_url = "https://entertain.naver.com";
-        System.out.println("--------"+category+"--------");
+//        System.out.println("--------"+category+"--------");
         for(int i=1;i<30;++i) {
 
-            System.out.println("page : "+i);
+//            System.out.println("page : "+i);
 
             try {
                 this.url = "https://entertain.naver.com/now?sid=106&date="+date.format(today)+"&page="+i;
@@ -158,11 +160,11 @@ public class Crawling_naver{
                             news.setContent(ele.text());
                         }
                         catch(Exception e2) {
-                            System.out.println("content error!");
+//                            System.out.println("content error!");
                         }
                         finally {
                             if(!tmp_hour.contains("분전")) {
-                                System.out.println("기사 개수 : "+cnt);
+//                                System.out.println("기사 개수 : "+cnt);
                                 return cnt;
                             }
                             else {
@@ -179,7 +181,7 @@ public class Crawling_naver{
                 e1.printStackTrace();
             }
         }
-        System.out.println("기사 개수 : "+cnt);
+//        System.out.println("기사 개수 : "+cnt);
         return cnt;
 
     }
@@ -187,10 +189,10 @@ public class Crawling_naver{
 
     public int run_sports(String group, String category) throws java.text.ParseException {
         int cnt = 0;
-        System.out.println("--------"+category+"--------");
+//        System.out.println("--------"+category+"--------");
         for(int i=1;i<2;i++) {
 
-            System.out.println("page : "+i);
+//            System.out.println("page : "+i);
 
             try {
 
@@ -227,11 +229,11 @@ public class Crawling_naver{
                                         ele = doc.select(".news_end");
                                         news.setContent(ele.text());
                                     } catch (Exception e2) {
-                                        System.out.println("content error!");
+//                                        System.out.println("content error!");
                                     } finally {
                                         //시간체크
                                         if (!news.IsInOnehour()) {
-                                            System.out.println("기사 개수 : " + cnt);
+//                                            System.out.println("기사 개수 : " + cnt);
                                             return cnt;
                                         }
 
@@ -257,7 +259,7 @@ public class Crawling_naver{
                 e1.printStackTrace();
             }
         }
-        System.out.println("기사 개수 : "+cnt);
+//        System.out.println("기사 개수 : " + cnt);
         return cnt;
     }
 

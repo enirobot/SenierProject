@@ -1,4 +1,4 @@
-package com.team.news.controller;
+package com.team.news.Controller;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.Block;

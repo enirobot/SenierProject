@@ -1,9 +1,8 @@
-package com.team.news.controller;
+package com.team.news.Controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * html 테스트할 때 사용되는 컨트롤러

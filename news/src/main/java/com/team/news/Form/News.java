@@ -71,7 +71,7 @@ public class News {
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        System.out.println(s);
+//        System.out.println(s);
         cal.add(Calendar.MINUTE, -Integer.parseInt(s));
         this.date = dateFormat.format(cal.getTime());
     }

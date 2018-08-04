@@ -1,4 +1,4 @@
-package com.team.news.controller;
+package com.team.news.Controller;
 
 import com.team.news.Repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
