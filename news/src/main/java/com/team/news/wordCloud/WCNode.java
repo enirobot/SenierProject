@@ -1,4 +1,4 @@
-package com.team.news.WordCloud;
+package com.team.news.wordCloud;
 
 import java.util.List;
 

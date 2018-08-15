@@ -1,10 +1,10 @@
-package com.team.news.Controller;
+package com.team.news.controller;
 
 import com.team.news.Form.MainNewsList;
 import com.team.news.Form.News;
 import com.team.news.Repository.NewsRepository;
 import com.team.news.Form.WCForm;
-import com.team.news.WordCloud.WCNode;
+import com.team.news.wordCloud.WCNode;
 import org.bitbucket.eunjeon.seunjeon.Analyzer;
 import org.bitbucket.eunjeon.seunjeon.LNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,9 +48,8 @@ public class MainPageController {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.HOUR_OF_DAY, -1 );    // 1시간 이내
+        cal.add( Calendar.HOUR_OF_DAY, -900 );    // 1시간 이내
         List<News> news = repository.findByDateGreaterThanEqual( date.format( cal.getTime() ) );
-
         // 형태소 분석
         for (News item : news) {
             for (LNode node : Analyzer.parseJava(item.getTitle())) {
