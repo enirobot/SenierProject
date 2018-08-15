@@ -4,7 +4,7 @@ import com.team.news.Form.MainNewsList;
 import com.team.news.Form.News;
 import com.team.news.Repository.NewsRepository;
 import com.team.news.Form.WCForm;
-import com.team.news.WordCloud.WCNode;
+import com.team.news.Form.WCNode;
 import org.bitbucket.eunjeon.seunjeon.Analyzer;
 import org.bitbucket.eunjeon.seunjeon.LNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +81,7 @@ public class MainPageController {
                                 String.valueOf(k.getValue().getCounts()),
                                 k.getValue().getIdList())));
 
-        return list.subList(0, 50);     // 상위 30개
+        return list.subList(0, 30);     // 상위 30개
     }
 
     // 정렬할 때 사용할 comparator 정의

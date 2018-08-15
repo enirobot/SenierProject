@@ -11,7 +11,7 @@ import java.util.Date;
 
 
 /**
- * DB에 저장되어 있는 한개의 요소를 나타내는 모델
+ * 정제되지 않은 뉴스 데이터를 나타내는 모델
  */
 public class News {
 

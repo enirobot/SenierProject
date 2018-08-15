@@ -1,5 +1,9 @@
 package com.team.news.Form;
 
+/**
+ *
+ */
+
 public class MainNewsList {
     private String title;
     private String url;
