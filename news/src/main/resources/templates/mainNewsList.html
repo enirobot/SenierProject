@@ -5,55 +5,11 @@
     <title>Title</title>
 </head>
 <body>
-
-
-
-
 <script type="text/javascript">
-    var arr = [];
-
-    canvas.height = div.offsetHeight;
-    canvas.width  = div.offsetWidth;
-
-    //html이 로딩되고 실행
-    $(document).ready(function(){
-        var data = null;
-
-        $.ajax({
-            url: "/WordCloud",
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            success: function(result) {
-
-            },
-            error : function () {
-                alert("fail");
-            }
-        })
-    });
-
-
-    function nextPage(data) {
-
-        $.ajax({
-            url: "/newsList",
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            success : function (data) {
-            },
-            error : function () {
-                location.href= "/mainNewsList";
-            }
-
-        });
-    }
-
-
+    temp=location.href.split("?");
+    data=temp[1].split(":");
+    var id = data[0];
+    document.write(id);
 </script>
-
 </body>
 </html>
