@@ -1,16 +1,20 @@
 package com.team.news.Analysis;
 
+import com.mongodb.Block;
+import com.mongodb.client.DistinctIterable;
 import com.team.news.Form.*;
+import com.team.news.Repository.GraphRepository;
 import com.team.news.Repository.MainNewsListRepository;
 import com.team.news.Repository.NewsRepository;
 import org.bitbucket.eunjeon.seunjeon.Analyzer;
 import org.bitbucket.eunjeon.seunjeon.LNode;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Morphological {
+
 
     public void analysis(NewsRepository newsRepository, MainNewsListRepository mainNewsListRepository, String beforeTime) {
 
@@ -83,6 +87,102 @@ public class Morphological {
                 return 1;
             } else {
                 return 0;
+            }
+        }
+    }
+
+    public void sankey_major_analysis(NewsRepository newsrepository, GraphRepository graphRepository)
+    {
+        SankeyFormAndDate sankeyFormList = new SankeyFormAndDate();
+        sankeyFormList.setGroup("major");
+
+        ArrayList<String> company = new ArrayList<String>();
+        company.add("중앙일보");
+        company.add("국민일보");
+        company.add("한겨례");
+        company.add("KBS 뉴스");
+        company.add("MBC 뉴스");
+        company.add("JTBC");
+        company.add("YTN");
+        company.add("연합뉴스TV");
+
+
+        ArrayList<String> category = new ArrayList<String>();
+        category.add("정치");
+        category.add("경제");
+        category.add("사회");
+        category.add("생활/문화");
+        category.add("세계");
+        category.add("IT/과학");
+        category.add("연예");
+
+        addList(sankeyFormList, company, category, newsrepository);
+
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
+        Calendar cal = Calendar.getInstance();
+        String currentTime = date.format(cal.getTime());
+
+        sankeyFormList.setDate(currentTime);
+
+        graphRepository.save(sankeyFormList);
+    }
+
+    public void sankey_minor_analysis(NewsRepository newsrepository, GraphRepository graphRepository, MongoTemplate mongoTemplate)
+    {
+        SankeyFormAndDate sankeyFormList = new SankeyFormAndDate();
+        sankeyFormList.setGroup("minor");
+
+
+        DistinctIterable<String> distinct = mongoTemplate.getCollection("news").distinct("company", String.class);
+        ArrayList<String> company_else = new ArrayList<String>();
+        distinct.forEach(new Block<String>() {
+            @Override
+            public void apply(final String result) {
+                if(result != "중앙일보" || result != " 국민일보" || result != "한겨례" || result != "KBS 뉴스" || result != "MBC 뉴스" || result != "JTBC"
+                || result != "YTN" || result != "연합뉴스TV") {
+                    company_else.add(result);
+                }
+            }
+        });
+
+        ArrayList<String> category = new ArrayList<String>();
+        category.add("정치");
+        category.add("경제");
+        category.add("사회");
+        category.add("생활/문화");
+        category.add("세계");
+        category.add("IT/과학");
+        category.add("연예");
+
+        addList(sankeyFormList, company_else, category, newsrepository);
+
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
+        Calendar cal = Calendar.getInstance();
+        String currentTime = date.format(cal.getTime());
+
+        sankeyFormList.setDate(currentTime);
+
+        graphRepository.save(sankeyFormList);
+    }
+
+    private void addList( SankeyFormAndDate sankeyFormAndDate, ArrayList<String> company, ArrayList<String> category, NewsRepository repository) {
+
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
+        Calendar cal = Calendar.getInstance();
+        cal.add( Calendar.MINUTE, -30 );    // 1시간 이내
+        String beforeTime = date.format(cal.getTime());
+
+        for(int i=0;i<company.size();i++){
+            for(int j=0;j<category.size();j++)
+            {
+                SankeyForm tmp = new SankeyForm();
+                tmp.source = company.get(i);
+                tmp.destination = category.get(j);
+                tmp.value = repository.countByCategoryAndCompanyAndDateGreaterThanEqual(category.get(j), company.get(i),beforeTime);
+
+                if(tmp.value != 0) {
+                    sankeyFormAndDate.addSankeyitems(tmp);
+                }
             }
         }
     }

@@ -26,4 +26,6 @@ public interface NewsRepository extends MongoRepository<News, String> {
     List<News> findNewsByTitleLikeAndDateGreaterThanEqual(@Nullable String title, String date);
 
     int countByCategoryAndCompany(String category, String company);
+
+    int countByCategoryAndCompanyAndDateGreaterThanEqual(String category, String company, String date);
 }
