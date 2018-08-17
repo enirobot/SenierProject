@@ -19,5 +19,5 @@ public interface NewsRepository extends MongoRepository<News, String> {
     @Nullable
     List<News> findAllById(List<String> list);
 
-    int countByCategoryAndCompany(String category, String company);
+    int countByCategoryAndCompanyAndDateGreaterThanEqual(String category, String company, String date);
 }

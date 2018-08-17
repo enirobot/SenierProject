@@ -4,42 +4,57 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        var inputdata = [];
+        var inputdata1 = [];
+        var inputdata2 = [];
 
         $(document).ready(function(){
             $.ajax({
-                url: "/sankey_post",
+                url: "/sankey_major_post",
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify(null),
                 success: function(data) {
                     for (var i = 0; i < data.length; i++) {
-                        inputdata.push( [ data[i].source, data[i].destination, data[i].value ] );
+                        inputdata1.push( [ data[i].source, data[i].destination, data[i].value ] );
+                    }
+
+                }
+            })
+            $.ajax({
+                url: "/sankey_minor_post",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(null),
+                success: function(data) {
+                    for (var i = 0; i < data.length; i++) {
+                        inputdata2.push( [ data[i].source, data[i].destination, data[i].value ] );
                     }
 
                     google.charts.load('current', {'packages':['sankey']});
-                    google.charts.setOnLoadCallback(drawChart);
+                    google.charts.setOnLoadCallback(drawChart1);
+                    google.charts.setOnLoadCallback(drawChart2);
 
                 }
             })
         });
 
 
-        function drawChart() {
+        function drawChart1() {
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'From');
             data.addColumn('string', 'To');
             data.addColumn('number', 'Weight');
-            data.addRows(inputdata);
+            data.addRows(inputdata1);
 
             var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
                 '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];
 
             // Sets chart options.
             var options = {
-                width: 1280,
-                height: 1980,
+                width: 400,
+                height: 400,
                 sankey: {
                     node: {
                         colors: colors
@@ -52,14 +67,45 @@
             };
 
             // Instantiates and draws our chart, passing in some options.
-            var chart = new google.visualization.Sankey(document.getElementById('sankey_basic'));
+            var chart = new google.visualization.Sankey(document.getElementById('sankey_major'));
+            chart.draw(data, options);
+        }
+        function drawChart2() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'From');
+            data.addColumn('string', 'To');
+            data.addColumn('number', 'Weight');
+            data.addRows(inputdata2);
+
+            var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
+                '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];
+
+            // Sets chart options.
+            var options = {
+                width: 400,
+                height: 400,
+                sankey: {
+                    node: {
+                        colors: colors
+                    },
+                    link: {
+                        colorMode: 'gradient',
+                        colors: colors
+                    }
+                }
+            };
+
+            // Instantiates and draws our chart, passing in some options.
+            var chart = new google.visualization.Sankey(document.getElementById('sankey_minor'));
             chart.draw(data, options);
         }
     </script>
 </head>
 <body>
-
-<div class="layer" id="sankey_basic" style="width: 100%; height: 100%;"></div>
+메이져 언론사
+<div class="layer" id="sankey_major" style="width: 100%; height: 100%;"></div>
+<br>마이너 언론사
+<div class="layer" id="sankey_minor" style="width: 100%; height: 100%;"></div>
 
 </body>
 </html>
