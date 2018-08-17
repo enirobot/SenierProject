@@ -41,6 +41,12 @@ public class MainPageController {
         return "main";
     }
 
+    @GetMapping("/mainNewsList")
+    public String mainNewsList(Model model) {
+
+        return "mainNewsList";
+    }
+
     @ResponseBody
     @PostMapping("/WordCloud")
     public List<WCForm> wc() {

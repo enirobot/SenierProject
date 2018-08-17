@@ -5,7 +5,7 @@
     <script th:src="@{/js/lib/wordcloud2.js}"></script>
 
     <style type="text/css">
-        #sourrounding_div{
+        #surrounding_div{
             width: 500px;
             height: 700px;
             margin:0 auto;
@@ -46,7 +46,7 @@
 </div>
 
 
-<div id="sourrounding_div">
+<div id="surrounding_div">
     <canvas id="canvas_cloud"></canvas>
     <div id="container">
         <form action="search" method="post" >
@@ -57,7 +57,7 @@
 </div>
 
 <script type="text/javascript">
-    var div = document.getElementById("sourrounding_div");
+    var div = document.getElementById("surrounding_div");
     var canvas = document.getElementById("canvas_cloud");
     var arr = [];
 
@@ -104,24 +104,9 @@
             }
         })
     });
-
-
+    
     function nextPage(data) {
-
-        $.ajax({
-            url: "/newsList",
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            success : function (data) {
-                location.href= "/main";
-            },
-            error : function () {
-                alert('fail');
-            }
-
-        });
+        location.href= "/mainNewsList?"+data;
     }
 
 

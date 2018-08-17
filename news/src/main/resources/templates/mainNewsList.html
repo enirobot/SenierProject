@@ -5,6 +5,11 @@
     <title>Title</title>
 </head>
 <body>
-
+<script type="text/javascript">
+    temp=location.href.split("?");
+    data=temp[1].split(":");
+    var id = data[0];
+    document.write(id);
+</script>
 </body>
 </html>
