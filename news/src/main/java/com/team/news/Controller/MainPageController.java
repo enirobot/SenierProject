@@ -43,6 +43,11 @@ public class MainPageController {
         return "mainNewsList";
     }
 
+
+    /**
+     * main wordcloude에 보여줄 때 사용되는 데이터를 보내줌
+     * @return
+     */
     @ResponseBody
     @PostMapping("/WordCloud")
     public List<WCForm> wc() {
@@ -65,7 +70,11 @@ public class MainPageController {
     }
 
 
-
+    /**
+     * main wordcloude에서 단어를 눌렀을 때 리스트 페이지 보여주는데 필요한 데이터들을 보내줌
+     * @param data
+     * @return
+     */
     @ResponseBody
     @PostMapping("/newsList")
     public List<MainNewsItem> NewsList(@RequestBody String data) {
