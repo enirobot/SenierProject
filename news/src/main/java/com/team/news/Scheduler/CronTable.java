@@ -32,7 +32,7 @@ public class CronTable {
 //    public void dayJob() {
 //
 //    }
-
+//
 //    // 매월 1일 0시 0분 0초에 실행
 //    @Scheduled(cron = "0 0 0 1 * *")
 //    public void monthJob() {

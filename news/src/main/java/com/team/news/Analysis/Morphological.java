@@ -66,7 +66,7 @@ public class Morphological {
                                                 k.getValue().getMainNewsItems())));
 
 
-        mainNewsListRepository.deleteAll();
+//        mainNewsListRepository.deleteAll();
         mainNewsListRepository.saveAll(list);   // mongoDB에 저장 (mainNewsList)
         System.out.println(list.size() + "개");
     }

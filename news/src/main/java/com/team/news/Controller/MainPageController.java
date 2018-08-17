@@ -61,7 +61,6 @@ public class MainPageController {
             list.add( new WCForm(item.getWord(), item.getCounts(), item.getId()) );
         }
 
-
         return list.subList(0, 30);     // 상위 30개
     }
 
@@ -70,20 +69,9 @@ public class MainPageController {
     @ResponseBody
     @PostMapping("/newsList")
     public MainNewsList NewsList(@RequestBody String data) {
-        System.out.println( data );
 
         MainNewsList mainNewsList;
-        mainNewsList = mainNewsListRepository.findMainNewsListById( data );
-
-        System.out.println( mainNewsList);
-
-//        System.out.println( repository.findAllById(itemList) );
-//
-//        newsList = repository.findAllById(itemList);
-//
-//        for(News item : newsList) {
-//            mainNewsList.add(new MainNewsList(item.getTitle(), item.getUrl()));
-//        }
+        mainNewsList = mainNewsListRepository.findMainNewsListById( data.replaceAll("\"", "") );
 
         return mainNewsList;
     }
