@@ -1,6 +1,7 @@
 package com.team.news.Form;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -20,8 +21,8 @@ public class News {
 
     private String title;	// 제목
     private String company;	// 언론사
-    private String date;		// 날짜
-    private String category;	// 카테고리
+    private String date;    // 날짜
+    private String category;// 카테고리
     private String url;		// 기사 주소
     private String content;	// 내용
 

@@ -1,5 +1,6 @@
 package com.team.news.Form;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,11 +9,17 @@ import java.util.List;
 
 public class WCNode {
     private int counts;
-    private List<String> idList;
+    private List<MainNewsItem> mainNewsItems;
 
-    public WCNode(int counts, List<String> idList) {
+    public WCNode(int counts) {
         this.counts = counts;
-        this.idList = idList;
+        this.mainNewsItems = new ArrayList<MainNewsItem>();
+    }
+
+    public WCNode(int counts, MainNewsItem mainNewsItem) {
+        this.counts = counts;
+        this.mainNewsItems = new ArrayList<MainNewsItem>();
+        this.mainNewsItems.add(mainNewsItem);
     }
 
     public int getCounts() {
@@ -23,15 +30,15 @@ public class WCNode {
         this.counts = counts;
     }
 
-    public List<String> getIdList() {
-        return idList;
+    public List<MainNewsItem> getMainNewsItems() {
+        return mainNewsItems;
     }
 
-    public void setIdList(List<String> idList) {
-        this.idList = idList;
+    public void setMainNewsItems(List<MainNewsItem> mainNewsItems) {
+        this.mainNewsItems = mainNewsItems;
     }
 
-    public void add(String id) {
-        idList.add(id);
+    public void add(MainNewsItem mainNewsItem) {
+        mainNewsItems.add(mainNewsItem);
     }
 }

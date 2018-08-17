@@ -1,5 +1,7 @@
 package com.team.news.Scheduler;
 
+import com.team.news.Analysis.Morphological;
+import com.team.news.Repository.MainNewsListRepository;
 import com.team.news.Repository.NewsRepository;
 import com.team.news.WebCrawler.Crawling_naver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,15 @@ import java.util.Calendar;
 @Component
 public class CronTable {
 
+    private final NewsRepository newsRepository;
+    private final MainNewsListRepository mainNewsListRepository;
+
+    @Autowired
+    public CronTable(NewsRepository newsRepository, MainNewsListRepository mainNewsListRepository) {
+        this.newsRepository = newsRepository;
+        this.mainNewsListRepository = mainNewsListRepository;
+    }
+
 //    // 매일 21시 30분 0초에 실행
 //    @Scheduled(cron = "0 30 21 * * *")
 //    public void dayJob() {
@@ -28,47 +39,23 @@ public class CronTable {
 //
 //    }
 
-    //서버 시작하고 6초후에 실행 후 30분마다 실행
+    //서버 시작하고 10초후에 실행 후 30분마다 실행
     @Scheduled(initialDelay = 10000, fixedDelay = 1800000)
     public void Job() {
-        int total_cnt = 0;
-
-        Crawling_naver c;
-
-        c = new Crawling_naver();
-        total_cnt += c.run(100, "정치");
-        total_cnt += c.run(101, "경제");
-        total_cnt += c.run(102, "사회");
-        total_cnt += c.run(103, "생활/문화");
-        total_cnt += c.run(104, "세계");
-        total_cnt += c.run(105, "IT/과학");
-        total_cnt += c.run_entertainment();
-
-//        try {
-//            c = new Crawling_naver();
-//            total_cnt += c.run(100, "정치");
-//            total_cnt += c.run(101, "경제");
-//            total_cnt += c.run(102, "사회");
-//            total_cnt += c.run(103, "생활/문화");
-//            total_cnt += c.run(104, "세계");
-//            total_cnt += c.run(105, "IT/과학");
-//            total_cnt += c.run_entertainment();
-//            total_cnt += c.run_sports("kbaseball", "스포츠-야구");
-//            total_cnt += c.run_sports("wbaseball", "스포츠-해외야구");
-//            total_cnt += c.run_sports("kfootball", "스포츠-축구");
-//            total_cnt += c.run_sports("wfootball", "스포츠-해외축구");
-//            total_cnt += c.run_sports("basketball", "스포츠-농구");
-//            total_cnt += c.run_sports("esports", "스포츠-e스포츠");
-//        }
-//        catch (java.text.ParseException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-
-        System.out.println("\r\n총 기사 개수 : "+total_cnt);
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
-        Calendar cal = Calendar.getInstance();    // 7시간 이내
-        System.out.println(date.format(cal.getTime()));
+        Calendar cal = Calendar.getInstance();
+        cal.add( Calendar.MINUTE, -30 );    // 30분 이내
+        String beforeTime = date.format(cal.getTime());
+
+        Crawling_naver crawlingNaver = new Crawling_naver();
+        crawlingNaver.start();
+
+        Morphological morphological = new Morphological();
+        morphological.analysis(newsRepository, mainNewsListRepository, beforeTime);
+
+
+
+
     }
 }
