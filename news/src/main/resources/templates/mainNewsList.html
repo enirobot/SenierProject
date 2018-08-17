@@ -1,15 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <script type="text/javascript">
-    temp=location.href.split("?");
-    data=temp[1].split(":");
+
+    temp = location.href.split("?");
+    data = temp[1].split(":");
     var id = data[0];
-    document.write(id);
+    var list = []
+
+    //html이 로딩되고 실행
+    $(document).ready(function(){
+        var data = null;
+
+        $.ajax({
+            url: "/newsList",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(id),
+            success: function(result) {
+
+            },
+            error : function () {
+                alert("fail");
+            }
+        })
+    });
+
 </script>
 </body>
 </html>

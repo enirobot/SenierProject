@@ -1,11 +1,8 @@
 package com.team.news.Controller;
 
-import com.team.news.Analysis.Morphological;
 import com.team.news.Form.*;
 import com.team.news.Repository.MainNewsListRepository;
 import com.team.news.Repository.NewsRepository;
-import org.bitbucket.eunjeon.seunjeon.Analyzer;
-import org.bitbucket.eunjeon.seunjeon.LNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -73,9 +69,14 @@ public class MainPageController {
 
     @ResponseBody
     @PostMapping("/newsList")
-    public String NewsList(@RequestBody String data) {
-
+    public MainNewsList NewsList(@RequestBody String data) {
         System.out.println( data );
+
+        MainNewsList mainNewsList;
+        mainNewsList = mainNewsListRepository.findMainNewsListById( data );
+
+        System.out.println( mainNewsList);
+
 //        System.out.println( repository.findAllById(itemList) );
 //
 //        newsList = repository.findAllById(itemList);
@@ -84,7 +85,7 @@ public class MainPageController {
 //            mainNewsList.add(new MainNewsList(item.getTitle(), item.getUrl()));
 //        }
 
-        return "mainNewsList";
+        return mainNewsList;
     }
 
 }
