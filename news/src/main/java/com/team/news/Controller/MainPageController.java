@@ -68,12 +68,12 @@ public class MainPageController {
 
     @ResponseBody
     @PostMapping("/newsList")
-    public MainNewsList NewsList(@RequestBody String data) {
+    public List<MainNewsItem> NewsList(@RequestBody String data) {
 
         MainNewsList mainNewsList;
         mainNewsList = mainNewsListRepository.findMainNewsListById( data.replaceAll("\"", "") );
 
-        return mainNewsList;
+        return mainNewsList.getNewsItems();
     }
 
 }

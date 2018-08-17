@@ -24,7 +24,9 @@
             contentType: "application/json",
             data: JSON.stringify(id),
             success: function(result) {
-
+                for (var i = 0; i < result.length; i++) {
+                    document.writeln(  result[i].title + " " + result[i].company+" "+result[i].date+" "+result[i].url+"<br>");
+                }
             },
             error : function () {
                 alert("fail");
