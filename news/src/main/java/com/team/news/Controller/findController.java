@@ -1,6 +1,7 @@
 package com.team.news.Controller;
 
 import com.team.news.Form.*;
+import com.team.news.Repository.MainNewsListRepository;
 import com.team.news.Repository.NewsRepository;
 import org.bitbucket.eunjeon.seunjeon.Analyzer;
 import org.bitbucket.eunjeon.seunjeon.LNode;
@@ -24,12 +25,15 @@ import java.util.*;
 @Controller
 public class findController {
 
-    private final NewsRepository repository;
+    private final NewsRepository newsRepository;
+    private final MainNewsListRepository mainNewsListRepository;
 
     @Autowired
-    public findController(NewsRepository repository) {
-        this.repository = repository;
+    public findController(NewsRepository newsRepository, MainNewsListRepository mainNewsListRepository) {
+        this.newsRepository = newsRepository;
+        this.mainNewsListRepository = mainNewsListRepository;
     }
+
 
     @ResponseBody
 	@PostMapping("/findKeyword")
@@ -45,7 +49,7 @@ public class findController {
         cal.add( Calendar.HOUR_OF_DAY, -1000 );    // 24시간 이내
         String beforeTime = date.format(cal.getTime());
 
-        List<News> news = repository.findNewsByTitleLikeAndDateGreaterThanEqual( data.replaceAll("\"", ""), beforeTime );
+        List<News> news = newsRepository.findNewsByTitleLikeAndDateGreaterThanEqual( data.replaceAll("\"", ""), beforeTime );
 
 //        for (News item : news)
 //            System.out.println( item.getTitle() + ", " + item.getDate() );
