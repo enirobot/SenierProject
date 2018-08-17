@@ -6,12 +6,24 @@
     <title>Title</title>
 </head>
 <body>
+        <h2>기사목록</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>날짜</th>
+                    <th>제목</th>
+                    <th>언론사</th>
+                </tr>
+            </thead>
+            <tbody id="list">
+
+            </tbody>
+        </table>
 <script type="text/javascript">
 
     temp = location.href.split("?");
     data = temp[1].split(":");
     var id = data[0];
-    var list = []
 
     //html이 로딩되고 실행
     $(document).ready(function(){
@@ -25,7 +37,9 @@
             data: JSON.stringify(id),
             success: function(result) {
                 for (var i = 0; i < result.length; i++) {
-                    document.writeln(  result[i].title + " " + result[i].company+" "+result[i].date+" "+result[i].url+"<br>");
+                    document.getElementById("list").innerHTML += "<tr><td>"+result[i].date+"</td>" +
+                        "<td><a href="+result[i].url+">"+result[i].title+"</a></td>" +
+                        "<td>"+result[i].company+"</td></tr>";
                 }
             },
             error : function () {
