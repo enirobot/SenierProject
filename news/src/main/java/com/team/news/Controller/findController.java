@@ -7,8 +7,6 @@ import org.bitbucket.eunjeon.seunjeon.Analyzer;
 import org.bitbucket.eunjeon.seunjeon.LNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,8 +49,6 @@ public class findController {
 
         List<News> news = newsRepository.findNewsByTitleLikeAndDateGreaterThanEqual( data.replaceAll("\"", ""), beforeTime );
 
-//        for (News item : news)
-//            System.out.println( item.getTitle() + ", " + item.getDate() );
 
         // 형태소 분석
         for (News item : news) {
@@ -86,11 +82,7 @@ public class findController {
                                 String.valueOf(k.getValue().getCounts()),
                                 k.getValue().getIdList())));
 
-
         System.out.println(list.size() + "개");
-
-        for (WCSearchForm item : list)
-            System.out.println(item.getWord() + ", " + item.getCounts() + ", " + item.getIdList());
 
         return list.subList(0, 30);
     }

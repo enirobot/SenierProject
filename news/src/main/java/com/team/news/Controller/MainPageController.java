@@ -43,6 +43,24 @@ public class MainPageController {
         return "mainNewsList";
     }
 
+    @GetMapping("/mainSearchNewsList")
+    public String mainSearchNewsList(Model model) {
+
+        return "mainSearchNewsList";
+    }
+
+    @ResponseBody
+    @PostMapping("/analysisSearchNewsList")
+    public List<News> analysisSearchNewsList(@RequestBody List<String> dataList) {
+
+        List<News> newsList = new ArrayList<>();
+
+        for (String item : dataList)
+            newsList.add(newsRepository.findNewsById( item.replaceAll("\"", "") ) );
+
+        return newsList;
+    }
+
 
     /**
      * main wordcloude에 보여줄 때 사용되는 데이터를 보내줌
@@ -62,9 +80,9 @@ public class MainPageController {
 
         List<MainNewsList> mainNewsLists = mainNewsListRepository.findMainNewsListByDateGreaterThanEqual( beforeTime );
 
-        for (MainNewsList item : mainNewsLists) {
+        for (MainNewsList item : mainNewsLists)
             list.add( new WCForm(item.getWord(), item.getCounts(), item.getId()) );
-        }
+
 
         return list.subList(0, 30);     // 상위 30개
     }
