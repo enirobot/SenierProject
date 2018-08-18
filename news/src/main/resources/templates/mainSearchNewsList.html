@@ -6,31 +6,32 @@
     <title>Title</title>
 </head>
 <body>
-        <h2>기사목록</h2>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>날짜</th>
-                    <th>제목</th>
-                    <th>언론사</th>
-                </tr>
-            </thead>
-            <tbody id="list">
+<h2>기사목록</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>날짜</th>
+        <th>제목</th>
+        <th>언론사</th>
+    </tr>
+    </thead>
+    <tbody id="list">
 
-            </tbody>
-        </table>
+    </tbody>
+</table>
 <script type="text/javascript">
 
     temp = location.href.split("?");
-    data = temp[1].split(":");
-    var id = data[0];
+    data = temp[1].split(",");
+    var id = [];
+    id = data;
 
     //html이 로딩되고 실행
     $(document).ready(function(){
         var data = null;
 
         $.ajax({
-            url: "/newsList",
+            url: "/analysisSearchNewsList",
             type: "POST",
             dataType: "json",
             contentType: "application/json",

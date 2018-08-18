@@ -4,7 +4,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
 import com.mongodb.client.DistinctIterable;
 import com.team.news.Form.SankeyForm;
-import com.team.news.Repository.NewsRepository;
+import com.team.news.Form.SankeyFormAndDate;
+import com.team.news.Repository.GraphRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Controller;
@@ -13,100 +14,62 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
 public class GraphController {
 
 
-    private final NewsRepository repository;
+    private final GraphRepository graphRepository;
     private final MongoTemplate mongoTemplate;
 
     @Autowired
-    public GraphController(NewsRepository repository, MongoTemplate mongoTemplate) {
-        this.repository = repository;
+    public GraphController(GraphRepository graphRepository, MongoTemplate mongoTemplate) {
+        this.graphRepository = graphRepository;
         this.mongoTemplate = mongoTemplate;
     }
 
     @ResponseBody
-    @PostMapping("/sankey_post")
+    @PostMapping("/sankey_major_post")
     public List<SankeyForm> sankey() {
 
-        System.out.println("sankey");
+        System.out.println("sankey_major");
         List<SankeyForm> list = new ArrayList<>();
+        List<SankeyFormAndDate> sankeyFormAndDate;
 
-        DistinctIterable<String> distinct = mongoTemplate.getCollection("news").distinct("company", String.class);
-        ArrayList<String> company = new ArrayList<String>();
-        distinct.forEach(new Block<String>() {
-            @Override
-            public void apply(final String result) {
-                company.add(result);
-            }
-        });
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
+        Calendar cal = Calendar.getInstance();
+        cal.add( Calendar.MINUTE, -30 );    // 1시간 이내
+        String beforeTime = date.format(cal.getTime());
 
-        distinct = mongoTemplate.getCollection("news").distinct("category", String.class);
-        ArrayList<String> category = new ArrayList<String>();
-        distinct.forEach(new Block<String>() {
-            @Override
-            public void apply(final String result) {
-                category.add(result);
-            }
-        });
-
-        addList(list, company, category);
+        sankeyFormAndDate = graphRepository.findSankeyFormAndDateByGroupAndDateGreaterThanEqual("major",beforeTime);
+        list = sankeyFormAndDate.get(0).getSankeyitems();
 
         return list;
     }
 
 
     @ResponseBody
-    @PostMapping("/sankey_sports_post")
+    @PostMapping("/sankey_minor_post")
     public List<SankeyForm> sankey_sports() {
 
-        System.out.println("sankey_sports");
+        System.out.println("sankey_minor");
         List<SankeyForm> list = new ArrayList<>();
+        List<SankeyFormAndDate> sankeyFormAndDate;
 
-        DistinctIterable<String> distinct = mongoTemplate.getCollection("news").distinct("company", String.class);
-        ArrayList<String> company = new ArrayList<String>();
-        distinct.forEach(new Block<String>() {
-            @Override
-            public void apply(final String result) {
-                company.add(result);
-            }
-        });
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        Calendar cal = Calendar.getInstance();
+        cal.add( Calendar.MINUTE, -30 );    // 1시간 이내
+        String beforeTime = date.format(cal.getTime());
 
-
-        BasicDBObject querry = new BasicDBObject();
-        querry.put("category",java.util.regex.Pattern.compile("스포츠"));
-        distinct = mongoTemplate.getCollection("news").distinct("category",querry, String.class);
-        ArrayList<String> category = new ArrayList<String>();
-        distinct.forEach(new Block<String>() {
-            @Override
-            public void apply(final String result) {
-                category.add(result);
-            }
-        });
-
-        addList(list, company, category);
+        sankeyFormAndDate = graphRepository.findSankeyFormAndDateByGroupAndDateGreaterThanEqual("minor",beforeTime);
+        list = sankeyFormAndDate.get(0).getSankeyitems();
 
         return list;
     }
 
 
-    private void addList(List<SankeyForm> list, ArrayList<String> company, ArrayList<String> category) {
-        for(int i=0;i<company.size();i++){
-            for(int j=0;j<category.size();j++)
-            {
-                SankeyForm tmp = new SankeyForm();
-                tmp.source = company.get(i);
-                tmp.destination = category.get(j);
-                tmp.value = repository.countByCategoryAndCompany(category.get(j), company.get(i));
-
-                if(tmp.value != 0)
-                    list.add(tmp);
-            }
-        }
-    }
 
 
     @GetMapping("/sankey")

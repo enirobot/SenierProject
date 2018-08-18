@@ -1,10 +1,12 @@
 package com.team.news.Scheduler;
 
 import com.team.news.Analysis.Morphological;
+import com.team.news.Repository.GraphRepository;
 import com.team.news.Repository.MainNewsListRepository;
 import com.team.news.Repository.NewsRepository;
 import com.team.news.WebCrawler.Crawling_naver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,11 +22,16 @@ public class CronTable {
 
     private final NewsRepository newsRepository;
     private final MainNewsListRepository mainNewsListRepository;
+    private final GraphRepository graphRepository;
+    private final MongoTemplate mongoTemplate;
+
 
     @Autowired
-    public CronTable(NewsRepository newsRepository, MainNewsListRepository mainNewsListRepository) {
+    public CronTable(NewsRepository newsRepository, MainNewsListRepository mainNewsListRepository, GraphRepository graphRepository, MongoTemplate mongoTemplate) {
         this.newsRepository = newsRepository;
         this.mainNewsListRepository = mainNewsListRepository;
+        this.graphRepository = graphRepository;
+        this.mongoTemplate = mongoTemplate;
     }
 
 //    // 매일 21시 30분 0초에 실행
@@ -32,7 +39,7 @@ public class CronTable {
 //    public void dayJob() {
 //
 //    }
-
+//
 //    // 매월 1일 0시 0분 0초에 실행
 //    @Scheduled(cron = "0 0 0 1 * *")
 //    public void monthJob() {
@@ -53,8 +60,8 @@ public class CronTable {
 
         Morphological morphological = new Morphological();
         morphological.analysis(newsRepository, mainNewsListRepository, beforeTime);
-
-
+        morphological.sankey_major_analysis(newsRepository,graphRepository);
+        morphological.sankey_minor_analysis(newsRepository,graphRepository,mongoTemplate);
 
 
     }

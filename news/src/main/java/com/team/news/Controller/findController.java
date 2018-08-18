@@ -1,38 +1,106 @@
 package com.team.news.Controller;
 
+import com.team.news.Form.*;
+import com.team.news.Repository.MainNewsListRepository;
 import com.team.news.Repository.NewsRepository;
+import org.bitbucket.eunjeon.seunjeon.Analyzer;
+import org.bitbucket.eunjeon.seunjeon.LNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.stereotype.Controller;
 
-import com.team.news.Form.News;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 /**
- * DB 테스트할 때 사용되는 컨트롤러
+ *
  */
 
-@RestController
+@Controller
 public class findController {
 
-    private final NewsRepository repository;
+    private final NewsRepository newsRepository;
+    private final MainNewsListRepository mainNewsListRepository;
 
     @Autowired
-    public findController(NewsRepository repository) {
-        this.repository = repository;
+    public findController(NewsRepository newsRepository, MainNewsListRepository mainNewsListRepository) {
+        this.newsRepository = newsRepository;
+        this.mainNewsListRepository = mainNewsListRepository;
     }
 
-    @GetMapping("/findAll")
-	public List<News> findAll() {
-	    return repository.findAll();
-	}
 
-	@GetMapping("/findNew")
-    public List<News> find() {
-	    return repository.findByDateGreaterThanEqual("2018/07/03 20:59");
+    @ResponseBody
+	@PostMapping("/findKeyword")
+    public List<WCSearchForm> findKeyword(@RequestBody String data) {
+
+
+        List<WCSearchForm> list = new ArrayList<>();
+        HashMap<String, WCSearchNode> wordList = new HashMap<>();
+        String temp;
+
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
+        Calendar cal = Calendar.getInstance();
+        cal.add( Calendar.HOUR_OF_DAY, -1000 );    // 24시간 이내
+        String beforeTime = date.format(cal.getTime());
+
+        List<News> news = newsRepository.findNewsByTitleLikeAndDateGreaterThanEqual( data.replaceAll("\"", ""), beforeTime );
+
+
+        // 형태소 분석
+        for (News item : news) {
+            for (LNode node : Analyzer.parseJava(item.getTitle())) {
+                if (node.morpheme().getFeatureHead().equalsIgnoreCase("NNG")) {
+                    temp = node.morpheme().getSurface();
+
+                    if (!wordList.containsKey(temp)) {
+                        wordList.put(temp, new WCSearchNode(1));
+                        wordList.get(temp).add(item.getId());
+                    }
+
+                    else {
+                        WCSearchNode wcTemp = wordList.get(temp);
+                        wcTemp.setCounts(wcTemp.getCounts() + 1);
+                        wcTemp.add(item.getId());
+                        wordList.put(temp, wcTemp);
+                    }
+                }
+            }
+        }
+
+        WCSearchFormComparator wcFormComparator = new WCSearchFormComparator();
+
+        // 오름차순 정렬
+        wordList.entrySet().stream()
+                .sorted((k1, k2) ->
+                        wcFormComparator.compare(k1.getValue(), k2.getValue()))
+                .forEach(k ->
+                        list.add(new WCSearchForm(k.getKey(),
+                                String.valueOf(k.getValue().getCounts()),
+                                k.getValue().getIdList())));
+
+        System.out.println(list.size() + "개");
+
+        return list.subList(0, 30);
     }
 
+    // 정렬할 때 사용할 comparator 정의
+    class WCSearchFormComparator implements Comparator<WCSearchNode> {
+
+        @Override
+        public int compare(WCSearchNode o1, WCSearchNode o2) {
+
+            if (o1.getCounts() > o2.getCounts()) {
+                return -1;
+            } else if (o1.getCounts() < o2.getCounts()) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    }
 
 }
