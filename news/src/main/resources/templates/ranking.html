@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script th:src="@{/js/lib/wordcloud2.js}"></script>
+
+    <style type="text/css">
+        #frame{
+            width: 500px;
+            height: 700px;
+            margin:0 auto;
+            text-align: center;
+        }
+        #keyword{
+            height: 28px;
+            display: inline-block;
+            border: 2px solid;
+            border-radius: 3px;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2), 1px 2px 2px gray;
+            padding-bottom: 2px;
+        }
+        #weekly{
+            display: inline-block;
+            width: 200px;
+            height: 550px;
+            border: 1px solid;
+            border-radius: 3px;
+        }
+        #monthly {
+            display: inline-block;
+            width: 200px;
+            height: 550px;
+            border: 1px solid;
+            border-radius: 3px;
+        }
+
+        .invisible{
+            clear: none;
+            border: 0px none;
+            float:none;
+            background-color: transparent;
+        }
+        #frame{
+            width: 500px;
+            height: 700px;
+            margin:0 auto;
+            text-align: center;
+        }
+
+    </style>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="frame">
+    <div id="weekly">
+        <h2>주간 빈도 Top 10</h2>
+        <ul class="rankList"><br>
+            <li id="week1"></li><br>
+            <li id="week2"></li><br>
+            <li id="week3"></li><br>
+            <li id="week4"></li><br>
+            <li id="week5"></li><br>
+            <li id="week6"></li><br>
+            <li id="week7"></li><br>
+            <li id="week8"></li><br>
+            <li id="week9"></li><br>
+            <li id="week10"></li><br>
+        </ul>
+    </div>
+    &nbsp;
+    <div id="monthly">
+        <h2>월간 빈도 Top 10</h2>
+        <ul class="rankList"><br>
+            <li id="month1"></li><br>
+            <li id="month2"></li><br>
+            <li id="month3"></li><br>
+            <li id="month4"></li><br>
+            <li id="month5"></li><br>
+            <li id="month6"></li><br>
+            <li id="month7"></li><br>
+            <li id="month8"></li><br>
+            <li id="month9"></li><br>
+            <li id="month10"></li><br>
+        </ul>
+    </div>
+    <br>
+    <h1>
+        키워드 검색
+    </h1>
+    <div>
+        <form action="line" method="post" >
+            <input type="text" id="keyword" class="invisible" name="search" size="70"/>
+            <!--<input type="image" class="image_align" src="resources/image/magnifying_glass.png" width="17px" height="17px"/>-->
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //html이 로딩되고 실행
+    $(document).ready(function(){
+        var data = null;
+
+        $.ajax({
+            url: "/weeklyList",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            async:false,
+            data: JSON.stringify(data),
+            success: function(result) {
+                document.getElementById("week1").innerHTML = result[0].word;
+                document.getElementById("week2").innerHTML = result[1].word;
+                document.getElementById("week3").innerHTML = result[2].word;
+                document.getElementById("week4").innerHTML = result[3].word;
+                document.getElementById("week5").innerHTML = result[4].word;
+                document.getElementById("week6").innerHTML = result[5].word;
+                document.getElementById("week7").innerHTML = result[6].word;
+                document.getElementById("week8").innerHTML = result[7].word;
+                document.getElementById("week9").innerHTML = result[8].word;
+                document.getElementById("week10").innerHTML = result[9].word;
+            },
+            error : function () {
+                alert("fail");
+            }
+        })
+
+        $.ajax({
+            url: "/monthlyList",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            async:false,
+            data: JSON.stringify(data),
+            success: function(result) {
+                document.getElementById("month1").innerHTML = result[0].word;
+                document.getElementById("month2").innerHTML = result[1].word;
+                document.getElementById("month3").innerHTML = result[2].word;
+                document.getElementById("month4").innerHTML = result[3].word;
+                document.getElementById("month5").innerHTML = result[4].word;
+                document.getElementById("month6").innerHTML = result[5].word;
+                document.getElementById("month7").innerHTML = result[6].word;
+                document.getElementById("month8").innerHTML = result[7].word;
+                document.getElementById("month9").innerHTML = result[8].word;
+                document.getElementById("month10").innerHTML = result[9].word;
+            },
+            error : function () {
+                alert("fail");
+            }
+        })
+
+        $('input[type="text"]').keydown(function() {
+            if (event.keyCode === 13) {
+                $.ajax({
+                    url: "/lineChart",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json",
+                    async:false,
+                    data: JSON.stringify(document.getElementById('keyword').value),
+                    success: function(result) {
+                    },
+                    error : function () {
+                        alert("fail");
+                    }
+                })
+            }
+        });
+    });
+
+
+</script>
+
+</body>
+</html>
