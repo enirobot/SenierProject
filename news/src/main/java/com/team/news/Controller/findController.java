@@ -84,7 +84,7 @@ public class findController {
 
         System.out.println(list.size() + "개");
 
-        return list.subList(0, 30);
+        return list.subList(0, 10);
     }
 
     // 정렬할 때 사용할 comparator 정의

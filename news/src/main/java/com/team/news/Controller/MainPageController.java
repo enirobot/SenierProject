@@ -75,7 +75,7 @@ public class MainPageController {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.MINUTE, -30 );    // 1시간 이내
+        cal.add( Calendar.MINUTE, -30 );    // 30분 이내
         String beforeTime = date.format(cal.getTime());
 
         List<MainNewsList> mainNewsLists = mainNewsListRepository.findMainNewsListByDateGreaterThanEqual( beforeTime );

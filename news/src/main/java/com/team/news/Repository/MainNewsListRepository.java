@@ -4,7 +4,6 @@ import com.team.news.Form.MainNewsList;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.lang.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface MainNewsListRepository extends MongoRepository<MainNewsList, String> {
@@ -15,7 +14,12 @@ public interface MainNewsListRepository extends MongoRepository<MainNewsList, St
     @Nullable
     List<MainNewsList> findMainNewsListByDateGreaterThanEqual(@Nullable String date);   // date 날짜 이후의 내용
 
+    @Nullable
     List<MainNewsList> findMainNewsListByWordAndDateGreaterThanEqual(String word, String date);
+
+    @Nullable
+    MainNewsList findMainNewsListById(String id);
+
 
     int countMainNewsListByDateGreaterThanEqualAndWord(String time, String word);
 }

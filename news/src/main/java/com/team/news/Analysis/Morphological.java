@@ -6,6 +6,7 @@ import com.team.news.Form.*;
 import com.team.news.Repository.GraphRepository;
 import com.team.news.Repository.MainNewsListRepository;
 import com.team.news.Repository.NewsRepository;
+import com.team.news.Repository.RankRepository;
 import org.bitbucket.eunjeon.seunjeon.Analyzer;
 import org.bitbucket.eunjeon.seunjeon.LNode;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -70,11 +71,6 @@ public class Morphological {
                                                 k.getValue().getMainNewsItems())));
 
 
-<<<<<<< HEAD
-        //mainNewsListRepository.deleteAll();
-=======
-//        mainNewsListRepository.deleteAll();
->>>>>>> 1cd2e3b6737987bad1265b2974fd7ce2defc2c49
         mainNewsListRepository.saveAll(list);   // mongoDB에 저장 (mainNewsList)
         System.out.println(list.size() + "개");
     }
@@ -187,6 +183,33 @@ public class Morphological {
                 if(tmp.value != 0) {
                     sankeyFormAndDate.addSankeyitems(tmp);
                 }
+            }
+        }
+    }
+
+
+    public void Rank_analysis(MainNewsListRepository mainNewsListRepository, RankRepository rankRepository) {
+
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
+        Calendar cal = Calendar.getInstance();
+        cal.add( Calendar.MINUTE, -30 );    // 1시간 이내
+        String beforeTime = date.format(cal.getTime());
+
+        List<MainNewsList> mainNewsLists = mainNewsListRepository.findMainNewsListByDateGreaterThanEqual( beforeTime );
+
+        for (MainNewsList item : mainNewsLists) {
+            RankForm rankForm = rankRepository.findRankFormByWord(item.getWord());
+
+            if (rankForm != null) {
+                rankForm.setTotalCounts( rankForm.getTotalCounts() + Integer.parseInt(item.getCounts()) );
+                rankForm.add( new RankNode( item.getDate(), Integer.parseInt(item.getCounts()) ) );
+                rankRepository.save( rankForm );
+            }
+
+            else {
+                RankForm temp = new RankForm(item.getWord(), Integer.parseInt(item.getCounts()));
+                temp.add( new RankNode( item.getDate(), Integer.parseInt(item.getCounts()) ) );
+                rankRepository.save( temp );
             }
         }
     }
