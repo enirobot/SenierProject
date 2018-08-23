@@ -23,6 +23,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 public class Crawling_naver{
 
@@ -32,61 +33,42 @@ public class Crawling_naver{
     private Date today = new Date();
 
 
-    BasicDBObject document;
-    DBCollection collection;
+    MongoTemplate mongoTemplate;
+    NewsRepository newsRepository;
+
     News news;
 
 
-    public Crawling_naver() {
+    public Crawling_naver(NewsRepository newsRepository, MongoTemplate mongoTemplate) {
 
-        String MongoDB_IP = " 45.119.145.73";
-        int MongoDB_PORT = 25000;
-        String DB_NAME = "project";
-
-        //Connect to MongoDB
-        @SuppressWarnings("resource")
-        MongoClient  mongoClient = new MongoClient(new ServerAddress(MongoDB_IP, MongoDB_PORT));
-        @SuppressWarnings("deprecation")
-        DB db = mongoClient.getDB(DB_NAME);
-        collection = db.getCollection("news");
-
+        this.mongoTemplate = mongoTemplate;
+        this.newsRepository = newsRepository;
 
     }
 
     public void start() {
         int total_cnt = 0;
 
-        Crawling_naver c;
-
-        c = new Crawling_naver();
-        total_cnt += c.run(100, "정치");
-        total_cnt += c.run(101, "경제");
-        total_cnt += c.run(102, "사회");
-        total_cnt += c.run(103, "생활/문화");
-        total_cnt += c.run(104, "세계");
-        total_cnt += c.run(105, "IT/과학");
-        total_cnt += c.run_entertainment();
-
-//        try {
-//            c = new Crawling_naver();
-//            total_cnt += c.run(100, "정치");
-//            total_cnt += c.run(101, "경제");
-//            total_cnt += c.run(102, "사회");
-//            total_cnt += c.run(103, "생활/문화");
-//            total_cnt += c.run(104, "세계");
-//            total_cnt += c.run(105, "IT/과학");
-//            total_cnt += c.run_entertainment();
-//            total_cnt += c.run_sports("kbaseball", "스포츠-야구");
-//            total_cnt += c.run_sports("wbaseball", "스포츠-해외야구");
-//            total_cnt += c.run_sports("kfootball", "스포츠-축구");
-//            total_cnt += c.run_sports("wfootball", "스포츠-해외축구");
-//            total_cnt += c.run_sports("basketball", "스포츠-농구");
-//            total_cnt += c.run_sports("esports", "스포츠-e스포츠");
-//        }
-//        catch (java.text.ParseException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
+        System.out.println("Crawler Start!");
+        try {
+            total_cnt += run(100, "정치");
+            total_cnt += run(101, "경제");
+            total_cnt += run(102, "사회");
+            total_cnt += run(103, "생활/문화");
+            total_cnt += run(104, "세계");
+            total_cnt += run(105, "IT/과학");
+            total_cnt += run_entertainment();
+            total_cnt += run_sports("kbaseball", "스포츠-야구");
+            total_cnt += run_sports("wbaseball", "스포츠-해외야구");
+            total_cnt += run_sports("kfootball", "스포츠-축구");
+            total_cnt += run_sports("wfootball", "스포츠-해외축구");
+            total_cnt += run_sports("basketball", "스포츠-농구");
+            total_cnt += run_sports("esports", "스포츠-e스포츠");
+        }
+        catch (java.text.ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         System.out.println("\r\n총 기사 개수 : "+total_cnt);
 
@@ -117,11 +99,11 @@ public class Crawling_naver{
                     Element tmp = e.selectFirst("a");
                     Elements span =  e.select("span");
 
-                    news.setUrl(tmp.attr("href")); // url
-                    if(!isExist("url",news.getUrl())) {
+                    news.setTitle(tmp.text()); // title
 
+                    if(!isExist(news.getTitle())) {
                         news.setCategory(category); // category
-                        news.setTitle(tmp.text()); // title
+                        news.setUrl(tmp.attr("href")); // url
                         news.setCompany(span.get(0).text()); //company
                         tmp_hour = span.get(span.size()-1).text(); //before hour
 
@@ -144,7 +126,7 @@ public class Crawling_naver{
                                 news.setDate(tmp_hour);
                             }
 
-                            insertDB(news);
+                            mongoTemplate.insert(news);
                             cnt++;
                         }
                     }
@@ -185,13 +167,11 @@ public class Crawling_naver{
                     Element tmp = e.selectFirst("a");
                     Elements span =  e.select("span");
 
-                    news.setUrl(attach_url.concat(tmp.attr("href"))); // url
-
-                    if(!isExist("url",news.getUrl())) {
+                    news.setTitle(tmp.text()); // title
+                    if(!isExist(news.getTitle())) {
 
                         news.setCategory(category); // category
-                        news.setTitle(tmp.text()); // title
-
+                        news.setUrl(attach_url.concat(tmp.attr("href"))); // url
                         int index = span.text().indexOf(" ");
 
                         news.setCompany(span.text().substring(0, index)); //company
@@ -214,7 +194,7 @@ public class Crawling_naver{
                                 news.setDate(tmp_hour);
                             }
 
-                            insertDB(news);
+                            mongoTemplate.insert(news);
                             cnt++;
                         }
                     }
@@ -262,10 +242,10 @@ public class Crawling_naver{
                                 news.setCategory(category);
                                 news.setCompany(tempObj.get("officeName").toString());
                                 news.setTitle(tempObj.get("title").toString());
-                                news.setDate(tempObj.get("datetime").toString().replace(".", "/"));
+                                news.setDate_2(tempObj.get("datetime").toString().replace(".", "/"));
                                 news.setUrl(attach_url + "oid=" + tempObj.get("oid") + "&aid=" + tempObj.get("aid"));
 
-                                if (!isExist("url", news.getUrl())) {
+                                if (!isExist(news.getTitle())) {
 
                                     try {
                                         doc = Jsoup.connect(news.getUrl()).get();
@@ -280,7 +260,7 @@ public class Crawling_naver{
                                             return cnt;
                                         }
 
-                                        insertDB(news);
+                                        mongoTemplate.insert(news);
                                         cnt++;
                                     }
                                 }
@@ -292,11 +272,6 @@ public class Crawling_naver{
                         }
                     }
 
-
-
-
-
-
             } catch (IOException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
@@ -306,28 +281,16 @@ public class Crawling_naver{
         return cnt;
     }
 
-    public boolean isExist(String where, String is){
-        BasicDBObject whereQuery = new BasicDBObject();
-        whereQuery.put(where, is);
-        DBCursor cursor = collection.find(whereQuery);
+    public boolean isExist(String title){
 
-        if(cursor.count() == 0)
+        int count = 0;
+        count = newsRepository.countByTitleLike(title);
+
+        if(count == 0) {
             return false;
+        }
         else
             return true;
     }
 
-    public void insertDB(News news)
-    {
-        document = new BasicDBObject();
-
-        document.put("title", news.getTitle());
-        document.put("company", news.getCompany());
-        document.put("date", news.getDate());
-        document.put("category", news.getCategory());
-        document.put("url", news.getUrl());
-        document.put("content", news.getContent());
-
-        collection.insert(document);
-    }
 }

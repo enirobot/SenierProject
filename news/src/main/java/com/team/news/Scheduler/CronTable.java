@@ -59,7 +59,7 @@ public class CronTable {
         cal.add( Calendar.MINUTE, -30 );    // 30분 이내
         String beforeTime = date.format(cal.getTime());
 
-        Crawling_naver crawlingNaver = new Crawling_naver();
+        Crawling_naver crawlingNaver = new Crawling_naver(newsRepository, mongoTemplate);
         crawlingNaver.start();
 
         Morphological morphological = new Morphological();

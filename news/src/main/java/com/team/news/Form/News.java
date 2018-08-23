@@ -76,6 +76,10 @@ public class News {
         cal.add(Calendar.MINUTE, -Integer.parseInt(s));
         this.date = dateFormat.format(cal.getTime());
     }
+    public void setDate_2(String date)
+    {
+        this.date = date;
+    }
 
     public String getCategory() {
         return category;
