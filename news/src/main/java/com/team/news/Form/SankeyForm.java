@@ -7,6 +7,10 @@ public class SankeyForm {
 
     public SankeyForm() {}
 
+    public int getValue() {
+        return value;
+    }
+
     @Override
     public String toString()
     {

@@ -54,19 +54,23 @@ public class CronTable {
     @Scheduled(initialDelay = 10000, fixedDelay = 1800000)
     public void Job() {
 
+        System.out.println("--CronTable start--");
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
         cal.add( Calendar.MINUTE, -30 );    // 30분 이내
         String beforeTime = date.format(cal.getTime());
 
-        Crawling_naver crawlingNaver = new Crawling_naver(newsRepository, mongoTemplate);
+        Crawling_naver crawlingNaver = new Crawling_naver(newsRepository);
         crawlingNaver.start();
 
         Morphological morphological = new Morphological();
         morphological.analysis(newsRepository, mainNewsListRepository, beforeTime);
         morphological.sankey_major_analysis(newsRepository,graphRepository);
         morphological.sankey_minor_analysis(newsRepository,graphRepository,mongoTemplate);
+        morphological.sankey_sports_analysis(newsRepository,graphRepository,mongoTemplate);
         morphological.Rank_analysis(mainNewsListRepository, rankRepository);
+
+        System.out.println("--CronTable end--");
 
     }
 }

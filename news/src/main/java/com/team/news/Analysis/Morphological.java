@@ -132,6 +132,7 @@ public class Morphological {
         SankeyFormAndDate sankeyFormList = new SankeyFormAndDate();
         sankeyFormList.setGroup("minor");
 
+        List<SankeyForm> list = new ArrayList<>();
 
         DistinctIterable<String> distinct = mongoTemplate.getCollection("news").distinct("company", String.class);
         ArrayList<String> company_else = new ArrayList<String>();
@@ -165,6 +166,39 @@ public class Morphological {
         graphRepository.save(sankeyFormList);
     }
 
+    public void sankey_sports_analysis(NewsRepository newsrepository, GraphRepository graphRepository, MongoTemplate mongoTemplate)
+    {
+        SankeyFormAndDate sankeyFormList = new SankeyFormAndDate();
+        sankeyFormList.setGroup("sports");
+
+        DistinctIterable<String> distinct = mongoTemplate.getCollection("news").distinct("company", String.class);
+        ArrayList<String> company = new ArrayList<String>();
+        distinct.forEach(new Block<String>() {
+            @Override
+            public void apply(final String result) {
+                company.add(result);
+            }
+        });
+
+        ArrayList<String> category = new ArrayList<String>();
+        category.add("야구");
+        category.add("해외야구");
+        category.add("축구");
+        category.add("해외축구");
+        category.add("농구");
+        category.add("e스포츠");
+
+        addList(sankeyFormList, company, category, newsrepository);
+
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
+        Calendar cal = Calendar.getInstance();
+        String currentTime = date.format(cal.getTime());
+
+        sankeyFormList.setDate(currentTime);
+
+        graphRepository.save(sankeyFormList);
+    }
+
     private void addList( SankeyFormAndDate sankeyFormAndDate, ArrayList<String> company, ArrayList<String> category, NewsRepository repository) {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
@@ -178,7 +212,9 @@ public class Morphological {
                 SankeyForm tmp = new SankeyForm();
                 tmp.source = company.get(i);
                 tmp.destination = category.get(j);
-                tmp.value = repository.countByCategoryAndCompanyAndDateGreaterThanEqual(category.get(j), company.get(i),beforeTime);
+                tmp.value = repository.countByCategoryLikeAndCompanyAndDateGreaterThanEqual(category.get(j), company.get(i),beforeTime);
+
+
 
                 if(tmp.value != 0) {
                     sankeyFormAndDate.addSankeyitems(tmp);

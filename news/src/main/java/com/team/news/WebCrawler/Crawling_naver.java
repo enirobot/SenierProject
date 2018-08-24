@@ -23,7 +23,6 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
 public class Crawling_naver{
 
@@ -33,15 +32,13 @@ public class Crawling_naver{
     private Date today = new Date();
 
 
-    MongoTemplate mongoTemplate;
     NewsRepository newsRepository;
 
     News news;
 
 
-    public Crawling_naver(NewsRepository newsRepository, MongoTemplate mongoTemplate) {
+    public Crawling_naver(NewsRepository newsRepository) {
 
-        this.mongoTemplate = mongoTemplate;
         this.newsRepository = newsRepository;
 
     }
@@ -49,7 +46,6 @@ public class Crawling_naver{
     public void start() {
         int total_cnt = 0;
 
-        System.out.println("Crawler Start!");
         try {
             total_cnt += run(100, "정치");
             total_cnt += run(101, "경제");
@@ -126,7 +122,7 @@ public class Crawling_naver{
                                 news.setDate(tmp_hour);
                             }
 
-                            mongoTemplate.insert(news);
+                            newsRepository.save(news);
                             cnt++;
                         }
                     }
@@ -194,7 +190,7 @@ public class Crawling_naver{
                                 news.setDate(tmp_hour);
                             }
 
-                            mongoTemplate.insert(news);
+                            newsRepository.save(news);
                             cnt++;
                         }
                     }
@@ -260,7 +256,7 @@ public class Crawling_naver{
                                             return cnt;
                                         }
 
-                                        mongoTemplate.insert(news);
+                                        newsRepository.save(news);
                                         cnt++;
                                     }
                                 }
