@@ -94,12 +94,13 @@ public class Crawling_naver{
                     news = new News();
                     Element tmp = e.selectFirst("a");
                     Elements span =  e.select("span");
+                    news.setUrl(tmp.attr("href")); // url
 
                     news.setTitle(tmp.text()); // title
 
-                    if(!isExist(news.getTitle())) {
+                    if(!isExist(news.getTitle(),news.getUrl())) {
                         news.setCategory(category); // category
-                        news.setUrl(tmp.attr("href")); // url
+
                         news.setCompany(span.get(0).text()); //company
                         tmp_hour = span.get(span.size()-1).text(); //before hour
 
@@ -162,12 +163,12 @@ public class Crawling_naver{
 
                     Element tmp = e.selectFirst("a");
                     Elements span =  e.select("span");
+                    news.setUrl(attach_url.concat(tmp.attr("href"))); // url
 
                     news.setTitle(tmp.text()); // title
-                    if(!isExist(news.getTitle())) {
+                    if(!isExist(news.getTitle(),news.getUrl())) {
 
                         news.setCategory(category); // category
-                        news.setUrl(attach_url.concat(tmp.attr("href"))); // url
                         int index = span.text().indexOf(" ");
 
                         news.setCompany(span.text().substring(0, index)); //company
@@ -241,7 +242,7 @@ public class Crawling_naver{
                                 news.setDate_2(tempObj.get("datetime").toString().replace(".", "/"));
                                 news.setUrl(attach_url + "oid=" + tempObj.get("oid") + "&aid=" + tempObj.get("aid"));
 
-                                if (!isExist(news.getTitle())) {
+                                if (!isExist(news.getTitle(),news.getUrl())) {
 
                                     try {
                                         doc = Jsoup.connect(news.getUrl()).get();
@@ -277,16 +278,17 @@ public class Crawling_naver{
         return cnt;
     }
 
-    public boolean isExist(String title){
+    public boolean isExist(String title, String url){
 
         int count = 0;
-        count = newsRepository.countByTitleLike(title);
+        count += newsRepository.countByTitleLike(title);
+        count += newsRepository.countByUrlLike(url);
 
-        if(count == 0) {
+        if(count == 0)
             return false;
-        }
-        else
+        else {
             return true;
+        }
     }
 
 }

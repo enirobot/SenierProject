@@ -68,7 +68,7 @@ public class CronTable {
         morphological.sankey_major_analysis(newsRepository,graphRepository);
         morphological.sankey_minor_analysis(newsRepository,graphRepository,mongoTemplate);
         morphological.sankey_sports_analysis(newsRepository,graphRepository,mongoTemplate);
-        morphological.Rank_analysis(mainNewsListRepository, rankRepository);
+        //morphological.Rank_analysis(mainNewsListRepository, rankRepository);
 
         System.out.println("--CronTable end--");
 
