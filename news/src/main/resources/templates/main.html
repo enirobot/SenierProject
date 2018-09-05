@@ -6,8 +6,8 @@
 
     <style type="text/css">
         #surrounding_div{
-            width: 600px;
-            height: 600px;
+            width: 500px;
+            height: 700px;
             margin:0 auto;
             text-align: center;
         }
@@ -21,8 +21,8 @@
         }
 
         #canvas_cloud{
-            width: 600px;
-            height: 600px;
+            width: 500px;
+            height: 500px;
             margin: 10px;
         }
         .invisible{
@@ -86,10 +86,11 @@
 
                 var options = {
                     list : arr,
-                    gridSize: Math.round(8 * document.getElementById('canvas_cloud').offsetWidth / 1024),
+                    gridSize: Math.round(2 * document.getElementById('canvas_cloud').offsetWidth / 1024),
                     weightFactor: function (size) {
                         return Math.pow(size, 2) * document.getElementById('canvas_cloud').offsetWidth / 1024;
                     },
+                    weightFactor: 7,
                     minSize: 3,
                     figPath: "circle",
                     click: function(item) {
