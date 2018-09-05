@@ -6,8 +6,8 @@
 
     <style type="text/css">
         #surrounding_div{
-            width: 500px;
-            height: 700px;
+            width: 600px;
+            height: 600px;
             margin:0 auto;
             text-align: center;
         }
@@ -21,8 +21,8 @@
         }
 
         #canvas_cloud{
-            width: 500px;
-            height: 500px;
+            width: 600px;
+            height: 600px;
             margin: 10px;
         }
         .invisible{
@@ -50,10 +50,11 @@
         <a href="ranking">
             <input type="button" value="rank"/>
         </a>
+        <input type="button" value="Sankey" onclick="location.href='sankey'">
     </div>
     <canvas id="canvas_cloud"></canvas>
 </div>
-<input type="button" value="Sankey" onclick="location.href='sankey'">
+
 <script type="text/javascript">
     var div = document.getElementById("surrounding_div");
     var canvas = document.getElementById("canvas_cloud");
@@ -85,11 +86,10 @@
 
                 var options = {
                     list : arr,
-                    gridSize: Math.round(2 * document.getElementById('canvas_cloud').offsetWidth / 1024),
+                    gridSize: Math.round(8 * document.getElementById('canvas_cloud').offsetWidth / 1024),
                     weightFactor: function (size) {
                         return Math.pow(size, 2) * document.getElementById('canvas_cloud').offsetWidth / 1024;
                     },
-                    weightFactor: 7,
                     minSize: 3,
                     figPath: "circle",
                     click: function(item) {
