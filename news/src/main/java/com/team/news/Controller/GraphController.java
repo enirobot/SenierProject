@@ -73,7 +73,7 @@ public class GraphController {
         List<SankeyForm> list = new ArrayList<>();
         List<SankeyFormAndDate> sankeyFormAndDate;
 
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
         cal.add( Calendar.MINUTE, -30 );    // 1시간 이내
         String beforeTime = date.format(cal.getTime());

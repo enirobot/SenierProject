@@ -1,5 +1,6 @@
 package com.team.news.Form;
 
+import com.mongodb.annotations.ThreadSafe;
 import org.springframework.data.annotation.Id;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,6 +15,7 @@ import java.util.Date;
 /**
  * 정제되지 않은 뉴스 데이터를 나타내는 모델
  */
+@ThreadSafe
 public class News {
 
     @Id
@@ -25,6 +27,9 @@ public class News {
     private String category;// 카테고리
     private String url;		// 기사 주소
     private String content;	// 내용
+    private int like_count;
+    private int comment_count;
+    private int recommend_count;
 
     public News(String title, String company, String date,
                 String category, String url, String content) {
@@ -63,20 +68,7 @@ public class News {
         return date;
     }
 
-    public void setDate(String s)
-    {
-        s = s.replace("분전", "");
-
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //set Time format
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-//        System.out.println(s);
-        cal.add(Calendar.MINUTE, -Integer.parseInt(s));
-        this.date = dateFormat.format(cal.getTime());
-    }
-    public void setDate_2(String date)
+    public void setDate(String date)
     {
         this.date = date;
     }
@@ -109,14 +101,14 @@ public class News {
         this.content = content;
     }
 
-    public boolean IsInOnehour() throws ParseException
+    public boolean IsInHour(int hour) throws ParseException
     {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //set Time format
 
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(date);
-        cal1.add(Calendar.HOUR, -1);
+        cal1.add(Calendar.HOUR, -hour);
 
         Calendar cal2 = Calendar.getInstance();
         cal2.setTime(dateFormat.parse(this.date));
@@ -127,8 +119,50 @@ public class News {
             return false;
     }
 
+    public boolean IsOutHour(int hour) throws ParseException
+    {
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //set Time format
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date);
+        cal1.add(Calendar.HOUR, -hour);
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(dateFormat.parse(this.date));
+
+        if(cal1.after(cal2))
+            return true;
+        else
+            return false;
+    }
+
     @Override
     public String toString() {
         return "News [category=" + category  + ", date=" + date + ", title=" + title + ", url=" + getUrl() + "]";
+    }
+
+    public int getLike_count() {
+        return like_count;
+    }
+
+    public void setLike_count(int like_count) {
+        this.like_count = like_count;
+    }
+
+    public int getComment_count() {
+        return comment_count;
+    }
+
+    public void setComment_count(int comment_count) {
+        this.comment_count = comment_count;
+    }
+
+    public int getRecommend_count() {
+        return recommend_count;
+    }
+
+    public void setRecommend_count(int recommend_count) {
+        this.recommend_count = recommend_count;
     }
 }
