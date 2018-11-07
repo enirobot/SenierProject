@@ -102,7 +102,7 @@ public class Crawling_naver{
     public int run(int num, String category) {
         int cnt = 0;
         String tmp_hour;
-        //System.out.println("--------"+category+"--------");
+        System.out.println("--------"+category+"--------");
 
         for(int i=1;i<MAX_PAGE;i++) {
 //            System.out.println("page : "+i);
@@ -143,11 +143,11 @@ public class Crawling_naver{
 //                                System.out.println(news.getTitle());
 //                                System.out.println(news.getDate());
 
-                                countReaction(news);
+                                countReaction(news,0);
                                 newsRepository.save(news);
                                 cnt++;
                             } catch (Exception e2) {
-                                //System.out.println("content error : "+e2);
+                                //System.out.println("error : "+e2);
                                 //System.out.println(news.getUrl());
                             }
 
@@ -175,7 +175,7 @@ public class Crawling_naver{
         String tmp_hour;
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
         String attach_url = "https://entertain.naver.com";
-        //System.out.println("--------entertainment--------");
+        System.out.println("--------entertainment--------");
         for(int i=1;i<MAX_PAGE;++i) {
             try {
                 this.url = "https://entertain.naver.com/now?sid=106&date="+date.format(today)+"&page="+i;
@@ -215,7 +215,7 @@ public class Crawling_naver{
 //                                System.out.println(news.getTitle());
 
                                 news.setContent(driver.findElement(By.id("articeBody")).getText());
-                                countReaction(news);
+                                countReaction(news,1);
                                 newsRepository.save(news);
                                 cnt++;
 
@@ -240,7 +240,7 @@ public class Crawling_naver{
 
     public int run_sports(String group, String category) throws java.text.ParseException {
         int cnt = 0;
-        //System.out.println("--------"+category+"--------");
+        System.out.println("--------"+category+"--------");
         for(int i=1;i<MAX_PAGE;i++) {
 
 //            System.out.println("page : "+i);
@@ -284,7 +284,7 @@ public class Crawling_naver{
 //                                            System.out.println(news.getDate());
 
                                             news.setContent(driver.findElement(By.id("newsEndContents")).getText());
-                                            countReaction(news);
+                                            countReaction(news,0);
                                             newsRepository.save(news);
                                             cnt++;
                                         } catch (Exception e2) {
@@ -314,8 +314,8 @@ public class Crawling_naver{
     public boolean isExist(String title, String url){
 
         int count = 0;
-        count += newsRepository.countByTitleLike(title);
-        count += newsRepository.countByUrlLike(url);
+        count += newsRepository.countByTitle(title);
+        count += newsRepository.countByUrl(url);
 
         if(count == 0) {
             return false;
@@ -323,14 +323,21 @@ public class Crawling_naver{
         else
             return true;
     }
-    public void countReaction(News news)
+    public void countReaction(News news, int flag)
     {
         driver.get(news.getUrl());
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         JavascriptExecutor executor = (JavascriptExecutor)driver;
 
-        String like_count = driver.findElement(By.xpath(
-                "//a[@class='u_likeit_button _face off']/span[contains(@class,'text')]")).getText();
+        String like_count;
+
+        if(flag == 0)
+            like_count = driver.findElement(By.xpath(
+                    "//span[contains(@class,'u_likeit_text _count')]")).getText();
+        else
+            like_count = driver.findElement(By.xpath(
+                    "//a[@class='u_likeit_button _face off']/span[contains(@class,'text')]")).getText();
+
         String comment_count = driver.findElement(By.xpath(
                 "//span[@class='u_cbox_count'] | //em[@class='simplecmt_num']")).getText();
         String recommend_count = driver.findElement(By.cssSelector("em.u_cnt._count")).getText();
@@ -354,9 +361,11 @@ public class Crawling_naver{
         else
             news.setComment_count(Integer.parseInt(comment_count));
 
-//         System.out.println("like : " +news.getLike_count());
-//         System.out.println("comment : " +news.getComment_count());
-//         System.out.println("recommand : " +news.getRecommend_count());
+//      System.out.println(news.getTitle());
+//      System.out.println("like : " +news.getLike_count());
+//      System.out.println("comment : " +news.getComment_count());
+//      System.out.println("recommand : " +news.getRecommend_count());
     }
+
 
 }
