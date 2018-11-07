@@ -55,16 +55,19 @@ public class CronTable {
     public void Job() {
 
         System.out.println("--CronTable start--");
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
-        Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.MINUTE, -30 );    // 30분 이내
-        String beforeTime = date.format(cal.getTime());
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.add( Calendar.HOUR, -3 );
+        cal2.add( Calendar.HOUR, -0 );
+        String fromTime = date.format(cal1.getTime());
+        String toTime = date.format(cal2.getTime());
 
         Crawling_naver crawlingNaver = new Crawling_naver(newsRepository);
         crawlingNaver.start();
 
         Morphological morphological = new Morphological();
-        morphological.analysis(newsRepository, mainNewsListRepository, beforeTime);
+        morphological.analysis(newsRepository, mainNewsListRepository, fromTime, toTime);
         morphological.sankey_major_analysis(newsRepository,graphRepository);
         morphological.sankey_minor_analysis(newsRepository,graphRepository,mongoTemplate);
         morphological.sankey_sports_analysis(newsRepository,graphRepository,mongoTemplate);

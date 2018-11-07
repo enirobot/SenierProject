@@ -15,6 +15,9 @@ public interface MainNewsListRepository extends MongoRepository<MainNewsList, St
     List<MainNewsList> findMainNewsListByDateGreaterThanEqual(@Nullable String date);   // date 날짜 이후의 내용
 
     @Nullable
+    List<MainNewsList> findByDateBetween(@Nullable String from, String to);
+
+    @Nullable
     List<MainNewsList> findMainNewsListByWordAndDateGreaterThanEqual(String word, String date);
 
     @Nullable

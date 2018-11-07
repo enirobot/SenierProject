@@ -20,9 +20,7 @@ public class HomeController {
 
     @GetMapping("/home")
     public String index(Model model) {
-
         List<News> temp = repository.findNewsByTitleIsLike("포토");
-
 
         return "home";
     }

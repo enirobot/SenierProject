@@ -9,6 +9,8 @@ import com.team.news.Repository.NewsRepository;
 import com.team.news.Repository.RankRepository;
 import org.bitbucket.eunjeon.seunjeon.Analyzer;
 import org.bitbucket.eunjeon.seunjeon.LNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.text.SimpleDateFormat;
@@ -16,18 +18,22 @@ import java.util.*;
 
 public class Morphological {
 
+    private Logger logger = LoggerFactory.getLogger(Morphological.class);
 
-    public void analysis(NewsRepository newsRepository, MainNewsListRepository mainNewsListRepository, String beforeTime) {
+    public void analysis(NewsRepository newsRepository, MainNewsListRepository mainNewsListRepository,
+                         String fromTime, String toTime) {
 
         List<MainNewsList> list = new ArrayList<>();
         HashMap<String, WCNode> wordList = new HashMap<>();
         String temp = null;
 
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         Calendar cal = Calendar.getInstance();
         String currentTime = date.format(cal.getTime());
 
-        List<News> news = newsRepository.findByDateGreaterThanEqual( beforeTime );
+        List<News> news = newsRepository.findByDateBetween(fromTime, toTime);
+
+        logger.info("news 개수 : " + news.size() + "개");
 
         // 형태소 분석
         for (News item : news) {
@@ -72,7 +78,8 @@ public class Morphological {
 
 
         mainNewsListRepository.saveAll(list);   // mongoDB에 저장 (mainNewsList)
-        System.out.println(list.size() + "개");
+
+        logger.info("형태소분석 : " + list.size() + "개");
     }
 
     // 정렬할 때 사용할 comparator 정의
@@ -157,7 +164,7 @@ public class Morphological {
 
         addList(sankeyFormList, company_else, category, newsrepository);
 
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         Calendar cal = Calendar.getInstance();
         String currentTime = date.format(cal.getTime());
 
@@ -190,7 +197,7 @@ public class Morphological {
 
         addList(sankeyFormList, company, category, newsrepository);
 
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         Calendar cal = Calendar.getInstance();
         String currentTime = date.format(cal.getTime());
 
@@ -199,9 +206,10 @@ public class Morphological {
         graphRepository.save(sankeyFormList);
     }
 
-    private void addList( SankeyFormAndDate sankeyFormAndDate, ArrayList<String> company, ArrayList<String> category, NewsRepository repository) {
+    private void addList( SankeyFormAndDate sankeyFormAndDate, ArrayList<String> company,
+                          ArrayList<String> category, NewsRepository repository) {
 
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         Calendar cal = Calendar.getInstance();
         cal.add( Calendar.MINUTE, -30 );    // 1시간 이내
         String beforeTime = date.format(cal.getTime());
@@ -226,7 +234,7 @@ public class Morphological {
 
     public void Rank_analysis(MainNewsListRepository mainNewsListRepository, RankRepository rankRepository) {
 
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         Calendar cal = Calendar.getInstance();
         cal.add( Calendar.MINUTE, -30 );    // 1시간 이내
         String beforeTime = date.format(cal.getTime());

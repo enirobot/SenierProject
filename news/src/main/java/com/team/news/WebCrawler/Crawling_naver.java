@@ -5,7 +5,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.team.news.Form.News;
@@ -22,7 +21,6 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -48,9 +46,20 @@ public class Crawling_naver{
 
     }
 
+
+    // ChromeDriver 설정 메소드
     public void SelenumSetup()
     {
-        System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
+        String os = System.getProperty("os.name");
+
+        if (os.equals("Windows 10")) {
+            System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
+        }
+
+        if (os.equals("Mac OS X")) {
+            System.setProperty("webdriver.chrome.driver", "chromedriver");
+        }
+
         options = new ChromeOptions();
         options.addArguments("headless");
     }

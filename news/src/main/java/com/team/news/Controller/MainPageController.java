@@ -3,6 +3,8 @@ package com.team.news.Controller;
 import com.team.news.Form.*;
 import com.team.news.Repository.MainNewsListRepository;
 import com.team.news.Repository.NewsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,8 @@ import java.util.*;
 
 @Controller
 public class MainPageController {
+
+    Logger logger = LoggerFactory.getLogger(MainPageController.class);
 
 
     private final NewsRepository newsRepository;
@@ -70,19 +74,25 @@ public class MainPageController {
     @PostMapping("/WordCloud")
     public List<WCForm> wc() {
 
-
         List<WCForm> list = new ArrayList<>();
 
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
-        Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.MINUTE, -30 );    // 30분 이내
-        String beforeTime = date.format(cal.getTime());
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.add( Calendar.HOUR, -3 );
+        cal2.add( Calendar.HOUR, -0 );
+        String fromTime = date.format(cal1.getTime());
+        String toTime = date.format(cal2.getTime());
 
-        List<MainNewsList> mainNewsLists = mainNewsListRepository.findMainNewsListByDateGreaterThanEqual( beforeTime );
+//        List<MainNewsList> mainNewsLists = mainNewsListRepository.findMainNewsListByDateGreaterThanEqual( beforeTime );
+        List<MainNewsList> mainNewsLists = mainNewsListRepository.findByDateBetween(fromTime, toTime);
+
+        logger.info("mainNewsLists 개수 : " + mainNewsLists.size() + "개");
 
         for (MainNewsList item : mainNewsLists)
             list.add( new WCForm(item.getWord(), item.getCounts(), item.getId()) );
 
+        logger.info("wordcloud 개수 : " + mainNewsLists.size() + "개");
 
         return list.subList(0, 30);     // 상위 30개
     }
