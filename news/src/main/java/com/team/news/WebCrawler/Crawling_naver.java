@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.team.news.Form.News;
@@ -21,6 +22,7 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -220,7 +222,7 @@ public class Crawling_naver{
                                 cnt++;
 
                             } catch (Exception e2) {
-                                System.out.println("error2 : "+e2);
+                                System.out.println("entertaiment error : "+e2);
                             }
                         }
 
@@ -288,7 +290,7 @@ public class Crawling_naver{
                                             newsRepository.save(news);
                                             cnt++;
                                         } catch (Exception e2) {
-                                            System.out.println("error3 : "+e2);
+                                            System.out.println("sports error : "+e2);
                                         }
 
                                     }
@@ -342,6 +344,7 @@ public class Crawling_naver{
                 "//span[@class='u_cbox_count'] | //em[@class='simplecmt_num']")).getText();
         String recommend_count = driver.findElement(By.cssSelector("em.u_cnt._count")).getText();
 
+
         like_count = like_count.replace(",","");
         comment_count = comment_count.replace(",","");
         recommend_count = recommend_count.replace(",","");
@@ -361,11 +364,24 @@ public class Crawling_naver{
         else
             news.setComment_count(Integer.parseInt(comment_count));
 
+        String tmp;
+        WebElement element;
+        for(int i=1;i<=5;i++){
+            tmp  =  driver.findElement(By.xpath(
+                    "//div[contains(@class,'end_btn')]/div[@class='_reactionModule u_likeit']/ul/li["+i+"]")).getText();
+            int index = tmp.indexOf('\n');
+            tmp = tmp.substring(index+1);
+            tmp = tmp.replace(",","");
+            news.setReaction_list(i-1,Integer.parseInt(tmp));
+
+        }
+
+        //System.out.println(news.getTitle());
+        //System.out.println("좋아요 : "+news.getReaction_list(0)+", 훈훈해요 : "+news.getReaction_list(1));
+
 //      System.out.println(news.getTitle());
 //      System.out.println("like : " +news.getLike_count());
 //      System.out.println("comment : " +news.getComment_count());
 //      System.out.println("recommand : " +news.getRecommend_count());
     }
-
-
 }

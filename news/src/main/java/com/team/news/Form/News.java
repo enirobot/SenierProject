@@ -27,7 +27,8 @@ public class News {
     private String category;// 카테고리
     private String url;		// 기사 주소
     private String content;	// 내용
-    private int like_count;
+    private int like_count; // 좋아요 수 총합
+    private int[] reaction_list; // 좋아요, 훈훈해요, 슬퍼요, 화나요, 후속기사 원해요 순
     private int comment_count;
     private int recommend_count;
 
@@ -42,7 +43,9 @@ public class News {
         this.content = content;
     }
 
-    public News() {}
+    public News() {
+        reaction_list = new int[5];
+    }
 
     public String getId() {
         return id;
@@ -100,6 +103,10 @@ public class News {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public void setReaction_list(int index,int num) { this.reaction_list[index] = num; }
+
+    public int getReaction_list(int index) { return reaction_list[index];}
 
     public boolean IsInHour(int hour) throws ParseException
     {
