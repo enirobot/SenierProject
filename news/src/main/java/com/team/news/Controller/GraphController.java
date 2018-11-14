@@ -36,7 +36,7 @@ public class GraphController {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.MINUTE, -30 );    // 1시간 이내
+        cal.add( Calendar.HOUR, -2 );    // 1시간 이내
         String beforeTime = date.format(cal.getTime());
 
         sankeyFormAndDate = graphRepository.findSankeyFormAndDateByGroupAndDateGreaterThanEqual("major",beforeTime);
@@ -55,7 +55,7 @@ public class GraphController {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.MINUTE, -30 );    // 1시간 이내
+        cal.add( Calendar.HOUR, -2 );    // 1시간 이내
         String beforeTime = date.format(cal.getTime());
 
         sankeyFormAndDate = graphRepository.findSankeyFormAndDateByGroupAndDateGreaterThanEqual("minor",beforeTime);
@@ -63,7 +63,8 @@ public class GraphController {
 
         list.sort(Comparator.comparing(SankeyForm::getValue));
 
-        return list.subList(list.size()-6,list.size());
+        //return list.subList(list.size()-6,list.size());
+        return list;
     }
 
     @ResponseBody
@@ -75,7 +76,7 @@ public class GraphController {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.MINUTE, -30 );    // 1시간 이내
+        cal.add( Calendar.HOUR, -2 );    // 1시간 이내
         String beforeTime = date.format(cal.getTime());
 
         sankeyFormAndDate = graphRepository.findSankeyFormAndDateByGroupAndDateGreaterThanEqual("sports",beforeTime);
