@@ -14,6 +14,6 @@ public class SankeyForm {
     @Override
     public String toString()
     {
-        return "source : " + source + ". destination : " + destination + ", value : " + value + "\r\n";
+        return "source : " + source + ". destination : " + destination + ", value : " + value;
     }
 }
