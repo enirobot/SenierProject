@@ -7,10 +7,10 @@ import java.util.List;
  */
 public class WCForm {
     private String word;
-    private String counts;
+    private int counts;
     private String id;
 
-    public WCForm(String word, String counts, String id)
+    public WCForm(String word, int counts, String id)
     {
         this.word = word;
         this.counts = counts;
@@ -27,11 +27,11 @@ public class WCForm {
         this.word = word;
     }
 
-    public String getCounts() {
+    public int getCounts() {
         return counts;
     }
 
-    public void setCount(String counts) {
+    public void setCount(int counts) {
         this.counts = counts;
     }
 

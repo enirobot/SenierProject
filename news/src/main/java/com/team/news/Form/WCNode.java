@@ -9,10 +9,12 @@ import java.util.List;
 
 public class WCNode {
     private int counts;
+    private double totalWeight;
     private List<MainNewsItem> mainNewsItems;
 
-    public WCNode(int counts) {
+    public WCNode(int counts, double totalWeight) {
         this.counts = counts;
+        this.totalWeight = totalWeight;
         this.mainNewsItems = new ArrayList<MainNewsItem>();
     }
 
@@ -28,6 +30,22 @@ public class WCNode {
 
     public void setCounts(int counts) {
         this.counts = counts;
+    }
+
+    public double getTotalWeight() {
+        return totalWeight;
+    }
+
+    public void setTotalWeight(double totalWeight) {
+        this.totalWeight = totalWeight;
+    }
+
+    public void sumCounts(int counts) {
+        this.counts = this.counts + counts;
+    }
+
+    public void sumTotalWeight(double totalWeight) {
+        this.totalWeight = this.totalWeight + totalWeight;
     }
 
     public List<MainNewsItem> getMainNewsItems() {

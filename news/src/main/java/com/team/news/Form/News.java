@@ -30,6 +30,7 @@ public class News {
     private int like_count;
     private int comment_count;
     private int recommend_count;
+    private double weight;
 
     public News(String title, String company, String date,
                 String category, String url, String content) {
@@ -81,13 +82,11 @@ public class News {
         this.category = category;
     }
 
-    public void setUrl(String url)
-    {
+    public void setUrl(String url) {
         this.url = url.replace("?", "=.q_m");
     }
 
-    public String getUrl()
-    {
+    public String getUrl() {
         String temp;
         temp = url.replaceAll("=.q_m", "?");
         return temp;
@@ -99,6 +98,38 @@ public class News {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public int getLike_count() {
+        return like_count;
+    }
+
+    public void setLike_count(int like_count) {
+        this.like_count = like_count;
+    }
+
+    public int getComment_count() {
+        return comment_count;
+    }
+
+    public void setComment_count(int comment_count) {
+        this.comment_count = comment_count;
+    }
+
+    public int getRecommend_count() {
+        return recommend_count;
+    }
+
+    public void setRecommend_count(int recommend_count) {
+        this.recommend_count = recommend_count;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 
     public boolean IsInHour(int hour) throws ParseException
@@ -142,27 +173,4 @@ public class News {
         return "News [category=" + category  + ", date=" + date + ", title=" + title + ", url=" + getUrl() + "]";
     }
 
-    public int getLike_count() {
-        return like_count;
-    }
-
-    public void setLike_count(int like_count) {
-        this.like_count = like_count;
-    }
-
-    public int getComment_count() {
-        return comment_count;
-    }
-
-    public void setComment_count(int comment_count) {
-        this.comment_count = comment_count;
-    }
-
-    public int getRecommend_count() {
-        return recommend_count;
-    }
-
-    public void setRecommend_count(int recommend_count) {
-        this.recommend_count = recommend_count;
-    }
 }

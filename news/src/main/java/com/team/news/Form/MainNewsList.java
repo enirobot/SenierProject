@@ -15,16 +15,18 @@ public class MainNewsList {
     private String id;
 
     private String word;
-    private String counts;
+    private int counts;
     private String date;
+    private double totalWeight;
     private List<MainNewsItem> newsItems;
 
     public MainNewsList(){}
 
-    public MainNewsList(String word, String counts, String date, List<MainNewsItem> mainNewsItems) {
+    public MainNewsList(String word, int counts, String date, double totalWeight, List<MainNewsItem> mainNewsItems) {
         this.word = word;
         this.counts = counts;
         this.date = date;
+        this.totalWeight = totalWeight;
         this.newsItems = mainNewsItems;
     }
 
@@ -44,11 +46,11 @@ public class MainNewsList {
         this.word = word;
     }
 
-    public String getCounts() {
+    public int getCounts() {
         return counts;
     }
 
-    public void setCounts(String counts) {
+    public void setCounts(int counts) {
         this.counts = counts;
     }
 
@@ -58,6 +60,14 @@ public class MainNewsList {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public double getTotalWeight() {
+        return totalWeight;
+    }
+
+    public void setTotalWeight(double totalWeight) {
+        this.totalWeight = totalWeight;
     }
 
     public List<MainNewsItem> getNewsItems() {
