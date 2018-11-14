@@ -118,7 +118,6 @@ public class CrawlingNaver {
                 Elements last_element = ele.last().select("span");
                 tmp_hour = last_element.get(last_element.size()-1).text();
 
-                System.out.println("last element : "+tmp_hour);
                 if(tmp_hour.contains("시간전")) {
                     for (Element e : ele) {
 
@@ -136,7 +135,7 @@ public class CrawlingNaver {
                             tmp_hour = span.get(span.size() - 1).text(); //before hour
 
                             if (tmp_hour.contains("3시간전")) {
-                                //System.out.println("3시간 넘음");
+                                logger.info("\"기사 개수 : \"" + cnt);
                                 return cnt;
                             }
                             if (tmp_hour.contains("시간전")) {
@@ -205,7 +204,7 @@ public class CrawlingNaver {
                             tmp_hour = span.select("em").text(); //before hour
 
                             if (tmp_hour.contains("3시간전")) {
-                                //System.out.println("3시간 넘음");
+                                logger.info("\"기사 개수 : \"" + cnt);
                                 return cnt;
                             }
 
@@ -281,6 +280,11 @@ public class CrawlingNaver {
                                 news.setTitle(tempObj.get("title").toString());
                                 news.setDate(tempObj.get("datetime").toString().replace(".","/"));
                                 news.setUrl(attach_url + "oid=" + tempObj.get("oid") + "&aid=" + tempObj.get("aid"));
+
+                                if(news.IsOutHour(3)) {
+                                    logger.info("\"기사 개수 : \"" + cnt);
+                                    return cnt;
+                                }
 
                                 if (!isExist(news.getTitle(),news.getUrl())) {
                                     if(news.IsInHour(3) && news.IsOutHour(1)) {
