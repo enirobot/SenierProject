@@ -30,19 +30,10 @@ public class GraphController {
     @ResponseBody
     @PostMapping("/sankey_major_post")
     public List<SankeyForm> sankey() {
+        SankeyFormAndDate sankeyFormAndDate;
+        sankeyFormAndDate = graphRepository.findTopByGroupOrderByDateDesc("major");
 
-        List<SankeyForm> list = new ArrayList<>();
-        List<SankeyFormAndDate> sankeyFormAndDate;
-
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
-        Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.HOUR, -2 );    // 1시간 이내
-        String beforeTime = date.format(cal.getTime());
-
-        sankeyFormAndDate = graphRepository.findSankeyFormAndDateByGroupAndDateGreaterThanEqual("major",beforeTime);
-        list = sankeyFormAndDate.get(0).getSankeyitems();
-
-        return list;
+        return sankeyFormAndDate.getSankeyitems();
     }
 
 
@@ -50,39 +41,20 @@ public class GraphController {
     @PostMapping("/sankey_minor_post")
     public List<SankeyForm> sankey_minor() {
 
-        List<SankeyForm> list = new ArrayList<>();
-        List<SankeyFormAndDate> sankeyFormAndDate;
+        SankeyFormAndDate sankeyFormAndDate;
+        sankeyFormAndDate = graphRepository.findTopByGroupOrderByDateDesc("minor");
 
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-        Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.HOUR, -2 );    // 1시간 이내
-        String beforeTime = date.format(cal.getTime());
-
-        sankeyFormAndDate = graphRepository.findSankeyFormAndDateByGroupAndDateGreaterThanEqual("minor",beforeTime);
-        list = sankeyFormAndDate.get(0).getSankeyitems();
-
-        list.sort(Comparator.comparing(SankeyForm::getValue));
-
-        //return list.subList(list.size()-6,list.size());
-        return list;
+        return sankeyFormAndDate.getSankeyitems();
     }
 
     @ResponseBody
     @PostMapping("/sankey_sports_post")
     public List<SankeyForm> sankey_sports() {
 
-        List<SankeyForm> list = new ArrayList<>();
-        List<SankeyFormAndDate> sankeyFormAndDate;
+        SankeyFormAndDate sankeyFormAndDate;
+        sankeyFormAndDate = graphRepository.findTopByGroupOrderByDateDesc("sports");
 
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
-        Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.HOUR, -2 );    // 1시간 이내
-        String beforeTime = date.format(cal.getTime());
-
-        sankeyFormAndDate = graphRepository.findSankeyFormAndDateByGroupAndDateGreaterThanEqual("sports",beforeTime);
-        list = sankeyFormAndDate.get(0).getSankeyitems();
-
-        return list;
+        return sankeyFormAndDate.getSankeyitems();
     }
 
     @GetMapping("/sankey")
