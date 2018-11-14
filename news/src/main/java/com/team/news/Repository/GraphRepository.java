@@ -10,6 +10,5 @@ import java.util.List;
 public interface GraphRepository extends MongoRepository<SankeyFormAndDate, String> {
 
     @Nullable
-    List<SankeyFormAndDate> findSankeyFormAndDateByGroupAndDateGreaterThanEqual(String group, String date);
-
+    SankeyFormAndDate findTopByGroupOrderByDateDesc(String group);
 }
