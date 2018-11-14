@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.team.news.Form.News;
@@ -20,6 +25,7 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
@@ -335,10 +341,14 @@ public class CrawlingNaver {
                 "//span[@class='u_cbox_count'] | //em[@class='simplecmt_num']")).getText();
         recommend_str = driver.findElement(By.cssSelector("em.u_cnt._count")).getText();
 
-        like_str = like_str.replace(",","");
-        comment_str = comment_str.replace(",","");
-        recommend_str = recommend_str.replace(",","");
+//        like_str = like_str.replace(",","");
+//        comment_str = comment_str.replace(",","");
+//        recommend_str = recommend_str.replace(",","");
 
+
+        like_count = Integer.parseInt( like_str.replace(",","") );
+        comment_count = Integer.parseInt( comment_str.replace(",","") );
+        recommend_count = Integer.parseInt( recommend_str.replace(",","") );
 
 
         if(like_str.equals("공감") || like_str.equals(""))
@@ -370,7 +380,18 @@ public class CrawlingNaver {
         double weight = (like_count + recommend_count + comment_count) / Math.sqrt(duration.getSeconds());
         news.setWeight(weight);
 
+
+        String tmp;
+        WebElement element;
+        for(int i=1;i<=5;i++){
+            tmp  =  driver.findElement(By.xpath(
+                    "//div[contains(@class,'end_btn')]/div[@class='_reactionModule u_likeit']/ul/li["+i+"]")).getText();
+            int index = tmp.indexOf('\n');
+            tmp = tmp.substring(index+1);
+            tmp = tmp.replace(",","");
+            news.setReaction_list(i-1,Integer.parseInt(tmp));
+
+        }
+
     }
-
-
 }
