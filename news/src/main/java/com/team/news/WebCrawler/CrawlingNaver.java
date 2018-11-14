@@ -4,11 +4,6 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.team.news.Form.News;
@@ -118,6 +113,7 @@ public class CrawlingNaver {
                 for(Element e : ele){
 
                     news = new News();
+
                     Element tmp = e.selectFirst("a");
                     Elements span =  e.select("span");
 
@@ -143,19 +139,20 @@ public class CrawlingNaver {
                                 countReaction(news,0);
                                 newsRepository.save(news);
                                 cnt++;
-                            } catch (Exception e2) {}
+                            } catch (Exception e2) {
+                                logger.info(category + " : " + e2);
+                            }
                         }
 
                     }
                 }
                 //ghostDriver.quit();
             } catch (IOException e1) {
-                logger.info("error : " + e1);
+                logger.info( category + "error : " + e1);
                 e1.printStackTrace();
-
             }
-
         }
+        logger.info("\"기사 개수 : \"" + cnt);
         return cnt;
     }
 
