@@ -24,4 +24,8 @@ public class SankeyFormAndDate {
     public List<SankeyForm> getSankeyitems() {
         return sankeyitems;
     }
+
+    public String getDate() {return date;}
+
+    public String toString() {return "SankeyFormAndDate : date="+date+", group="+group;}
 }

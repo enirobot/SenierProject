@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -41,6 +40,12 @@ public class MainPageController {
     public String main(Model model) {
 
         return "main";
+    }
+
+    @GetMapping("/index")
+    public String index(Model model) {
+
+        return "index";
     }
 
     @GetMapping("/mainNewsList")
