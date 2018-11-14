@@ -18,9 +18,14 @@ public interface MainNewsListRepository extends MongoRepository<MainNewsList, St
     @Nullable
     List<MainNewsList> findByDateBetweenOrderByTotalWeightDescCountsDesc(@Nullable String from, String to);
 
-    // Date에서 from과 to 사이의 값을 counts 내림차순, totalWeight 내림차순 한 값을 가져옴
+    // Date에서 from과 to 사이, totalWeight가 0이 아닌 값을 counts 내림차순, totalWeight 내림차순 하여 가져옴
     @Nullable
     List<MainNewsList> findByDateBetweenAndTotalWeightGreaterThanOrderByCountsDescTotalWeightDesc(@Nullable String from, String to, int weight);;
+
+    // Date에서 from과 to 사이, totalWeight가 0이 아닌 값을 totalWeight 내림차순, counts 내림차순 하여 가져옴
+    @Nullable
+    List<MainNewsList> findByDateBetweenAndTotalWeightGreaterThanOrderByTotalWeightDescCountsDesc(@Nullable String from, String to, int weight);;
+
 
     @Nullable
     List<MainNewsList> findMainNewsListByWordAndDateGreaterThanEqual(String word, String date);

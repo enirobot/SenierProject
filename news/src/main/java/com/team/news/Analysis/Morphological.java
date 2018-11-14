@@ -81,7 +81,6 @@ public class Morphological {
                     item.getTotalWeight(),
                     item.getMainNewsItems()));
 
-            System.out.println(item.getCounts() + ", " + item.getTotalWeight());
         }
 
         mainNewsListRepository.saveAll(list);   // mongoDB에 저장 (mainNewsList)

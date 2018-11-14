@@ -165,13 +165,13 @@ public class CrawlingNaver {
         int cnt = 0;
         String tmp_hour;
         String attach_url = "https://entertain.naver.com";
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter urlDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         logger.info("--------entertainment--------");
 
         for(int i=1;i<MAX_PAGE;++i) {
             try {
-                this.url = "https://entertain.naver.com/now?sid=106&date="+dateFormat.format(today)+"&page="+i;
+                this.url = "https://entertain.naver.com/now?sid=106&date="+urlDateFormat.format(today)+"&page="+i;
                 Document doc = Jsoup.connect(this.url).get();
                 ele = doc.select(".news_lst li .tit_area");
 
@@ -212,7 +212,7 @@ public class CrawlingNaver {
                                 cnt++;
 
                             } catch (Exception e2) {
-                                logger.info("entertainment_error2 : " + e2);
+                                logger.debug("entertainment_error2 : " + e2);
                             }
                         }
 
@@ -281,7 +281,7 @@ public class CrawlingNaver {
                                             newsRepository.save(news);
                                             cnt++;
                                         } catch (Exception e2) {
-                                            logger.info(category + "_error2 : " + e2);
+                                            logger.debug(category + "_error2 : " + e2);
                                         }
 
                                     }
@@ -341,14 +341,9 @@ public class CrawlingNaver {
                 "//span[@class='u_cbox_count'] | //em[@class='simplecmt_num']")).getText();
         recommend_str = driver.findElement(By.cssSelector("em.u_cnt._count")).getText();
 
-//        like_str = like_str.replace(",","");
-//        comment_str = comment_str.replace(",","");
-//        recommend_str = recommend_str.replace(",","");
-
-
-        like_count = Integer.parseInt( like_str.replace(",","") );
-        comment_count = Integer.parseInt( comment_str.replace(",","") );
-        recommend_count = Integer.parseInt( recommend_str.replace(",","") );
+        like_str = like_str.replace(",","");
+        comment_str = comment_str.replace(",","");
+        recommend_str = recommend_str.replace(",","");
 
 
         if(like_str.equals("공감") || like_str.equals(""))

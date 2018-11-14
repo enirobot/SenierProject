@@ -84,7 +84,7 @@ public class MainPageController {
         String fromTime = dateFormat.format(now.minusHours(3));         // 3시간 전
         String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
 
-        List<MainNewsList> mainNewsLists = mainNewsListRepository.findByDateBetweenAndTotalWeightGreaterThanOrderByCountsDescTotalWeightDesc(fromTime, toTime, 0);
+        List<MainNewsList> mainNewsLists = mainNewsListRepository.findByDateBetweenAndTotalWeightGreaterThanOrderByTotalWeightDescCountsDesc(fromTime, toTime, 0);
 
         logger.info("mainNewsLists 개수 : " + mainNewsLists.size() + "개");
 
