@@ -115,6 +115,8 @@ public class CrawlingNaver {
                 doc = Jsoup.connect(url).get();
                 ele = doc.select(".type02 li");
 
+                if(ele.isEmpty()) break;
+
                 Elements last_element = ele.last().select("span");
                 tmp_hour = last_element.get(last_element.size()-1).text();
 
@@ -183,6 +185,8 @@ public class CrawlingNaver {
                 this.url = "https://entertain.naver.com/now?sid=106&date="+urlDateFormat.format(today)+"&page="+i;
                 Document doc = Jsoup.connect(this.url).get();
                 ele = doc.select(".news_lst li .tit_area");
+
+                if(ele.isEmpty()) break;
 
                 Elements last_element = ele.last().select("span");
                 tmp_hour = last_element.select("em").text();
