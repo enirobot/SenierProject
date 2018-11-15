@@ -1,27 +1,28 @@
 package com.team.news.Controller;
+import org.slf4j.Logger;
 
-import com.team.news.Form.News;
 import com.team.news.Repository.NewsRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * html 테스트할 때 사용되는 컨트롤러
  */
-@Controller
+@RestController
 public class HomeController {
+
+    Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     @Autowired
     private NewsRepository repository;
 
+
+
     @GetMapping("/home")
     public String index(Model model) {
-        List<News> temp = repository.findNewsByTitleIsLike("포토");
-
         return "home";
     }
 }

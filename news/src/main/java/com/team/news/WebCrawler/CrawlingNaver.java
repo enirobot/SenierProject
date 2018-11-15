@@ -4,11 +4,6 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.team.news.Form.News;
@@ -82,19 +77,24 @@ public class CrawlingNaver {
         String[] sports_categroy_arr = {"스포츠-야구","스포츠-해외야구","스포츠-축구","스포츠-해외축구","스포츠-농구","스포츠-e스포츠"};
 
 
-        try {
-           total_cnt += run_entertainment();
+        total_cnt += run_entertainment();
 
-            for(int i=0;i<sports_arr.length;i++)
-                total_cnt += run_sports(sports_arr[i],sports_categroy_arr[i]);
+        for(int i=0;i<category_arr.length;i++)
+            total_cnt += run(i+100,category_arr[i]);
 
-            for(int i=0;i<category_arr.length;i++)
-                total_cnt += run(i+100,category_arr[i]);
-        }
-        catch (java.text.ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+//        try {
+//           total_cnt += run_entertainment();
+//
+//            for(int i=0;i<sports_arr.length;i++)
+//                total_cnt += run_sports(sports_arr[i],sports_categroy_arr[i]);
+//
+//            for(int i=0;i<category_arr.length;i++)
+//                total_cnt += run(i+100,category_arr[i]);
+//        }
+//        catch (java.text.ParseException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
 
         logger.info("\r\n총 기사 개수 : " + total_cnt);
 

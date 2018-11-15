@@ -6,16 +6,22 @@ import com.team.news.Repository.NewsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOptions;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static org.springframework.data.domain.Sort.Direction.DESC;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
 /**
  * 메인 페이지
@@ -28,17 +34,20 @@ public class MainPageController {
 
 
     private final NewsRepository newsRepository;
+    private final MongoTemplate mongoTemplate;
+
     private final MainNewsListRepository mainNewsListRepository;
 
     @Autowired
-    public MainPageController(NewsRepository newsRepository, MainNewsListRepository mainNewsListRepository) {
+    public MainPageController(NewsRepository newsRepository, MainNewsListRepository mainNewsListRepository
+            , MongoTemplate mongoTemplate) {
         this.newsRepository = newsRepository;
+        this.mongoTemplate = mongoTemplate;
         this.mainNewsListRepository = mainNewsListRepository;
     }
 
     @GetMapping("/main")
-    public String main(Model model) {
-
+    public String main(Model model) throws Exception {
         return "main";
     }
 
@@ -89,19 +98,30 @@ public class MainPageController {
         String fromTime = dateFormat.format(now.minusHours(3));         // 3시간 전
         String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
 
-        List<MainNewsList> mainNewsLists = mainNewsListRepository.findByDateBetweenAndTotalWeightGreaterThanOrderByTotalWeightDescCountsDesc(fromTime, toTime, 0);
+        Aggregation agg = newAggregation(
+                match(Criteria.where("date").gte(fromTime).lte(toTime)
+                        .and("totalWeight").gt(0)
+                        .and("counts").gt(1)),
+                group("word")
+                        .sum("totalWeight").as("totalWeight")
+                        .push("_id").as("idList"),
+                sort(DESC, "totalWeight"),
+                limit(30)
+        );
 
-        logger.info("mainNewsLists 개수 : " + mainNewsLists.size() + "개");
+        AggregationResults<WCForm> result = mongoTemplate.aggregate(agg, "mainNewsList", WCForm.class);
+        List<WCForm> WCFormList = result.getMappedResults();
 
-        for (MainNewsList item : mainNewsLists) {
-            System.out.println(item.getWord() + " " + item.getCounts() + " " + item.getTotalWeight());
-            list.add(new WCForm(item.getWord(), item.getCounts(), item.getId()));
+        logger.info("WCFormList size:" + WCFormList.size());
+
+        for (WCForm item : WCFormList) {
+            System.out.println(item.getWord() + " " + item.getTotalWeight() + " " + item.getIdList().size());
+            list.add(new WCForm(item.getWord(), item.getTotalWeight(), item.getIdList()));
         }
 
+        logger.info("wordcloud 개수 : " + WCFormList.size() + "개");
 
-        logger.info("wordcloud 개수 : " + mainNewsLists.size() + "개");
-
-        return list.subList(0, 30);     // 상위 30개
+        return list;     // 상위 30개
     }
 
 
@@ -114,10 +134,18 @@ public class MainPageController {
     @PostMapping("/newsList")
     public List<MainNewsItem> NewsList(@RequestBody String data) {
 
-        MainNewsList mainNewsList;
-        mainNewsList = mainNewsListRepository.findMainNewsListById( data.replaceAll("\"", "") );
+        List<MainNewsItem> idList = new ArrayList<>();
+        List<MainNewsList> mainNewsList;
 
-        return mainNewsList.getNewsItems();
+        // url 형식으로 들어오는 id의 list를 잘라내어 그것을 가지고 mainNewsItem들을 가져옴
+        mainNewsList = mainNewsListRepository.findByIdIn(
+                Arrays.asList(data.replaceAll("\"", "").split(",")));
+
+        for (MainNewsList item : mainNewsList)
+            for (MainNewsItem tem: item.getNewsItems())
+                idList.add(tem);
+
+        return idList;
     }
 
 }
