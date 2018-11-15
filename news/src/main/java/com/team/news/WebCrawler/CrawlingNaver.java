@@ -4,20 +4,12 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.team.news.Form.News;
 
 import com.team.news.Repository.NewsRepository;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -34,12 +26,13 @@ import org.slf4j.LoggerFactory;
 
 public class CrawlingNaver {
 
-    static final int MAX_PAGE = 30;
+    static final int MAX_PAGE = 20;
     private String url;
     private Document doc;
     private Elements ele;// = doc.select("div.article");
     private LocalDateTime today = LocalDateTime.now();
     private WebDriver driver;
+    private WebDriver driver2;
     private ChromeOptions options;
     private DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
     private NewsRepository newsRepository;
@@ -76,6 +69,7 @@ public class CrawlingNaver {
 
         SelenumSetup();
         driver = new ChromeDriver(options);
+        driver2 = new ChromeDriver(options);
 
         String[] category_arr = {"정치","경제","사회","생활/문화","세계","IT/과학"};
         String[] sports_arr = {"kbaseball","wbaseball","kfootball","wfootball","basketball","esports"};
@@ -96,8 +90,6 @@ public class CrawlingNaver {
             e.printStackTrace();
         }
 
-        logger.info("\r\n총 기사 개수 : " + total_cnt);
-
         driver.quit();
     }
 
@@ -110,7 +102,6 @@ public class CrawlingNaver {
 
         for(int i=1;i<MAX_PAGE;i++) {
             try {
-
                 url = "http://news.naver.com/main/list.nhn?mode=LSD&mid=sec&listType=title&sid1="+num+"&page="+i;
                 doc = Jsoup.connect(url).get();
                 ele = doc.select(".type02 li");
@@ -122,51 +113,53 @@ public class CrawlingNaver {
 
                 if(tmp_hour.contains("시간전")) {
                     for (Element e : ele) {
+                        try {
+                            news = new News();
+                            Element tmp = e.selectFirst("a");
+                            Elements span = e.select("span");
 
-
-                        news = new News();
-                        Element tmp = e.selectFirst("a");
-                        Elements span = e.select("span");
-
-                        news.setTitle(tmp.text()); // title
-                        news.setUrl(tmp.attr("href")); // url
-
-                        if (!isExist(news.getTitle(), news.getUrl())) {
+                            news.setTitle(tmp.text()); // title
+                            news.setUrl(tmp.attr("href")); // url
                             news.setCategory(category); // category
                             news.setCompany(span.get(0).text()); //company
                             tmp_hour = span.get(span.size() - 1).text(); //before hour
 
-                            if (tmp_hour.contains("3시간전")) {
+                            if (tmp_hour.contains("3시간전")||tmp_hour.contains("4시간전")) {
                                 logger.info("\"기사 개수 : \"" + cnt);
                                 return cnt;
                             }
-                            if (tmp_hour.contains("시간전")) {
-                                try {
-                                    doc = Jsoup.connect(news.getUrl()).get();
-                                    ele = doc.select("#articleBodyContents");
-                                    news.setContent(ele.text());
-                                    Elements ele2 = doc.select("div .sponsor span");
-                                    news.setDate(ele2.select(".t11").first().text().replaceAll("-", "/"));
 
-                                    countReaction(news, 0);
+                            if (!isExist(news.getTitle(), news.getUrl())) {
+                                if (tmp_hour.contains("시간전")) {
+                                    driver2.get(news.getUrl());
+                                    driver2.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+                                    String contents = driver2.findElement(By.xpath("//div[@id='articleBodyContents']")).getText();
+                                    String date = driver2.findElement(By.xpath("//span[@class='t11']")).getText();
+                                    date = date.replace("-", "/");
+
+                                    news.setContent(contents);
+                                    news.setDate(date);
+                                    countReaction(driver2, news, 0);
                                     newsRepository.save(news);
                                     cnt++;
-                                } catch (Exception e2) {
-                                    logger.debug("news_error : " + e2);
                                 }
-                            }
 
+                            }
+                        }
+                        catch (Exception e1) {
+                            logger.info("url : " + news.getUrl());
+                            logger.info("news_error : " + e1);
+                            e1.printStackTrace();
                         }
                     }
                 }
-                //ghostDriver.quit();
             } catch (IOException e1) {
-                logger.info("error : " + e1);
-                e1.printStackTrace();
 
             }
 
         }
+        logger.info("\"기사 개수 : \"" + cnt);
         return cnt;
     }
 
@@ -200,40 +193,40 @@ public class CrawlingNaver {
 
                         news.setTitle(tmp.text()); // title
                         news.setUrl(attach_url.concat(tmp.attr("href"))); // url
+                        news.setCategory(category); // category
+
+                        tmp_hour = span.select("em").text(); //before hour
                         int index = span.text().indexOf(" ");
+                        news.setCompany(span.text().substring(0, index)); //company
+
+                        if (tmp_hour.contains("3시간전") || tmp_hour.contains("4시간전")) {
+                            logger.info("\"기사 개수 : \"" + cnt);
+                            return cnt;
+                        }
 
                         if (!isExist(news.getTitle(), news.getUrl())) {
-                            news.setCategory(category); // category
-                            news.setCompany(span.text().substring(0, index)); //company
-                            tmp_hour = span.select("em").text(); //before hour
-
-                            if (tmp_hour.contains("3시간전")) {
-                                logger.info("\"기사 개수 : \"" + cnt);
-                                return cnt;
-                            }
-
                             if (tmp_hour.contains("시간전")) {
                                 try {
-                                    driver.get(news.getUrl());
-                                    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-                                    JavascriptExecutor executor = (JavascriptExecutor) driver;
+                                    driver2.get(news.getUrl());
+                                    driver2.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
-                                    String time_s = driver.findElement(By.xpath("//span[@class = 'author']/em")).getText();
+                                    String time_s = driver2.findElement(By.xpath("//span[@class = 'author']/em")).getText();
                                     LocalDateTime old_date = LocalDateTime.parse(time_s, DateTimeFormatter.ofPattern("yyyy.MM.dd a h:mm"));
 //                                Date old_date = new SimpleDateFormat("yyyy.MM.dd a h:mm").parse(time_s);
 //                                news.setDate(dateFormat.format(old_date));
                                     news.setDate(dateFormat.format(old_date));
 
-                                    news.setContent(driver.findElement(By.id("articeBody")).getText());
-                                    countReaction(news, 1);
+                                    news.setContent(driver2.findElement(By.id("articeBody")).getText());
+                                    countReaction(driver2, news, 1);
                                     newsRepository.save(news);
+                                    System.out.println(news.getTitle());
                                     cnt++;
 
                                 } catch (Exception e2) {
+                                    logger.info("url : " + news.getUrl());
                                     logger.debug("entertainment_error : " + e2);
                                 }
                             }
-
                         }
                     }
                 }
@@ -250,83 +243,73 @@ public class CrawlingNaver {
 
     public int run_sports(String group, String category) throws java.text.ParseException {
         int cnt = 0;
-
+        WebElement tmp_e = null;
         logger.info("--------"+category+"--------");
 
         for(int i=1;i<MAX_PAGE;i++) {
 
-//            System.out.println("page : "+i);
+            url = "https://sports.news.naver.com/"+group+"/news/index.nhn?isphoto=N&page="+i;
+            driver.get(url);
+            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+            JavascriptExecutor executor = (JavascriptExecutor) driver;
 
-            try {
+            By mySelector = By.xpath("//div[@class='content_area']/div[@class='news_list']/ul/li");
+            List<WebElement> ele_list = driver.findElements(mySelector);
 
-                url = "https://sports.news.naver.com/"+group+"/news/index.nhn?isphoto=N&page="+i;
-                doc = Jsoup.connect(url).get();
-                ele = doc.select("script");
-                Elements eles = ele.attr("type", "text/javascript");
-                String attach_url = "https://sports.news.naver.com/kbaseball/news/read.nhn?";
+            tmp_e = driver.findElement(mySelector);
 
-                for(Element e : eles)
-                    if (e.data().contains("NewsListPage")) {
-                        String tmp = e.data();
-                        String split[];
-                        split = tmp.split("\\r?\\n");
-                        String jsonStr = split[7].substring(17);
-                        try {
-                            JSONParser jsonParser = new JSONParser();
-                            JSONObject jsonObj = (JSONObject) jsonParser.parse(jsonStr);
-                            JSONArray listarray = (JSONArray) jsonObj.get("list");
-                            for (int j = 0; j < listarray.size(); j++) {
-                                news = new News();
-                                JSONObject tempObj = (JSONObject) listarray.get(j);
 
-                                news.setCategory(category);
-                                news.setCompany(tempObj.get("officeName").toString());
-                                news.setTitle(tempObj.get("title").toString());
-                                news.setDate(tempObj.get("datetime").toString().replace(".","/"));
-                                news.setUrl(attach_url + "oid=" + tempObj.get("oid") + "&aid=" + tempObj.get("aid"));
+            for(int j=1;j<=ele_list.size();j++) {
+                try {
+                    news = new News();
 
-                                if(news.IsOutHour(3)) {
-                                    logger.info("\"기사 개수 : \"" + cnt);
-                                    return cnt;
-                                }
+                    String title = null;
+                    String company = null;
+                    String url = null;
+                    String date = null;
 
-                                if (!isExist(news.getTitle(),news.getUrl())) {
-                                    if(news.IsInHour(3) && news.IsOutHour(1)) {
-                                        try {
-                                            driver.get(news.getUrl());
-                                            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-                                            JavascriptExecutor executor = (JavascriptExecutor)driver;
+                    WebElement ele = driver.findElement(By.xpath("//div[@class='content_area']/div[@class='news_list']/ul/li[" + j + "]"));
+                    title = ele.findElement(By.cssSelector("a.title")).getText();
+                    company = ele.findElement(By.cssSelector("span.press")).getText();
+                    url = ele.findElement(By.cssSelector("a.title")).getAttribute("href");
+                    date = ele.findElement(By.cssSelector("span.time")).getText();
+                    date = date.replace(".", "/");
 
-//                                            System.out.println(news.getTitle());
-//                                            System.out.println(news.getDate());
+                    news.setTitle(title);
+                    news.setCompany(company);
+                    news.setDate(date);
+                    news.setUrl(url);
 
-                                            news.setContent(driver.findElement(By.id("newsEndContents")).getText());
-                                            countReaction(news,0);
-                                            newsRepository.save(news);
-                                            cnt++;
-                                        } catch (Exception e2) {
-                                            logger.debug(category + "sports_error : " + e2);
-                                        }
+                    if (news.IsInHour(3)) {
+                        if (!news.IsInHour(1) && !isExist(news.getTitle(), news.getUrl())) {
+                            driver2.get(news.getUrl());
+                            driver2.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
-                                    }
-
-                                }
-                            }
-
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
+                            String contents = driver2.findElement(By.xpath("//div[@id='newsEndContents']")).getText();
+                            news.setContent(contents);
+                            countReaction(driver2, news, 1);
+                            newsRepository.save(news);
+                            cnt++;
                         }
+                    } else {
+                        logger.info("\"기사 개수 : \"" + cnt);
+                        return cnt;
                     }
-
-            } catch (IOException e1) {
-                e1.printStackTrace();
+                } catch(Exception e3) {
+                    logger.info("url : " + news.getUrl());
+                    logger.info("sports_error : " + e3);
+                    e3.printStackTrace();
+                }
             }
+
         }
         logger.info("\"기사 개수 : \"" + cnt);
         return cnt;
     }
 
     public boolean isExist(String title, String url){
+
+        url = url.replace("?", "=.q_m");
 
         int count = 0;
         count += newsRepository.countByTitle(title);
@@ -335,18 +318,15 @@ public class CrawlingNaver {
         if(count == 0) {
             return false;
         }
-        else
+        else {
             return true;
+        }
     }
 
-    public void countReaction(News news, int flag)
+    public void countReaction(WebDriver driver, News news, int flag)
     {
         //flag : 1, entertainment
         //flag : 0, sprots, run
-
-        driver.get(news.getUrl());
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        JavascriptExecutor executor = (JavascriptExecutor)driver;
 
         String like_str;
         String comment_str;
@@ -402,12 +382,10 @@ public class CrawlingNaver {
         }
 
         LocalDateTime newsTime = LocalDateTime.parse(news.getDate(), dateFormat);
-
         Duration duration = Duration.between(newsTime, today);  //두 날짜 차이
 
         double weight = (like_count + recommend_count + comment_count) / Math.sqrt(duration.getSeconds());
         news.setWeight(weight);
-
 
         String tmp;
         WebElement element;
@@ -418,7 +396,6 @@ public class CrawlingNaver {
             tmp = tmp.substring(index+1);
             tmp = tmp.replace(",","");
             news.setReaction_list(i-1,Integer.parseInt(tmp));
-
         }
 
     }
