@@ -38,6 +38,12 @@ public class MainPageController {
         return "main";
     }
 
+    @GetMapping("/index")
+    public String index(Model model) {
+
+        return "index";
+    }
+
     @GetMapping("/mainNewsList")
     public String mainNewsList(Model model) {
 

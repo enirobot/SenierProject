@@ -201,7 +201,7 @@ public class Morphological {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.MINUTE, -30 );    // 1시간 이내
+        cal.add( Calendar.HOUR, -2 );    // 2시간 이내
         String beforeTime = date.format(cal.getTime());
 
         for(int i=0;i<company.size();i++){
@@ -211,8 +211,6 @@ public class Morphological {
                 tmp.source = company.get(i);
                 tmp.destination = category.get(j);
                 tmp.value = repository.countByCategoryLikeAndCompanyAndDateGreaterThanEqual(category.get(j), company.get(i),beforeTime);
-
-
 
                 if(tmp.value != 0) {
                     sankeyFormAndDate.addSankeyitems(tmp);
