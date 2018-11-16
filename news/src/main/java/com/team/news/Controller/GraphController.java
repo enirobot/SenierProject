@@ -41,8 +41,19 @@ public class GraphController {
     @PostMapping("/sankey_minor_post")
     public List<SankeyForm> sankey_minor() {
 
+        List<SankeyForm> sort_list, list;
+
         SankeyFormAndDate sankeyFormAndDate;
         sankeyFormAndDate = graphRepository.findTopByGroupOrderByDateDesc("minor");
+
+        list = sankeyFormAndDate.getSankeyitems();
+        sort_list = sankeyFormAndDate.getSankeyitems();
+
+        if(list.size() > 10)
+        {
+            sort_list.sort(Comparator.comparing(SankeyForm::getValue));
+            return sort_list.subList(list.size()-10,list.size());
+        }
 
         return sankeyFormAndDate.getSankeyitems();
     }

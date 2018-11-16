@@ -24,6 +24,7 @@ public class News {
     private String title;	// 제목
     private String company;	// 언론사
     private String date;    // 날짜 (yyyy/MM/dd HH:mm)
+    private String crawling_date; // 크롤링 시간
     private String category;// 카테고리
     private String url;		// 기사 주소
     private String content;	// 내용
@@ -44,7 +45,8 @@ public class News {
         this.content = content;
     }
 
-    public News() {
+    public News(String date) {
+        this.crawling_date = date;
         reaction_list = new int[5];
         this.title = null;
         this.company = null;
