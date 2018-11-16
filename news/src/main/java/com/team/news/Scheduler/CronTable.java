@@ -52,7 +52,7 @@ public class CronTable {
 //    public void monthJob() {
 //
 //    }
-
+//
     //서버 시작하고 10초후에 실행 후 30분마다 실행
     @Scheduled(initialDelay = 10000, fixedDelay = 1800000)
     public void Job() {
@@ -63,6 +63,7 @@ public class CronTable {
 
         String fromTime = dateFormat.format(now.minusHours(3));         // 3시간 전
         String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
+        String MorphologicalTime = dateFormat.format(now.minusMinutes(40));
 
         logger.info("web crawling start");
         CrawlingNaver crawlingNaver = new CrawlingNaver(newsRepository);
@@ -71,7 +72,7 @@ public class CronTable {
 
         logger.info("web morphological start");
         Morphological morphological = new Morphological();
-        morphological.analysis(newsRepository, mainNewsListRepository, fromTime, toTime);
+        morphological.analysis(newsRepository, mainNewsListRepository, MorphologicalTime);
         logger.info("web morphological end");
 
         logger.info("web sankey_major_analysis start");

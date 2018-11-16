@@ -23,7 +23,7 @@ public class News {
 
     private String title;	// 제목
     private String company;	// 언론사
-    private String date;    // 날짜
+    private String date;    // 날짜 (yyyy/MM/dd HH:mm)
     private String category;// 카테고리
     private String url;		// 기사 주소
     private String content;	// 내용
@@ -46,6 +46,12 @@ public class News {
 
     public News() {
         reaction_list = new int[5];
+        this.title = null;
+        this.company = null;
+        this.date = null;
+        this.category = null;
+        this.url = null;
+        this.content = null;
     }
 
     public String getId() {
@@ -91,7 +97,7 @@ public class News {
 
     public String getUrl() {
         String temp;
-        temp = url.replaceAll("=.q_m", "?");
+        temp = url.replace("=.q_m", "?");
         return temp;
     }
 
