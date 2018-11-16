@@ -407,7 +407,6 @@ public class CrawlingNaver {
         Duration duration = Duration.between(newsTime, today);  //두 날짜 차이
 
         double weight = (like_count + recommend_count + comment_count) / Math.sqrt(duration.getSeconds());
-        news.setWeight(weight);
 
         String tmp;
         WebElement element;
@@ -419,6 +418,9 @@ public class CrawlingNaver {
             tmp = tmp.replace(",","");
             news.setReaction_list(i-1,Integer.parseInt(tmp));
         }
+
+        int emotion_weight = news.getReaction_list(0) + news.getReaction_list(1)
+                - news.getReaction_list(2) - news.getReaction_list(3);
 
     }
 }
