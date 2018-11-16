@@ -6,17 +6,15 @@ package com.team.news.Form;
 
 public class LineForm {
     public String word;
-    public String counts;
+    public int counts;
     public String date;
 
-    public LineForm(String word, String counts, String date)
+    public LineForm(String word, int counts, String date)
     {
         this.word = word;
         this.counts = counts;
         this.date = date;
     }
-
-    public LineForm() {}
 
     public String getWord() {
         return word;
@@ -26,11 +24,11 @@ public class LineForm {
         this.word = word;
     }
 
-    public String getCounts() {
+    public int getCounts() {
         return counts;
     }
 
-    public void setCount(String counts) {
+    public void setCount(int counts) {
         this.counts = counts;
     }
 

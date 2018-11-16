@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Controller
@@ -29,33 +31,35 @@ public class LineController {
 
     @GetMapping("/line")
     public String main(Model model) {
-
+        System.out.println(33);
         return "line";
     }
 
     @ResponseBody
     @PostMapping("/lineChart")
-    public List<LineForm> line(@RequestBody String keyword) {
+    public List<LineForm> line() {
 
         List<LineForm> list = new ArrayList<>();
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -7);     // 검색일로부터 일주일 전의 날짜를 저장
+        cal.add(Calendar.HOUR, -2);     // 2시간 전
         String beforeTime = date.format(cal.getTime());
         System.out.println(beforeTime);
-        System.out.println(keyword);
 
-//        int mainNewsLists = mainNewsListRepository.countMainNewsListByDateGreaterThanEqualAndWord(beforeTime, keyword);
-//        List<LineForm> mainNewsLists = mainNewsListRepository.findMainNewsListByDateGreaterThanEqual(beforeTime);
-//        for (MainNewsList item : mainNewsLists) {
-//            if(keyword.equals("\"" + item.getWord() + "\""))    // keyword를 큰 따옴표가 붙은 형태로 받아옴
-//                list.add(new LineForm(item.getWord(), item.getCounts(), item.getDate()));
-//        }
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+        LocalDateTime now = LocalDateTime.now();    // 현재 시간
+        String fromTime = dateFormat.format(now.minusHours(3));         // 3시간 전
+        String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
 
+        List<MainNewsList> mainNewsLists = mainNewsListRepository.findByDateBetweenAndTotalWeightGreaterThanOrderByTotalWeightDescCountsDesc(fromTime, toTime, 0);
+        for (MainNewsList item : mainNewsLists) {
+                list.add(new LineForm(item.getWord(), item.getCounts(), item.getDate()));
+        }
         for (LineForm item : list.subList(0, 7)){
             System.out.println(item.getWord() + ' ' + item.getCounts() + ' ' + item.getDate());
         }
+        System.out.println(list.subList(0,7));
         return list.subList(0, 7);     // 상위 10개
     }
 }

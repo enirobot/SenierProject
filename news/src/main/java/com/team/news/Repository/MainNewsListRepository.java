@@ -15,6 +15,10 @@ public interface MainNewsListRepository extends MongoRepository<MainNewsList, St
     @Nullable
     List<MainNewsList> findMainNewsListByDateGreaterThanEqual(@Nullable String date);   // date 날짜 이후의 내용
 
+    @Nullable
+    List<MainNewsList> findMainNewsListsByWordGreaterThanEqualOrderByCountsDesc(@Nullable String date);
+
+
     // Date에서 from과 to 사이의 값을 totalWeight 내림차순, counts 내림차순 한 값을 가져옴
     @Nullable
     List<MainNewsList> findByDateBetweenOrderByTotalWeightDescCountsDesc(@Nullable String from, String to);
