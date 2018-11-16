@@ -63,8 +63,7 @@ public class CronTable {
 
         String fromTime = dateFormat.format(now.minusHours(3));         // 3시간 전
         String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
-//        String MorphologicalTime = dateFormat.format(now.minusMinutes(40));
-        String MorphologicalTime = dateFormat.format(now.minusMinutes(600));
+        String MorphologicalTime = dateFormat.format(now.minusMinutes(40));
 
         logger.info("web crawling start");
         CrawlingNaver crawlingNaver = new CrawlingNaver(newsRepository);
