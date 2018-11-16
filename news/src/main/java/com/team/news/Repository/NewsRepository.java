@@ -17,6 +17,9 @@ public interface NewsRepository extends MongoRepository<News, String> {
     List<News> findByDateGreaterThanEqual(@Nullable String date); // date 날짜 이후의 내용
 
     @Nullable
+    List<News> findByCrawlingDateGreaterThanEqual(@Nullable String crawlingDate);
+
+    @Nullable
     List<News> findByDateBetween(@Nullable String from, String to);
 
     @Nullable
