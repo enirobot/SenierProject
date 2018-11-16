@@ -90,6 +90,7 @@ public class CrawlingNaver {
             e.printStackTrace();
         }
 
+        logger.info("\"총 기사 개수 : \"" + total_cnt);
         driver.quit();
     }
 
@@ -145,6 +146,11 @@ public class CrawlingNaver {
                                     cnt++;
                                 }
 
+                            }
+                            else
+                            {
+                                logger.info("\"기사 개수 : \"" + cnt);
+                                return cnt;
                             }
                         }
                         catch (Exception e1) {
@@ -219,7 +225,6 @@ public class CrawlingNaver {
                                     news.setContent(driver2.findElement(By.id("articeBody")).getText());
                                     countReaction(driver2, news, 1);
                                     newsRepository.save(news);
-                                    System.out.println(news.getTitle());
                                     cnt++;
 
                                 } catch (Exception e2) {
@@ -227,6 +232,11 @@ public class CrawlingNaver {
                                     logger.debug("entertainment_error : " + e2);
                                 }
                             }
+                        }
+                        else
+                        {
+                            logger.info("\"기사 개수 : \"" + cnt);
+                            return cnt;
                         }
                     }
                 }
@@ -281,15 +291,23 @@ public class CrawlingNaver {
                     news.setUrl(url);
 
                     if (news.IsInHour(3)) {
-                        if (!news.IsInHour(1) && !isExist(news.getTitle(), news.getUrl())) {
-                            driver2.get(news.getUrl());
-                            driver2.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+                        if (!news.IsInHour(1)) {
+                            if(!isExist(news.getTitle(), news.getUrl())){
+                                driver2.get(news.getUrl());
+                                driver2.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
-                            String contents = driver2.findElement(By.xpath("//div[@id='newsEndContents']")).getText();
-                            news.setContent(contents);
-                            countReaction(driver2, news, 1);
-                            newsRepository.save(news);
-                            cnt++;
+                                String contents = driver2.findElement(By.xpath("//div[@id='newsEndContents']")).getText();
+                                news.setContent(contents);
+                                countReaction(driver2, news, 1);
+                                newsRepository.save(news);
+                                cnt++;
+                            }
+                            else
+                            {
+                                logger.info("\"기사 개수 : \"" + cnt);
+                                return cnt;
+                            }
+
                         }
                     } else {
                         logger.info("\"기사 개수 : \"" + cnt);
@@ -311,15 +329,16 @@ public class CrawlingNaver {
 
         url = url.replace("?", "=.q_m");
 
-        int count = 0;
-        count += newsRepository.countByTitle(title);
-        count += newsRepository.countByUrl(url);
+        int count1 = 0;
+        int count2 = 0;
+        count1 = newsRepository.countByTitle(title);
+        count2 = newsRepository.countByUrl(url);
 
-        if(count == 0) {
-            return false;
+        if(count1 > 0 && count2 > 0) {
+            return true;
         }
         else {
-            return true;
+            return false;
         }
     }
 
