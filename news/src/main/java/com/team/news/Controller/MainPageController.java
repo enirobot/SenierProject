@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOptions;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Controller;
@@ -95,7 +93,7 @@ public class MainPageController {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         LocalDateTime now = LocalDateTime.now();    // 현재 시간
 
-        String fromTime = dateFormat.format(now.minusHours(3));         // 3시간 전
+        String fromTime = dateFormat.format(now.minusHours(10));         // 3시간 전
         String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
 
         Aggregation agg = newAggregation(
