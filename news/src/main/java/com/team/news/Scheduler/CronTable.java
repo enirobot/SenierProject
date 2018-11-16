@@ -52,7 +52,7 @@ public class CronTable {
 //    public void monthJob() {
 //
 //    }
-
+//
     //서버 시작하고 10초후에 실행 후 30분마다 실행
     @Scheduled(initialDelay = 10000, fixedDelay = 1800000)
     public void Job() {
