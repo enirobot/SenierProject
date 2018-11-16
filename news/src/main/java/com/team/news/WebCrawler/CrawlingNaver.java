@@ -34,6 +34,7 @@ public class CrawlingNaver {
     private WebDriver driver;
     private WebDriver driver2;
     private ChromeOptions options;
+    private String crawling_date;
     private DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
     private NewsRepository newsRepository;
 
@@ -67,6 +68,8 @@ public class CrawlingNaver {
     public void start() {
         int total_cnt = 0;
 
+        crawling_date = dateFormat.format(today).toString();
+
         SelenumSetup();
         driver = new ChromeDriver(options);
         driver2 = new ChromeDriver(options);
@@ -92,6 +95,7 @@ public class CrawlingNaver {
 
         logger.info("\"총 기사 개수 : \"" + total_cnt);
         driver.quit();
+        driver2.quit();
     }
 
 
@@ -115,7 +119,7 @@ public class CrawlingNaver {
                 if(tmp_hour.contains("시간전")) {
                     for (Element e : ele) {
                         try {
-                            news = new News();
+                            news = new News(crawling_date);
                             Element tmp = e.selectFirst("a");
                             Elements span = e.select("span");
 
@@ -192,7 +196,7 @@ public class CrawlingNaver {
 
                 if(tmp_hour.contains("시간전")) {
                     for (Element e : ele) {
-                        news = new News();
+                        news = new News(crawling_date);
 
                         Element tmp = e.selectFirst("a");
                         Elements span = e.select("span");
@@ -218,8 +222,6 @@ public class CrawlingNaver {
 
                                     String time_s = driver2.findElement(By.xpath("//span[@class = 'author']/em")).getText();
                                     LocalDateTime old_date = LocalDateTime.parse(time_s, DateTimeFormatter.ofPattern("yyyy.MM.dd a h:mm"));
-//                                Date old_date = new SimpleDateFormat("yyyy.MM.dd a h:mm").parse(time_s);
-//                                news.setDate(dateFormat.format(old_date));
                                     news.setDate(dateFormat.format(old_date));
 
                                     news.setContent(driver2.findElement(By.id("articeBody")).getText());
@@ -271,7 +273,7 @@ public class CrawlingNaver {
 
             for(int j=1;j<=ele_list.size();j++) {
                 try {
-                    news = new News();
+                    news = new News(crawling_date);
 
                     String title = null;
                     String company = null;
@@ -289,6 +291,7 @@ public class CrawlingNaver {
                     news.setCompany(company);
                     news.setDate(date);
                     news.setUrl(url);
+                    news.setCategory(category);
 
                     if (news.IsInHour(3)) {
                         if (!news.IsInHour(1)) {
