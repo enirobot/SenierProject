@@ -33,6 +33,7 @@ public class News {
     private int comment_count;
     private int recommend_count;
     private double weight;
+    private int emtion_weight;
 
     public News(String title, String company, String date,
                 String category, String url, String content) {
@@ -188,4 +189,11 @@ public class News {
         return "News [category=" + category  + ", date=" + date + ", title=" + title + ", url=" + getUrl() + "]";
     }
 
+    public int getEmtion_weight() {
+        return emtion_weight;
+    }
+
+    public void setEmtion_weight(int emtion_weight) {
+        this.emtion_weight = emtion_weight;
+    }
 }
