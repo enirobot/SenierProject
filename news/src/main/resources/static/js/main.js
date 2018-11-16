@@ -422,20 +422,15 @@ var main = (function($) { var _ = {
 
 					// Slide.
 
-						// Create elements.
-	 						s.$slide = $('<div class="slide"><div class="caption"></div><canvas id="canvas_cloud"></canvas></div>');
-							s.$slideWordCloud = s.$slide.children('#canvas_cloud')
-                                // <div class="image"></div>
-							s.$slideWordCloud
-                                .css('background-image', '')
-                                .css('background-position', ($thumbnail.data('position') || 'center'));
+						// Create elements
+	 						s.$slide = $('<div class="slide"><div class="caption"></div><div class="image"></div>/div>');
 	 					// // Image.
- 						// 	s.$slideImage = s.$slide.children('.image');
-						//
- 						// 	// Set background stuff.
-	 					// 		s.$slideImage
-		 				// 			.css('background-image', '')
-		 				// 			.css('background-position', ($thumbnail.data('position') || 'center'));
+ 							s.$slideImage = s.$slide.children('.image');
+
+ 							// Set background stuff.
+	 							s.$slideImage
+		 							.css('background-image', '')
+		 							.css('background-position', ($thumbnail.data('position') || 'center'));
 
 						// Caption.
 							s.$slideCaption = s.$slide.find('.caption');
@@ -748,50 +743,6 @@ var main = (function($) { var _ = {
 			_.hide();
 
 	},
-	
-	wordCloud: function () {
-        var data = null;
-		var arr = [];
-
-        $.ajax({
-            url: "/WordCloud",
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            success: function(result) {
-
-                // arr = [];
-                arr.length = 0;
-
-                for (var i = 0; i < result.length; i++) {
-                    arr.push( [ result[i].word,
-                        result[i].totalWeight,
-                        result[i].idList ] );
-                }
-
-                var options = {
-                    list : arr,
-                    gridSize: Math.round(2 * document.getElementById('canvas_cloud').offsetWidth / 1024),
-                    weightFactor: function (size) {
-                        return Math.pow(size, 2) * document.getElementById('canvas_cloud').offsetWidth / 1024;
-                    },
-                    weightFactor: 7,
-                    minSize: 3,
-                    figPath: "circle",
-                    click: function(item) {
-                        alert("word : " + item[0] + " totalWeight : " + item[1]);
-                        location.href= "/mainNewsList?"+item[2];
-                    }
-                }
-
-                WordCloud(document.getElementById('canvas_cloud'), options);
-            },
-            error : function () {
-                alert("fail");
-            }
-        })
-    }
 
 }; return _; })(jQuery); main.init();
 
