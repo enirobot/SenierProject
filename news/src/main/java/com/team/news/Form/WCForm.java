@@ -1,23 +1,26 @@
 package com.team.news.Form;
 
+import org.springframework.data.annotation.Id;
+
 import java.util.List;
 
 /**
  * 클라이언트에서 워드클라우드 다이어그램을 그릴 때 필요한 정보 보낼 때 사용되는 모델
  */
 public class WCForm {
+    @Id
     private String word;
-    private int counts;
-    private String id;
-
-    public WCForm(String word, int counts, String id)
-    {
-        this.word = word;
-        this.counts = counts;
-        this.id = id;
-    }
+    private double totalWeight;
+    private List<String> idList;
 
     public WCForm() {}
+
+    public WCForm(String word, double totalWeight, List<String> idList)
+    {
+        this.word = word;
+        this.totalWeight = totalWeight;
+        this.idList = idList;
+    }
 
     public String getWord() {
         return word;
@@ -27,19 +30,19 @@ public class WCForm {
         this.word = word;
     }
 
-    public int getCounts() {
-        return counts;
+    public double getTotalWeight() {
+        return totalWeight;
     }
 
-    public void setCount(int counts) {
-        this.counts = counts;
+    public void setTotalWeight(double totalWeight) {
+        this.totalWeight = totalWeight;
     }
 
-    public String getId() {
-        return id;
+    public List<String> getIdList() {
+        return idList;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setIdList(List<String> idList) {
+        this.idList = idList;
     }
 }

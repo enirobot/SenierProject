@@ -23,7 +23,7 @@ public class Morphological {
 
 
     public void analysis(NewsRepository newsRepository, MainNewsListRepository mainNewsListRepository,
-                         String fromTime, String toTime) {
+                         String MorphologicalTime) {
 
         List<MainNewsList> list = new ArrayList<>();
         HashMap<String, WCNode> wordList = new HashMap<>();
@@ -33,7 +33,7 @@ public class Morphological {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         String currentTime = dateFormat.format(today);
 
-        List<News> news = newsRepository.findByDateBetween(fromTime, toTime);
+        List<News> news = newsRepository.findByDateGreaterThanEqual(MorphologicalTime);
 
         logger.info("news 개수 : " + news.size() + "개");
 
