@@ -24,7 +24,7 @@ public class News {
     private String title;	// 제목
     private String company;	// 언론사
     private String date;    // 날짜 (yyyy/MM/dd HH:mm)
-    private String crawling_date; // 크롤링 시간
+    private String crawlingDate; // 크롤링 시간
     private String category;// 카테고리
     private String url;		// 기사 주소
     private String content;	// 내용
@@ -34,19 +34,22 @@ public class News {
     private int recommend_count;
     private double weight;
 
+    public News(){};
+
     public News(String title, String company, String date,
-                String category, String url, String content) {
+                String category, String url, String content, String crawlingDate) {
 
         this.title = title;
         this.company = company;
         this.date = date;
+        this.crawlingDate = crawlingDate;
         this.category = category;
         this.url = url;
         this.content = content;
     }
 
-    public News(String date) {
-        this.crawling_date = date;
+    public News(String crawlingDate) {
+        this.crawlingDate = crawlingDate;
         reaction_list = new int[5];
         this.title = null;
         this.company = null;
@@ -58,6 +61,14 @@ public class News {
 
     public String getId() {
         return id;
+    }
+
+    public String getCrawlingDate() {
+        return crawlingDate;
+    }
+
+    public void setCrawlingDate(String crawlingDate) {
+        this.crawlingDate = crawlingDate;
     }
 
     public String getTitle() {

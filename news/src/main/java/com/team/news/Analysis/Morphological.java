@@ -33,7 +33,7 @@ public class Morphological {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         String currentTime = dateFormat.format(today);
 
-        List<News> news = newsRepository.findByDateGreaterThanEqual(MorphologicalTime);
+        List<News> news = newsRepository.findByCrawlingDateGreaterThanEqual(MorphologicalTime);
 
         logger.info("news 개수 : " + news.size() + "개");
 
