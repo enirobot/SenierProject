@@ -423,8 +423,11 @@ var main = (function($) { var _ = {
 					// Slide.
 
 						// Create elements.
-	 						s.$slide = $('<div class="slide"><div class="caption"></div><div class="image"><canvas id="canvas_cloud"></canvas></div></div>');
+	 						s.$slide = $('<div class="slide"><div class="caption"></div><canvas id="canvas_cloud"></canvas></div>');
+							s.$slideWordCloud = s.$slide.children('#canvas_cloud')
 
+							s.$slideWordCloud
+								.css('background-color', 'rgb(255, 99, 71)')
 	 					// Image.
  							s.$slideImage = s.$slide.children('.image');
 
