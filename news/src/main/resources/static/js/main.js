@@ -423,15 +423,19 @@ var main = (function($) { var _ = {
 					// Slide.
 
 						// Create elements.
-	 						s.$slide = $('<div class="slide"><div class="caption"></div><div class="image"><canvas id="canvas_cloud"></canvas></div></div>');
-
-	 					// Image.
- 							s.$slideImage = s.$slide.children('.image');
-
- 							// Set background stuff.
-	 							s.$slideImage
-		 							.css('background-image', '')
-		 							.css('background-position', ($thumbnail.data('position') || 'center'));
+	 						s.$slide = $('<div class="slide"><div class="caption"></div><canvas id="canvas_cloud"></canvas></div>');
+							s.$slideWordCloud = s.$slide.children('#canvas_cloud')
+                                // <div class="image"></div>
+							s.$slideWordCloud
+                                .css('background-image', '')
+                                .css('background-position', ($thumbnail.data('position') || 'center'));
+	 					// // Image.
+ 						// 	s.$slideImage = s.$slide.children('.image');
+						//
+ 						// 	// Set background stuff.
+	 					// 		s.$slideImage
+		 				// 			.css('background-image', '')
+		 				// 			.css('background-position', ($thumbnail.data('position') || 'center'));
 
 						// Caption.
 							s.$slideCaption = s.$slide.find('.caption');
