@@ -4,6 +4,7 @@ import com.team.news.Form.MainNewsList;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.lang.Nullable;
+import sun.applet.Main;
 
 import java.util.List;
 
@@ -39,4 +40,8 @@ public interface MainNewsListRepository extends MongoRepository<MainNewsList, St
 
 
     int countMainNewsListByDateGreaterThanEqualAndWord(String time, String word);
+
+
+    @Nullable
+    List<MainNewsList> findByDateBetweenAndTotalWeightGreaterThanOrderByTotalWeightDescCountsDesc(String fromTime, String toTime, int i);
 }
