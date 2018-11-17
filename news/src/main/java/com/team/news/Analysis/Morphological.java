@@ -58,6 +58,7 @@ public class Morphological {
                         WCNode wcTemp = wordList.get(keyword);  // 키워드에 해당되는 값 가져옴
                         wcTemp.sumCounts(1);    // 카운트 1씩 증가
                         wcTemp.sumTotalWeight(item.getWeight());
+                        wcTemp.sumTotalEmotionWeight(item.getEmtion_weight());
                         wcTemp.add( new MainNewsItem(
                                         item.getTitle(),
                                         item.getCompany(),
