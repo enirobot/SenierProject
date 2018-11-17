@@ -396,75 +396,78 @@ var main = (function($) { var _ = {
 					// Switch to this thumbnail's slide.
 						_.switchTo($this.data('index'));
 
+
 				});
+
 
 		// Create slides from thumbnails.
-			_.$thumbnails.children()
-				.each(function() {
+        _.$thumbnails.children()
+            .each(function(index) {
 
-					var	$this = $(this),
-						$thumbnail = $this.children('.thumbnail'),
-						s;
+                var	$this = $(this),
+                    $thumbnail = $this.children('.thumbnail'),
+                    s;
 
-					// Slide object.
-						s = {
-							$parent: $this,
-							$slide: null,
-							$slideImage: null,
-							$slideWordCloud: null,
-							$slideCaption: null,
-							url: $thumbnail.attr('href'),
-							loaded: false
-						};
+                // Slide object.
+                s = {
+                    $parent: $this,
+                    $slide: null,
+                    $slideImage: null,
+					 $slideElement: null,
+                    $slideCaption: null,
+                    url: $thumbnail.attr('href'),
+                    loaded: false
+                };
 
-					// Parent.
-						$this.attr('tabIndex', '-1');
+                // Parent.
+                $this.attr('tabIndex', '-1');
 
-					// Slide.
+                // Slide.
 
-						// Create elements
-	 						s.$slide = $('<div class="slide"><div class="caption"></div><div class="image"></div>/div>');
-	 					// // Image.
- 							s.$slideImage = s.$slide.children('.image');
+                // Create elements.
+                s.$slide = $('<div class="slide"><div class="caption"></div><div class="element"></div></div>');
 
- 							// Set background stuff.
-	 							s.$slideImage
-		 							.css('background-image', '')
-		 							.css('background-position', ($thumbnail.data('position') || 'center'));
+                // Image.
+                s.$slideImage = s.$slide.children('.image');
+                s.$slideElement = s.$slide.children(".element");
 
-						// Caption.
-							s.$slideCaption = s.$slide.find('.caption');
+                //_.$thumbnails.children().eq(0).$slideElement.load("../html/sankey.html");
+				//s.$slideElement.load("../html/sankey.html");
+				switch (index) {
+					case 0:
+                        s.$slideElement.load("../html/main.html");
+                        break;
 
-							// Move everything *except* the thumbnail itself to the caption.
-								$this.children().not($thumbnail)
-									.appendTo(s.$slideCaption);
+					case 1:
+                        s.$slideElement.load("../html/sankey.html");
+                        break;
 
-					// Preload?
-						if (_.settings.preload) {
+                    case 2:
+                        s.$slideElement.load("../html/line.html");
+                        break;
+                }
 
-							// Force image to download.
-								var $img = $('<img src="' + s.url + '" />');
+                // Set background stuff.
+                s.$slideImage
+                    .css('background-image', '')
+                    .css('background-position', ($thumbnail.data('position') || 'center'));
 
-							// Set slide's background image to it.
-								s.$slideImage
-									.css('background-image', 'url(' + s.url + ')');
+                // Caption.
+                s.$slideCaption = s.$slide.find('.caption');
 
-							// Mark slide as loaded.
-								s.$slide.addClass('loaded');
-								s.loaded = true;
+                // Move everything *except* the thumbnail itself to the caption.
+                $this.children().not($thumbnail)
+                    .appendTo(s.$slideCaption);
 
+                // Add to slides array.
+                _.slides.push(s);
 
-						}
+                // Set thumbnail's index.
+                $thumbnail.data('index', _.slides.length - 1);
 
-					// Add to slides array.
-						_.slides.push(s);
+            });
 
-					// Set thumbnail's index.
-						$thumbnail.data('index', _.slides.length - 1);
-
-				});
-
-	},
+    },
 
 	/**
 	 * Initialize stuff.
@@ -607,7 +610,7 @@ var main = (function($) { var _ = {
 						}
 
 				};
-
+				
 				// No old slide? Switch immediately.
 					if (!oldSlide)
 						(f)();
