@@ -396,80 +396,78 @@ var main = (function($) { var _ = {
 					// Switch to this thumbnail's slide.
 						_.switchTo($this.data('index'));
 
+
 				});
+
 
 		// Create slides from thumbnails.
-			_.$thumbnails.children()
-				.each(function() {
+        _.$thumbnails.children()
+            .each(function(index) {
 
-					var	$this = $(this),
-						$thumbnail = $this.children('.thumbnail'),
-						s;
+                var	$this = $(this),
+                    $thumbnail = $this.children('.thumbnail'),
+                    s;
 
-					// Slide object.
-						s = {
-							$parent: $this,
-							$slide: null,
-							$slideImage: null,
-							$slideWordCloud: null,
-							$slideCaption: null,
-							url: $thumbnail.attr('href'),
-							loaded: false
-						};
+                // Slide object.
+                s = {
+                    $parent: $this,
+                    $slide: null,
+                    $slideImage: null,
+					 $slideElement: null,
+                    $slideCaption: null,
+                    url: $thumbnail.attr('href'),
+                    loaded: false
+                };
 
-					// Parent.
-						$this.attr('tabIndex', '-1');
+                // Parent.
+                $this.attr('tabIndex', '-1');
 
-					// Slide.
+                // Slide.
 
-						// Create elements.
-	 						s.$slide = $('<div class="slide"><div class="caption"></div><canvas id="canvas_cloud"></canvas></div>');
-							s.$slideWordCloud = s.$slide.children('#canvas_cloud')
-                                // <div class="image"></div>
-							s.$slideWordCloud
-                                .css('background-image', '')
-                                .css('background-position', ($thumbnail.data('position') || 'center'));
-	 					// // Image.
- 						// 	s.$slideImage = s.$slide.children('.image');
-						//
- 						// 	// Set background stuff.
-	 					// 		s.$slideImage
-		 				// 			.css('background-image', '')
-		 				// 			.css('background-position', ($thumbnail.data('position') || 'center'));
+                // Create elements.
+                s.$slide = $('<div class="slide"><div class="caption"></div><div class="element"></div></div>');
 
-						// Caption.
-							s.$slideCaption = s.$slide.find('.caption');
+                // Image.
+                s.$slideImage = s.$slide.children('.image');
+                s.$slideElement = s.$slide.children(".element");
 
-							// Move everything *except* the thumbnail itself to the caption.
-								$this.children().not($thumbnail)
-									.appendTo(s.$slideCaption);
+                //_.$thumbnails.children().eq(0).$slideElement.load("../html/sankey.html");
+				//s.$slideElement.load("../html/sankey.html");
+				switch (index) {
+					case 0:
+                        s.$slideElement.load("../html/main.html");
+                        break;
 
-					// Preload?
-						if (_.settings.preload) {
+					case 1:
+                        s.$slideElement.load("../html/sankey.html");
+                        break;
 
-							// Force image to download.
-								var $img = $('<img src="' + s.url + '" />');
+                    case 2:
+                        s.$slideElement.load("../html/line.html");
+                        break;
+                }
 
-							// Set slide's background image to it.
-								s.$slideImage
-									.css('background-image', 'url(' + s.url + ')');
+                // Set background stuff.
+                s.$slideImage
+                    .css('background-image', '')
+                    .css('background-position', ($thumbnail.data('position') || 'center'));
 
-							// Mark slide as loaded.
-								s.$slide.addClass('loaded');
-								s.loaded = true;
+                // Caption.
+                s.$slideCaption = s.$slide.find('.caption');
 
+                // Move everything *except* the thumbnail itself to the caption.
+                $this.children().not($thumbnail)
+                    .appendTo(s.$slideCaption);
 
-						}
+                // Add to slides array.
+                _.slides.push(s);
 
-					// Add to slides array.
-						_.slides.push(s);
+                // Set thumbnail's index.
+                $thumbnail.data('index', _.slides.length - 1);
 
-					// Set thumbnail's index.
-						$thumbnail.data('index', _.slides.length - 1);
+            });
 
-				});
-
-	},
+    },
 
 	/**
 	 * Initialize stuff.
@@ -612,7 +610,7 @@ var main = (function($) { var _ = {
 						}
 
 				};
-
+				
 				// No old slide? Switch immediately.
 					if (!oldSlide)
 						(f)();
@@ -748,50 +746,6 @@ var main = (function($) { var _ = {
 			_.hide();
 
 	},
-	
-	wordCloud: function () {
-        var data = null;
-		var arr = [];
-
-        $.ajax({
-            url: "/WordCloud",
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            success: function(result) {
-
-                // arr = [];
-                arr.length = 0;
-
-                for (var i = 0; i < result.length; i++) {
-                    arr.push( [ result[i].word,
-                        result[i].totalWeight,
-                        result[i].idList ] );
-                }
-
-                var options = {
-                    list : arr,
-                    gridSize: Math.round(2 * document.getElementById('canvas_cloud').offsetWidth / 1024),
-                    weightFactor: function (size) {
-                        return Math.pow(size, 2) * document.getElementById('canvas_cloud').offsetWidth / 1024;
-                    },
-                    weightFactor: 7,
-                    minSize: 3,
-                    figPath: "circle",
-                    click: function(item) {
-                        alert("word : " + item[0] + " totalWeight : " + item[1]);
-                        location.href= "/mainNewsList?"+item[2];
-                    }
-                }
-
-                WordCloud(document.getElementById('canvas_cloud'), options);
-            },
-            error : function () {
-                alert("fail");
-            }
-        })
-    }
 
 }; return _; })(jQuery); main.init();
 
