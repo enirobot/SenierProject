@@ -2,6 +2,7 @@ package com.team.news.Scheduler;
 
 import com.team.news.Analysis.Morphological;
 import com.team.news.Repository.GraphRepository;
+import com.team.news.Repository.GraphRepository2;
 import com.team.news.Repository.MainNewsListRepository;
 import com.team.news.Repository.NewsRepository;
 import com.team.news.WebCrawler.CrawlingNaver;
@@ -27,14 +28,17 @@ public class CronTable {
     private final NewsRepository newsRepository;
     private final MainNewsListRepository mainNewsListRepository;
     private final GraphRepository graphRepository;
+    private final GraphRepository2 graphRepository2;///////////////////////
     private final MongoTemplate mongoTemplate;
+
 
     private Logger logger = LoggerFactory.getLogger(CronTable.class);
 
 
     @Autowired
     public CronTable(NewsRepository newsRepository, MainNewsListRepository mainNewsListRepository
-            , GraphRepository graphRepository, MongoTemplate mongoTemplate) {
+            , GraphRepository graphRepository, GraphRepository2 graphRepository2,MongoTemplate mongoTemplate) {
+       this.graphRepository2=graphRepository2;//////////////////////
         this.newsRepository = newsRepository;
         this.mainNewsListRepository = mainNewsListRepository;
         this.graphRepository = graphRepository;
@@ -84,6 +88,10 @@ public class CronTable {
         logger.info("web sankey_sports_analysis start");
         morphological.sankey_sports_analysis(newsRepository,graphRepository,mongoTemplate);
         logger.info("web sankey_sports_analysis end");
+
+        logger.info("web bubble_analysis start");
+        morphological.bubble_analysis(newsRepository,graphRepository2,mongoTemplate);//bubble부분추가
+        logger.info("web bubble_analysis end");
 
         System.out.println("--CronTable end--");
 

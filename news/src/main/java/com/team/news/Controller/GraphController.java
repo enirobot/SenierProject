@@ -3,9 +3,12 @@ package com.team.news.Controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
 import com.mongodb.client.DistinctIterable;
+import com.team.news.Form.BubbleForm;
+import com.team.news.Form.BubbleFormAndDate;
 import com.team.news.Form.SankeyForm;
 import com.team.news.Form.SankeyFormAndDate;
 import com.team.news.Repository.GraphRepository;
+import com.team.news.Repository.GraphRepository2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +24,11 @@ public class GraphController {
 
 
     private final GraphRepository graphRepository;
-
+    private final GraphRepository2 graphRepository2;
     @Autowired
-    public GraphController(GraphRepository graphRepository) {
+    public GraphController(GraphRepository graphRepository, GraphRepository2 graphRepository2) {////
         this.graphRepository = graphRepository;
+        this.graphRepository2=graphRepository2;//////
     }
 
     @ResponseBody
@@ -68,9 +72,28 @@ public class GraphController {
         return sankeyFormAndDate.getSankeyitems();
     }
 
+    @ResponseBody
+    @PostMapping("/bubble_sports_post")
+    public List<BubbleForm> bubble_sports() {
+
+        BubbleFormAndDate bubbleFormAndDate;
+        bubbleFormAndDate = graphRepository2.findTopByGroupOrderByDateDesc("sports");
+
+        return bubbleFormAndDate.getBubbleitems();
+    }
+
+
     @GetMapping("/sankey")
     public String main(Model model) {
 
         return "sankey";
     }
+
+    @GetMapping("/bubble")
+    public String main2(Model model) {
+
+        return "bubble";
+    }
+
+
 }

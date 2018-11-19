@@ -1,9 +1,9 @@
 package com.team.news.Analysis;
-
 import com.mongodb.Block;
 import com.mongodb.client.DistinctIterable;
 import com.team.news.Form.*;
 import com.team.news.Repository.GraphRepository;
+import com.team.news.Repository.GraphRepository2;
 import com.team.news.Repository.MainNewsListRepository;
 import com.team.news.Repository.NewsRepository;
 import org.bitbucket.eunjeon.seunjeon.Analyzer;
@@ -16,11 +16,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
 public class Morphological {
 
     private Logger logger = LoggerFactory.getLogger(Morphological.class);
-
 
     public void analysis(NewsRepository newsRepository, MainNewsListRepository mainNewsListRepository,
                          String MorphologicalTime) {
@@ -121,7 +119,6 @@ public class Morphological {
         String currentTime = date.format(cal.getTime());
 
         sankeyFormList.setDate(currentTime);
-
         graphRepository.save(sankeyFormList);
     }
 
@@ -197,6 +194,42 @@ public class Morphological {
         graphRepository.save(sankeyFormList);
     }
 
+    public void bubble_analysis(NewsRepository newsrepository, GraphRepository2 graphRepository2, MongoTemplate mongoTemplate)
+    {
+
+        BubbleFormAndDate bubbleFormList = new BubbleFormAndDate();
+        bubbleFormList.setGroup("sports");
+
+        DistinctIterable<String> distinct = mongoTemplate.getCollection("news").distinct("company", String.class);
+        ArrayList<String> company = new ArrayList<String>();
+        distinct.forEach(new Block<String>() {
+            @Override
+            public void apply(final String result) {
+                company.add(result);
+            }
+        });
+
+        ArrayList<String> category = new ArrayList<String>();
+        category.add("야구");
+        category.add("해외야구");
+        category.add("축구");
+        category.add("해외축구");
+        category.add("농구");
+        category.add("e스포츠");
+
+        addList2(bubbleFormList, company, category, newsrepository);
+
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        Calendar cal = Calendar.getInstance();
+        String currentTime = date.format(cal.getTime());
+
+        bubbleFormList.setDate(currentTime);
+
+
+        graphRepository2.save(bubbleFormList);////
+
+    }
+
     private void addList( SankeyFormAndDate sankeyFormAndDate, ArrayList<String> company,
                           ArrayList<String> category, NewsRepository repository) {
 
@@ -219,5 +252,29 @@ public class Morphological {
             }
         }
     }
+    private void addList2( BubbleFormAndDate bubbleFormAndDate, ArrayList<String> company,
+                          ArrayList<String> category, NewsRepository repository) {
+
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        Calendar cal = Calendar.getInstance();
+        cal.add( Calendar.HOUR, -2 );    // 2시간 이내
+        String beforeTime = date.format(cal.getTime());
+
+        for(int i=0;i<company.size();i++){
+            for(int j=0;j<category.size();j++)
+            {
+                BubbleForm tmp = new BubbleForm();
+                tmp.source = company.get(i);
+                tmp.destination = category.get(j);
+                tmp.value = repository.countByCategoryLikeAndCompanyAndDateGreaterThanEqual(category.get(j), company.get(i),beforeTime);
+
+                if(tmp.value != 0) {
+                    bubbleFormAndDate.addBubbleitems(tmp);
+                }
+            }
+        }
+    }
+
+
 
 }
