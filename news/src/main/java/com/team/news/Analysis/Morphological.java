@@ -46,18 +46,21 @@ public class Morphological {
                         continue;
 
                     if (!wordList.containsKey(keyword)) {
-                        wordList.put(keyword, new WCNode(1, item.getWeight()));
-                        wordList.get(keyword).add( new MainNewsItem(
-                                                    item.getTitle(),
-                                                    item.getCompany(),
-                                                    item.getDate(),
-                                                    item.getUrl()));
+                        WCNode wcNode = new WCNode(1,
+                                item.getWeight(),
+                                item.getEmtion_weight());
+                        wcNode.add(new MainNewsItem(
+                                item.getTitle(),
+                                item.getCompany(),
+                                item.getDate(),
+                                item.getUrl()));
+                        wordList.put(keyword, wcNode);
                     }
 
                     else {
                         WCNode wcTemp = wordList.get(keyword);  // 키워드에 해당되는 값 가져옴
                         wcTemp.sumCounts(1);    // 카운트 1씩 증가
-                        wcTemp.sumTotalWeight(item.getWeight());
+                        wcTemp.sumTotalWeight(item.getWeight());    // 가중치
                         wcTemp.sumTotalEmotionWeight(item.getEmtion_weight());
                         wcTemp.add( new MainNewsItem(
                                         item.getTitle(),
@@ -68,6 +71,7 @@ public class Morphological {
                     }
                 }
             }
+            System.out.println(item.getTitle() + ", " + item.getDate() + ", " + item.getWeight() + ", " + item.getCompany());
         }
 
         for (String key : wordList.keySet()) {
@@ -81,7 +85,6 @@ public class Morphological {
                     currentTime,
                     item.getTotalWeight(),
                     item.getMainNewsItems()));
-
         }
 
         mainNewsListRepository.saveAll(list);   // mongoDB에 저장 (mainNewsList)
