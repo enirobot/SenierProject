@@ -413,8 +413,9 @@ var main = (function($) { var _ = {
                     $parent: $this,
                     $slide: null,
                     $slideImage: null,
-					 $slideElement: null,
+					$slideElement: null,
                     $slideCaption: null,
+					$slideCanvas: null,
                     url: $thumbnail.attr('href'),
                     loaded: false
                 };

@@ -71,7 +71,6 @@ public class Morphological {
                     }
                 }
             }
-            System.out.println(item.getTitle() + ", " + item.getDate() + ", " + item.getWeight() + ", " + item.getCompany());
         }
 
         for (String key : wordList.keySet()) {
