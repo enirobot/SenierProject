@@ -13,9 +13,10 @@ public class WCNode {
     private int totalEmtionWeight;
     private List<MainNewsItem> mainNewsItems;
 
-    public WCNode(int counts, double totalWeight) {
+    public WCNode(int counts, double totalWeight, int totalEmtionWeight) {
         this.counts = counts;
         this.totalWeight = totalWeight;
+        this.totalEmtionWeight = totalEmtionWeight;
         this.mainNewsItems = new ArrayList<MainNewsItem>();
     }
 

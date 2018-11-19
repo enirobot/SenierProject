@@ -407,6 +407,7 @@ public class CrawlingNaver {
         Duration duration = Duration.between(newsTime, today);  //두 날짜 차이
 
         double weight = (like_count + recommend_count + comment_count) / Math.sqrt(duration.getSeconds());
+        news.setWeight(weight);
 
         String tmp;
         WebElement element;
