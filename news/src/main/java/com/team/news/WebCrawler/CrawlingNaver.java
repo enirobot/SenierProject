@@ -159,7 +159,7 @@ public class CrawlingNaver {
                         }
                         catch (Exception e1) {
                             logger.info("url : " + news.getUrl());
-                            logger.info("news_error : " + e1);
+//                            logger.info("news_error : " + e1);
                             e1.printStackTrace();
                         }
                     }
