@@ -813,7 +813,7 @@ var main = (function($) { var _ = {
                     click: function(item) {
                         alert("word : " + item[0] + " totalWeight : " + item[1]);
                         location.href= "/mainNewsList?"+item[2];
-                        
+
                         //popup 창
 						// window.open("/mainNewsList?"+item[2], "newsList", 'height=' + screen.height + ',width=' + screen.width + 'fullscreen=yes')
                     }

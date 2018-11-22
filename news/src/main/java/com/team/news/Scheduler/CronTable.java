@@ -54,39 +54,39 @@ public class CronTable {
 //    }
 //
 
-//    //서버 시작하고 10초후에 실행 후 30분마다 실행
-//    @Scheduled(initialDelay = 10000, fixedDelay = 1800000)
-//    public void Job() {
-//
-//        System.out.println("--CronTable start--");
-//        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
-//        LocalDateTime now = LocalDateTime.now();    // 현재 시간
-//
-////        String fromTime = dateFormat.format(now.minusHours(3));         // 3시간 전
-////        String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
-//        String MorphologicalTime = dateFormat.format(now.minusMinutes(40));
-//
-//        logger.info("web crawling start");
-//        CrawlingNaver crawlingNaver = new CrawlingNaver(newsRepository);
-//        crawlingNaver.start();
-//        logger.info("web crawling end");
-//
-//        logger.info("web morphological start");
-//        Morphological morphological = new Morphological();
-//        morphological.analysis(newsRepository, mainNewsListRepository, MorphologicalTime);
-//        logger.info("web morphological end");
-//
-//        logger.info("web sankey_major_analysis start");
-//        morphological.sankey_major_analysis(newsRepository,graphRepository);
-//        logger.info("web sankey_major_analysis end");
-//        logger.info("web sankey_minor_analysis start");
-//        morphological.sankey_minor_analysis(newsRepository,graphRepository,mongoTemplate);
-//        logger.info("web sankey_minor_analysis end");
-//        logger.info("web sankey_sports_analysis start");
-//        morphological.sankey_sports_analysis(newsRepository,graphRepository,mongoTemplate);
-//        logger.info("web sankey_sports_analysis end");
-//
-//        System.out.println("--CronTable end--");
-//
-//    }
+    //서버 시작하고 10초후에 실행 후 30분마다 실행
+    @Scheduled(initialDelay = 10000, fixedDelay = 1800000)
+    public void Job() {
+
+        System.out.println("--CronTable start--");
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+        LocalDateTime now = LocalDateTime.now();    // 현재 시간
+
+//        String fromTime = dateFormat.format(now.minusHours(3));         // 3시간 전
+//        String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
+        String MorphologicalTime = dateFormat.format(now.minusMinutes(40));
+
+        logger.info("web crawling start");
+        CrawlingNaver crawlingNaver = new CrawlingNaver(newsRepository);
+        crawlingNaver.start();
+        logger.info("web crawling end");
+
+        logger.info("web morphological start");
+        Morphological morphological = new Morphological();
+        morphological.analysis(newsRepository, mainNewsListRepository, MorphologicalTime);
+        logger.info("web morphological end");
+
+        logger.info("web sankey_major_analysis start");
+        morphological.sankey_major_analysis(newsRepository,graphRepository);
+        logger.info("web sankey_major_analysis end");
+        logger.info("web sankey_minor_analysis start");
+        morphological.sankey_minor_analysis(newsRepository,graphRepository,mongoTemplate);
+        logger.info("web sankey_minor_analysis end");
+        logger.info("web sankey_sports_analysis start");
+        morphological.sankey_sports_analysis(newsRepository,graphRepository,mongoTemplate);
+        logger.info("web sankey_sports_analysis end");
+
+        System.out.println("--CronTable end--");
+
+    }
 }
