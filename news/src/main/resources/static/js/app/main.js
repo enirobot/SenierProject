@@ -426,26 +426,58 @@ var main = (function($) { var _ = {
 
                 // Slide.
 
-                // Create elements.
-                // s.$slide = $('<div class="slide"><canvas id="canvas""></canvas><div class="caption"></div></div>');
-                s.$slide = $('<div class="slide">' +
-								'<div class="sankeyContainer">' +
-								'<div id="sankey_major"></div>' +
-								'<div id="sankey_minor"></div>' +
-								'<div id="sankey_sports"></div>' +
-								'</div>' +
-								'<div class="canvasContainer">' +
-									'<canvas id="canvas"></canvas>' +
-								'</div>' +
-								'<div class="caption"></div>' +
-							'</div>');
+				if (index == 0) {
+                    // Create elements.
+                    // s.$slide = $('<div class="slide"><canvas id="canvas""></canvas><div class="caption"></div></div>');
+                    s.$slide = $('<div class="slide">' +
+                        			'<div class="canvasContainer">' +
+                        				'<canvas id="canvas"></canvas>' +
+                        			'</div>' +
+                        			'<div class="caption"></div>' +
+								'</div>');
+
+                    // Image.
+                    s.$slideImage = s.$slide.children('.image');
+                    s.$slideCanvasContainer = s.$slide.children('.canvasContainer');
+				} else {
+                    // Create elements.
+                    // s.$slide = $('<div class="slide"><canvas id="canvas""></canvas><div class="caption"></div></div>');
+                    s.$slide = $('<div class="slide">' +
+									'<div class="sankeyContainer">' +
+										'<div id="sankey_major"></div>' +
+										'<div id="sankey_minor"></div>' +
+										'<div id="sankey_sports"></div>' +
+									'</div>' +
+									'<div class="caption"></div>' +
+								'</div>');
+
+                    // Image.
+                    s.$slideImage = s.$slide.children('.image');
+                    // s.$slideElement = s.$slide.children(".element");
+                    s.$slideSankeyContainer = s.$slide.children('.sankeyContainer');
+				}
 
 
-                // Image.
-                s.$slideImage = s.$slide.children('.image');
-                // s.$slideElement = s.$slide.children(".element");
-				s.$slideCanvasContainer = s.$slide.children('.canvasContainer');
-				s.$slideSankeyContainer = s.$slide.children('.sankeyContainer');
+                // // Create elements.
+                // // s.$slide = $('<div class="slide"><canvas id="canvas""></canvas><div class="caption"></div></div>');
+                // s.$slide = $('<div class="slide">' +
+				// 				'<div class="sankeyContainer">' +
+				// 				'<div id="sankey_major"></div>' +
+				// 				'<div id="sankey_minor"></div>' +
+				// 				'<div id="sankey_sports"></div>' +
+				// 				'</div>' +
+				// 				'<div class="canvasContainer">' +
+				// 					'<canvas id="canvas"></canvas>' +
+				// 				'</div>' +
+				// 				'<div class="caption"></div>' +
+				// 			'</div>');
+				//
+				//
+                // // Image.
+                // s.$slideImage = s.$slide.children('.image');
+                // // s.$slideElement = s.$slide.children(".element");
+				// s.$slideCanvasContainer = s.$slide.children('.canvasContainer');
+				// s.$slideSankeyContainer = s.$slide.children('.sankeyContainer');
 
                 //_.$thumbnails.children().eq(0).$slideElement.load("../html/sankey.html");
 				//s.$slideElement.load("../html/sankey.html");
@@ -519,6 +551,7 @@ var main = (function($) { var _ = {
 	 * @param {integer} index Index.
 	 */
 	switchTo: function(index, noHide) {
+		var oldIndex = 0;
         console.log("index : " + index + ", noHide : " + noHide + ", currentSlide : " + _.current);
 
 		// Already at index and xsmall isn't active? Bail.
@@ -543,6 +576,8 @@ var main = (function($) { var _ = {
 			var	oldSlide = (_.current !== null ? _.slides[_.current] : null),
 				newSlide = _.slides[index];
 
+        oldIndex = _.current;
+
         // Update current.
 			_.current = index;
 
@@ -556,14 +591,17 @@ var main = (function($) { var _ = {
 				// Slide.
 					oldSlide.$slide.removeClass('active');
 
-					// 화면 초기화
-					var canvas = oldSlide.$slideCanvasContainer.children()[0];
-					var context = canvas.getContext('2d');
-					context.clearRect(0, 0, canvas.width, canvas.height);
+					// 전환하기 전 화면이 wordCloud일 때
+					if (oldIndex == 0) {
+                        // 화면 초기화
+                        var canvas = oldSlide.$slideCanvasContainer.children()[0];
+                        var context = canvas.getContext('2d');
+                        context.clearRect(0, 0, canvas.width, canvas.height);
 
-					// var charts = oldSlide.$slideSankeyContainer.children();
-					// for (var i = 0; i <= charts.length; i++)
-					// 	charts[i] = "";
+                        // var charts = oldSlide.$slideSankeyContainer.children();
+                        // for (var i = 0; i <= charts.length; i++)
+                        // 	charts[i] = "";
+                    }
 			}
 
 		// Activate new slide.
@@ -657,8 +695,10 @@ var main = (function($) { var _ = {
 						// canvas를 매개변수로 넘겨줌
 						_.wordcloud_load(newSlide.$slideCanvasContainer.children()[0]);
 					} else if (index == 1) {
-                        initSankey();
-                        // $(document).ready(initSankey());
+
+                        $(document).ready(function(){
+							initSankey(newSlide.$slideSankeyContainer.children());
+                        });
 					}
 	},
 
@@ -842,164 +882,6 @@ var main = (function($) { var _ = {
         })
 
     },
-
-	//
-	// initSankey: function() {
-	// 	google.charts.load('current', {'packages':['sankey']});
-	//
-    //     google.charts.setOnLoadCallback(_.sankey_major_drawChart());
-    //     google.charts.setOnLoadCallback(_.sankey_minor_drawChart());
-    //     google.charts.setOnLoadCallback(_.sankey_sports_drawChart());
-    // },
-	//
-    // sankey_major_drawChart: function() {
-    //     var inputdata = [];
-	//
-    //     $.ajax({
-    //         url: "/sankey_major_post",
-    //         type: "POST",
-    //         dataType: "json",
-    //         contentType: "application/json",
-    //         data: JSON.stringify(null),
-    //         success: function(data) {
-	//
-    //             for (var i = 0; i < data.length; i++)
-    //                 inputdata.push( [ data[i].source, data[i].destination, data[i].value ] );
-	//
-    //             try {
-    //                 var chartData = new google.visualization.DataTable();
-	// 			} catch (e) {
-	// 				console.log(e.message);
-    //             }
-    //             // var chartData = new google.visualization.DataTable();
-    //             chartData.addColumn('string', 'From');
-    //             chartData.addColumn('string', 'To');
-    //             chartData.addColumn('number', 'Weight');
-    //             chartData.addRows(inputdata);
-	//
-    //             var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
-    //                 '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];
-	//
-    //             // Sets chart options.
-    //             var options = {
-    //                 width: 400,
-    //                 height: 400,
-    //                 sankey: {
-    //                     node: {
-    //                         colors: colors
-    //                     },
-    //                     link: {
-    //                         colorMode: 'gradient',
-    //                         colors: colors
-    //                     }
-    //                 }
-    //             };
-	//
-    //             // Instantiates and draws our chart, passing in some options.
-    //             var chart = new google.visualization.Sankey(document.getElementById('sankey_major'));
-    //             chart.draw(data, options);
-    //         }
-    //     })
-	// },
-	//
-    // sankey_minor_drawChart: function() {
-    //     var inputdata = [];
-	//
-    //     $.ajax({
-    //         url: "/sankey_minor_post",
-    //         type: "POST",
-    //         dataType: "json",
-    //         contentType: "application/json",
-    //         data: JSON.stringify(null),
-    //         success: function(data) {
-	//
-    //             for (var i = 0; i < data.length; i++)
-    //                 inputdata.push( [ data[i].source, data[i].destination, data[i].value ] );
-	//
-    //             try {
-    //                 var chartData = new google.visualization.DataTable();
-    //             } catch (e) {
-    //                 console.log(e.message);
-    //             }
-    //             // var chartData = new google.visualization.DataTable();
-    //             chartData.addColumn('string', 'From');
-    //             chartData.addColumn('string', 'To');
-    //             chartData.addColumn('number', 'Weight');
-    //             chartData.addRows(inputdata);
-	//
-    //             var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
-    //                 '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];
-	//
-    //             // Sets chart options.
-    //             var options = {
-    //                 width: 400,
-    //                 height: 400,
-    //                 sankey: {
-    //                     node: {
-    //                         colors: colors
-    //                     },
-    //                     link: {
-    //                         colorMode: 'gradient',
-    //                         colors: colors
-    //                     }
-    //                 }
-    //             };
-	//
-    //             // Instantiates and draws our chart, passing in some options.
-    //             var chart = new google.visualization.Sankey(document.getElementById('sankey_minor'));
-    //             chart.draw(data, options);
-    //         }
-    //     })
-	// },
-	//
-    // sankey_sports_drawChart: function() {
-    //     var inputdata = [];
-	//
-    //     $.ajax({
-    //         url: "/sankey_sports_post",
-    //         type: "POST",
-    //         dataType: "json",
-    //         contentType: "application/json",
-    //         data: JSON.stringify(null),
-    //         success: function(data) {
-    //             for (var i = 0; i < data.length; i++)
-    //                 inputdata.push( [ data[i].source, data[i].destination, data[i].value ] );
-	//
-    //             try {
-    //                 var chartData = new google.visualization.DataTable();
-    //             } catch (e) {
-    //                 console.log(e.message);
-    //             }
-    //             // var chartData = new google.visualization.DataTable();
-    //             chartData.addColumn('string', 'From');
-    //             chartData.addColumn('string', 'To');
-    //             chartData.addColumn('number', 'Weight');
-    //             chartData.addRows(inputdata);
-	//
-    //             var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
-    //                 '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];
-	//
-    //             // Sets chart options.
-    //             var options = {
-    //                 width: 400,
-    //                 height: 400,
-    //                 sankey: {
-    //                     node: {
-    //                         colors: colors
-    //                     },
-    //                     link: {
-    //                         colorMode: 'gradient',
-    //                         colors: colors
-    //                     }
-    //                 }
-    //             };
-	//
-    //             // Instantiates and draws our chart, passing in some options.
-    //             var chart = new google.visualization.Sankey(document.getElementById('sankey_sports'));
-    //             chart.draw(data, options);
-    //         }
-    //     })
-    // },
 
 
 }; return _; })(jQuery); main.init();
