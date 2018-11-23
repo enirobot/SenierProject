@@ -434,6 +434,6 @@ public class CrawlingNaver {
             news.setDate(date);
         }
 
-        System.out.println(news.getContent());
+//        System.out.println(news.getContent());
     }
 }
