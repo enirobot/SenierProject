@@ -41,6 +41,7 @@ public class Morphological {
         for (News item : news) {
             for (LNode node : Analyzer.parseJava(item.getTitle())) {
                 if (node.morpheme().getFeatureHead().equalsIgnoreCase("NNG")) {
+
                     keyword = node.morpheme().getSurface();
                     if (keyword.length() < 2)
                         continue;
@@ -84,6 +85,7 @@ public class Morphological {
                     item.getCounts(),
                     currentTime,
                     item.getTotalWeight(),
+                    item.getTotalEmtionWeight(),
                     item.getMainNewsItems()));
         }
 

@@ -10,13 +10,13 @@ import java.util.List;
 public class WCNode {
     private int counts;
     private double totalWeight;
-    private int totalEmtionWeight;
+    private int totalEmotionWeight;
     private List<MainNewsItem> mainNewsItems;
 
-    public WCNode(int counts, double totalWeight, int totalEmtionWeight) {
+    public WCNode(int counts, double totalWeight, int totalEmotionWeight) {
         this.counts = counts;
         this.totalWeight = totalWeight;
-        this.totalEmtionWeight = totalEmtionWeight;
+        this.totalEmotionWeight = totalEmotionWeight;
         this.mainNewsItems = new ArrayList<MainNewsItem>();
     }
 
@@ -48,7 +48,7 @@ public class WCNode {
         this.totalWeight = this.totalWeight + totalWeight;
     }
 
-    public void sumTotalEmotionWeight(int totalEmtionWeight) {this.totalEmtionWeight = this.totalEmtionWeight + totalEmtionWeight; }
+    public void sumTotalEmotionWeight(int totalEmtionWeight) {this.totalEmotionWeight = this.totalEmotionWeight + totalEmtionWeight; }
 
     public List<MainNewsItem> getMainNewsItems() {
         return mainNewsItems;
@@ -63,10 +63,10 @@ public class WCNode {
     }
 
     public int getTotalEmtionWeight() {
-        return totalEmtionWeight;
+        return totalEmotionWeight;
     }
 
     public void setTotalEmtionWeight(int totalEmtionWeight) {
-        this.totalEmtionWeight = totalEmtionWeight;
+        this.totalEmotionWeight = totalEmtionWeight;
     }
 }
