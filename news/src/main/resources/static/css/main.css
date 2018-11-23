@@ -27,7 +27,8 @@ section, summary, time, mark, audio, video {
 
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
-	display: block;}
+	display: block;
+}
 
 body {
 	line-height: 1;
@@ -272,6 +273,10 @@ input, select, textarea {
 		text-align: right;
 	}
 
+	/*canvas {*/
+		/*max-width: 100%;*/
+		/*height: auto !important;*/
+	/*}*/
 /* Button */
 
 	input[type="submit"],
@@ -813,7 +818,7 @@ input, select, textarea {
 		top: 0;
 		width: 22.5em;
 		height: 100%;
-		background: #fff;
+		background: #ffffff;
 		outline: 0;
 		overflow-x: hidden;
 		overflow-y: auto;
@@ -1099,10 +1104,15 @@ input, select, textarea {
 			}
 
 			#viewer .inner:before {
-				background-image: -moz-linear-gradient(left, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0)), -moz-linear-gradient(right, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0));
-				background-image: -webkit-linear-gradient(left, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0)), -webkit-linear-gradient(right, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0));
-				background-image: -ms-linear-gradient(left, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0)), -ms-linear-gradient(right, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0));
-				background-image: linear-gradient(left, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0)), linear-gradient(right, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0));
+				/*background-image: -moz-linear-gradient(left, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0)), -moz-linear-gradient(right, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0));*/
+				/*background-image: -webkit-linear-gradient(left, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0)), -webkit-linear-gradient(right, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0));*/
+				/*background-image: -ms-linear-gradient(left, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0)), -ms-linear-gradient(right, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0));*/
+				/*background-image: linear-gradient(left, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0)), linear-gradient(right, rgba(16,16,16,0.2), rgba(16,16,16,0) 10em, rgba(16,16,16,0));*/
+				background-image: -moz-linear-gradient(right, rgba(16,16,16,0.2), rgba(16,16,16,0) 0.3em, rgba(16,16,16,0));
+				background-image: -webkit-linear-gradient(right, rgba(16,16,16,0.2), rgba(16,16,16,0) 0.3em, rgba(16,16,16,0));
+				background-image: -ms-linear-gradient(right, rgba(16,16,16,0.2), rgba(16,16,16,0) 0.3em, rgba(16,16,16,0));
+				background-image: linear-gradient(right, rgba(16,16,16,0.2), rgba(16,16,16,0) 0.3em, rgba(16,16,16,0));
+
 				content: '';
 				display: block;
 				position: absolute;
@@ -1166,6 +1176,7 @@ input, select, textarea {
 			height: 100%;
 			opacity: 1;
 			z-index: 1;
+			background-color: white;
 		}
  		/* 그림 밑 글씨 */
 			#viewer .slide .caption {
@@ -1202,8 +1213,8 @@ input, select, textarea {
 				opacity: 0;
 			}
 
-			#viewer .slide .sankeyContainer {
-				background-position: center;
+			#viewer .slide #canvas {
+				max-width: 100%;
 			}
 
 			/*#viewer .slide #canvas {*/

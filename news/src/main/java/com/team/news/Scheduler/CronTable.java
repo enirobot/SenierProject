@@ -39,17 +39,17 @@ public class CronTable {
         this.mongoTemplate = mongoTemplate;
     }
 
-    // 매일 21시 30분 0초에 실행
-    @Scheduled(cron = "0 30 21 * * *")
-    public void dayJob() {
-
-    }
-
-    // 매월 1일 0시 0분 0초에 실행
-    @Scheduled(cron = "0 0 0 1 * *")
-    public void monthJob() {
-
-    }
+//    // 매일 21시 30분 0초에 실행
+//    @Scheduled(cron = "0 30 21 * * *")
+//    public void dayJob() {
+//
+//    }
+//
+//    // 매월 1일 0시 0분 0초에 실행
+//    @Scheduled(cron = "0 0 0 1 * *")
+//    public void monthJob() {
+//
+//    }
 
 
     //서버 시작하고 10초후에 실행 후 30분마다 실행
