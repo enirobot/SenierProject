@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64px" height="64px" viewBox="0 0 64 64" zoomAndPan="disable">
 	<style>
 		line {
-			stroke: #fff;
+			stroke: #000;
 			stroke-width: 1.5px;
 		}
 	</style>
