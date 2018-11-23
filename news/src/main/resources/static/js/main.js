@@ -229,8 +229,8 @@ var main = (function($) { var _ = {
 					.on('touchmove', function(event) {
 
 						// No start position recorded? Bail.
-							if (_.$viewer.touchPosX === null
-							||	_.$viewer.touchPosY === null)
+							if (_.$viewer.touchPosX == null
+							||	_.$viewer.touchPosY == null)
 								return;
 
 						// Calculate stuff.
@@ -283,8 +283,8 @@ var main = (function($) { var _ = {
 								return;
 
 						// No start position recorded? Bail.
-							if (_.$main.touchPosX === null
-							||	_.$main.touchPosY === null)
+							if (_.$main.touchPosX == null
+							||	_.$main.touchPosY == null)
 								return;
 
 						// Calculate stuff.
@@ -413,8 +413,10 @@ var main = (function($) { var _ = {
                     $parent: $this,
                     $slide: null,
                     $slideImage: null,
-					 $slideElement: null,
+					$slideElement: null,
                     $slideCaption: null,
+					// $slideCanvas: null,
+                    $slideCanvasContainer: null,
                     url: $thumbnail.attr('href'),
                     loaded: false
                 };
@@ -425,32 +427,41 @@ var main = (function($) { var _ = {
                 // Slide.
 
                 // Create elements.
-                s.$slide = $('<div class="slide"><div class="caption"></div><div class="element"></div></div>');
+                // s.$slide = $('<div class="slide"><canvas id="canvas""></canvas><div class="caption"></div></div>');
+                s.$slide = $('<div class="slide">' +
+								'<div class="canvasContainer">' +
+									'<canvas id="canvas"></canvas>' +
+								'</div>' +
+								'<div class="caption"></div>' +
+							'</div>');
+
 
                 // Image.
                 s.$slideImage = s.$slide.children('.image');
-                s.$slideElement = s.$slide.children(".element");
+                // s.$slideElement = s.$slide.children(".element");
+                // s.$slideCanvas = s.$slide.children('#canvas');
+				s.$slideCanvasContainer = s.$slide.children('.canvasContainer');
 
                 //_.$thumbnails.children().eq(0).$slideElement.load("../html/sankey.html");
 				//s.$slideElement.load("../html/sankey.html");
 				switch (index) {
 					case 0:
-                        s.$slideElement.load("../html/main.html");
+                        // s.$slideElement.load("../html/main.html");
                         break;
 
 					case 1:
-                        s.$slideElement.load("../html/sankey.html");
+                        // s.$slideElement.load("../html/sankey.html");
                         break;
 
                     case 2:
-                        s.$slideElement.load("../html/line.html");
+                        // s.$slideElement.load("../html/line.html");
                         break;
                 }
 
-                // Set background stuff.
-                s.$slideImage
-                    .css('background-image', '')
-                    .css('background-position', ($thumbnail.data('position') || 'center'));
+                // // Set background stuff.
+                // s.$slideImage
+                //     .css('background-image', '')
+                //     .css('background-position', ($thumbnail.data('position') || 'center'));
 
                 // Caption.
                 s.$slideCaption = s.$slide.find('.caption');
@@ -491,7 +502,7 @@ var main = (function($) { var _ = {
 		// Show first slide if xsmall isn't active.
 			breakpoints.on('>xsmall', function() {
 
-				if (_.current === null)
+				if (_.current == null)
 					_.switchTo(0, true);
 
 			});
@@ -503,6 +514,7 @@ var main = (function($) { var _ = {
 	 * @param {integer} index Index.
 	 */
 	switchTo: function(index, noHide) {
+        console.log("index : " + index + ", noHide : " + noHide + ", currentSlide : " + _.current);
 
 		// Already at index and xsmall isn't active? Bail.
 			if (_.current == index
@@ -521,11 +533,12 @@ var main = (function($) { var _ = {
 			&&	breakpoints.active('<=medium'))
 				_.hide();
 
+
 		// Get slides.
 			var	oldSlide = (_.current !== null ? _.slides[_.current] : null),
 				newSlide = _.slides[index];
 
-		// Update current.
+        // Update current.
 			_.current = index;
 
 		// Deactivate old slide (if there is one).
@@ -538,6 +551,10 @@ var main = (function($) { var _ = {
 				// Slide.
 					oldSlide.$slide.removeClass('active');
 
+					// 화면 초기화
+					var canvas = oldSlide.$slideCanvasContainer.children()[0];
+					var context = canvas.getContext('2d');
+					context.clearRect(0, 0, canvas.width, canvas.height);
 			}
 
 		// Activate new slide.
@@ -551,8 +568,9 @@ var main = (function($) { var _ = {
 				var f = function() {
 
 					// Old slide exists? Detach it.
-						if (oldSlide)
-							oldSlide.$slide.detach();
+						if (oldSlide) {
+                            oldSlide.$slide.detach();
+						}
 
 					// Attach new slide.
 						newSlide.$slide.appendTo(_.$viewer);
@@ -619,6 +637,18 @@ var main = (function($) { var _ = {
 					else
 						window.setTimeout(f, _.settings.slideDuration);
 
+					// 새로운 슬라이드가 로딩되고 수행하려는 함수
+					if (index == 0) {	// wordcloud load
+                        // var canvasContainer = newSlide.$slide.children(".canvasContainer")[0];
+						// var canvas = canvasContainer.children();
+                        // var canvasContainer = newSlide.$slideCanvasContainer.children()[0];
+						// console.log(canvasContainer);
+						// console.log(canvas);
+                        // _.wordcloud_load(newSlide.$slide.children("#canvas")[0]);
+
+						// canvas를 매개변수로 넘겨줌
+						_.wordcloud_load(newSlide.$slideCanvasContainer.children()[0]);
+					}
 	},
 
 	/**
@@ -746,6 +776,61 @@ var main = (function($) { var _ = {
 			_.hide();
 
 	},
+
+	wordcloud_load: function (canvas) {
+
+        var data = null;
+        var arr = [];
+        var parent = document.getElementById("viewer");
+
+        $.ajax({
+            url: "/WordCloud",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function(result) {
+
+                // arr = [];
+                arr.length = 0;
+
+                for (var i = 0; i < result.length; i++) {
+                    arr.push( [ result[i].word,
+                        result[i].totalWeight,
+                        result[i].idList ] );
+                }
+
+                var options = {
+                    list : arr,
+                    // gridSize: Math.round(2 * parent.offsetHeight / 1024),
+                    // weightFactor: function (size) {
+                    //     return Math.pow(size, 2) * parent.offsetWidth / 1024;
+                    // },
+                    weightFactor: 5,
+                    minSize: 3,
+                    figPath: "circle",
+                    // backgroundColor: "white",
+                    click: function(item) {
+                        alert("word : " + item[0] + " totalWeight : " + item[1]);
+                        location.href= "/mainNewsList?"+item[2];
+
+                        //popup 창
+						// window.open("/mainNewsList?"+item[2], "newsList", 'height=' + screen.height + ',width=' + screen.width + 'fullscreen=yes')
+                    }
+                }
+
+
+                canvas.width = parent.offsetWidth;
+                canvas.height = parent.offsetHeight;
+
+                WordCloud(canvas, options);
+            },
+            error : function () {
+                alert("fail");
+            }
+        })
+
+    },
 
 }; return _; })(jQuery); main.init();
 
