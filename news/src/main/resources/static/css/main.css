@@ -1202,7 +1202,9 @@ input, select, textarea {
 				opacity: 0;
 			}
 
-
+			#viewer .slide .sankeyContainer {
+				background-position: center;
+			}
 
 			/*#viewer .slide #canvas {*/
 				/*!*-moz-transition: opacity 0.5s ease-in-out;*!*/

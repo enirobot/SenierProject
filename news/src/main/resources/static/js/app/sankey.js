@@ -1,10 +1,9 @@
-var inputdata1 = [];
-var inputdata2 = [];
-var inputdata3 = [];
+function initSankey(divList){
+    google.charts.load('current', {'packages':['sankey']});
+    var sankey_major_data = [];
+    var sankey_minor_data = [];
+    var sankey_sports_data = [];
 
-
-
-function initSankey(){
     $.ajax({
         url: "/sankey_major_post",
         type: "POST",
@@ -12,10 +11,15 @@ function initSankey(){
         contentType: "application/json",
         data: JSON.stringify(null),
         success: function(data) {
-            for (var i = 0; i < data.length; i++) {
-                inputdata1.push( [ data[i].source, data[i].destination, data[i].value ] );
-            }
+            for (var i = 0; i < data.length; i++)
+                sankey_major_data.push( [ data[i].source, data[i].destination, data[i].value ] );
 
+            var timeout1 = setInterval(function () {
+                if (google.visualization !== undefined) {
+                    google.charts.setOnLoadCallback(drawChart1(divList[0], sankey_major_data));
+                    clearInterval(timeout1);
+                }
+            }, 300);
         }
     })
 
@@ -26,9 +30,16 @@ function initSankey(){
         contentType: "application/json",
         data: JSON.stringify(null),
         success: function(data) {
-            for (var i = 0; i < data.length; i++) {
-                inputdata2.push( [ data[i].source, data[i].destination, data[i].value ] );
-            }
+            for (var i = 0; i < data.length; i++)
+                sankey_minor_data.push( [ data[i].source, data[i].destination, data[i].value ] );
+
+            var timeout2 = setInterval(function () {
+                if (google.visualization !== undefined) {
+                    google.charts.setOnLoadCallback(drawChart2(divList[1], sankey_minor_data));
+                    clearInterval(timeout2);
+                }
+            }, 300);
+
         }
     })
     $.ajax({
@@ -38,33 +49,36 @@ function initSankey(){
         contentType: "application/json",
         data: JSON.stringify(null),
         success: function(data) {
-            for (var i = 0; i < data.length; i++) {
-                inputdata3.push( [ data[i].source, data[i].destination, data[i].value ] );
-            }
+            for (var i = 0; i < data.length; i++)
+                sankey_sports_data.push( [ data[i].source, data[i].destination, data[i].value ] );
 
-            google.charts.load('current', {'packages':['sankey']});
-            google.charts.setOnLoadCallback(drawChart1);
-            google.charts.setOnLoadCallback(drawChart2);
-            google.charts.setOnLoadCallback(drawChart3);
+            var timeout3 = setInterval(function () {
+                if (google.visualization !== undefined) {
+                    google.charts.setOnLoadCallback(drawChart3(divList[2], sankey_sports_data));
+                    clearInterval(timeout3);
+                }
+            }, 300);
         }
     })
 };
 
 
-function drawChart1() {
+function drawChart1(major_div, sankey_major_data) {
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'From');
     data.addColumn('string', 'To');
     data.addColumn('number', 'Weight');
-    data.addRows(inputdata1);
+    data.addRows(sankey_major_data);
 
     var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
         '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];
 
+    var parent = document.getElementById("viewer");
+
     // Sets chart options.
     var options = {
-        width: 400,
-        height: 400,
+        width: parent.offsetWidth,
+        height: parent.offsetHeight / 3,
         sankey: {
             node: {
                 colors: colors
@@ -76,25 +90,27 @@ function drawChart1() {
         }
     };
 
-    // Instantiates and draws our chart, passing in some options.
-    var chart = new google.visualization.Sankey(document.getElementById('sankey_major'));
+
+    var chart = new google.visualization.Sankey(major_div);
     chart.draw(data, options);
 }
 
-function drawChart2() {
+function drawChart2(minor_div, sankey_minor_data) {
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'From');
     data.addColumn('string', 'To');
     data.addColumn('number', 'Weight');
-    data.addRows(inputdata2);
+    data.addRows(sankey_minor_data);
 
     var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
         '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];
 
+    var parent = document.getElementById("viewer");
+
     // Sets chart options.
     var options = {
-        width: 400,
-        height: 400,
+        width: parent.offsetWidth,
+        height: parent.offsetHeight / 3,
         sankey: {
             node: {
                 colors: colors
@@ -106,24 +122,28 @@ function drawChart2() {
         }
     };
 
+
     // Instantiates and draws our chart, passing in some options.
-    var chart = new google.visualization.Sankey(document.getElementById('sankey_minor'));
+    var chart = new google.visualization.Sankey(minor_div);
     chart.draw(data, options);
 }
-function drawChart3() {
+
+function drawChart3(sports_div, sankey_sports_data) {
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'From');
     data.addColumn('string', 'To');
     data.addColumn('number', 'Weight');
-    data.addRows(inputdata3);
+    data.addRows(sankey_sports_data);
 
     var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
         '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];
 
+    var parent = document.getElementById("viewer");
+
     // Sets chart options.
     var options = {
-        width: 400,
-        height: 400,
+        width: parent.offsetWidth,
+        height: parent.offsetHeight / 3,
         sankey: {
             node: {
                 colors: colors
@@ -136,6 +156,6 @@ function drawChart3() {
     };
 
     // Instantiates and draws our chart, passing in some options.
-    var chart = new google.visualization.Sankey(document.getElementById('sankey_sports'));
+    var chart = new google.visualization.Sankey(sports_div);
     chart.draw(data, options);
 }
