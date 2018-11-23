@@ -6,8 +6,7 @@
 -->
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<script th:src="@{/js/lib/wordcloud2.js}"></script> <!-- 추가 -->
+		<script type="text/javascript" th:src="@{https://www.gstatic.com/charts/loader.js}"></script>
 		<title>R뉴스</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -73,13 +72,14 @@
 
 			</div>
 
-		<!-- Scripts -->
-			<script th:src="@{/js/jquery.min.js}"></script>
-			<script th:src="@{/js/browser.min.js}"></script>
-			<script th:src="@{/js/breakpoints.min.js}"></script>
-			<script th:src="@{/js/main.js}"></script>
-			<script th:src="@{/js/lib/wordcloud2.js}"></script>
-			<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+			<!-- Scripts -->
+			<script th:src="@{/js/app/jquery.min.js}"></script>
+			<script th:src="@{/js/app/browser.min.js}"></script>
+			<script th:src="@{/js/app/breakpoints.min.js}"></script>
+			<script th:src="@{/js/app/main.js}"></script>
+			<script th:src="@{/js/app/sankey.js}"></script>
+			<script th:src="@{/js/lib/wordcloud2.js}"></script> <!-- 추가 -->
+
 
 	</body>
 </html>
