@@ -433,6 +433,12 @@ var main = (function($) { var _ = {
                         				'<canvas id="canvas"></canvas>' +
                         			'</div>' +
                         			'<div class="caption"></div>' +
+									// '<div id="myModal" class="modal">' +
+									// 	'<div class="modal_content">' +
+									// 		'<span class="close">&times;</span>' +
+									// 		'<a> dddddddddddddddddd </a>' +
+									// 	'</div>' +
+									// '</div>' +
 								'</div>');
 
                     s.$slideCanvasContainer = s.$slide.children('.canvasContainer');
@@ -818,9 +824,10 @@ var main = (function($) { var _ = {
                     figPath: "circle",
                     // backgroundColor: "white",
                     click: function(item) {
-                        alert("word : " + item[0] + " totalWeight : " + item[1]);
-                        location.href= "/mainNewsList?"+item[2];
+                        // alert("word : " + item[0] + " totalWeight : " + item[1]);
 
+                        // location.href= "/mainNewsList?"+item[2];
+                        _.sampleModalPopup(item[2]);
                         //popup 창
 						// window.open("/mainNewsList?"+item[2], "newsList", 'height=' + screen.height + ',width=' + screen.width + 'fullscreen=yes')
                     }
@@ -838,6 +845,40 @@ var main = (function($) { var _ = {
         })
 
     },
+
+    sampleModalPopup: function(idList){
+		console.log(idList);
+
+		$.ajax({
+			url: "/newsList",
+			type: "POST",
+			dataType: "json",
+			contentType: "application/json",
+			data: JSON.stringify(idList),
+			success: function(result) {
+				console.log(result);
+
+				for (var i = 0; i < result.length; i++) {
+
+					$("#modal_list").append(
+						"<tr>" +
+							"<td>" + result[i].date + "</td>" +
+                        	"<td>" +
+								"<a href=" + result[i].url + ">" + result[i].title + "</a>" +
+							"</td>" +
+                        	"<td>" + result[i].company + "</td>" +
+						"</tr>"
+					);
+                }
+
+				modalOpen();
+
+				},
+			error : function () {
+				alert("fail");
+			}
+		});
+	},
 
 
 }; return _; })(jQuery); main.init();
