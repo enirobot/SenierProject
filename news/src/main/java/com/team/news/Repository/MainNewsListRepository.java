@@ -41,7 +41,8 @@ public interface MainNewsListRepository extends MongoRepository<MainNewsList, St
 
     int countMainNewsListByDateGreaterThanEqualAndWord(String time, String word);
 
-
+    @Nullable
+    List<MainNewsList> findMainNewsListsByDateBetweenAndWord(String fromTime, String toTime, String word);
     @Nullable
     List<MainNewsList> findByDateBetweenAndTotalWeightGreaterThanOrderByTotalWeightDescCountsDesc(String fromTime, String toTime, int i);
 }
