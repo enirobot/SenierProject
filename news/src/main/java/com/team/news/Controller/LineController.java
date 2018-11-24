@@ -56,7 +56,6 @@ public class LineController {
         String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
 
         List<MainNewsList> mainNewsLists = mainNewsListRepository.findByDateBetweenAndTotalWeightGreaterThanOrderByTotalWeightDescCountsDesc(fromTime, toTime, 0);
-
         
         for (MainNewsList item : mainNewsLists) {
                 list.add(new LineForm(item.getWord(), item.getCounts(), item.getDate()));
@@ -66,6 +65,7 @@ public class LineController {
                     break;
         }
 
+        //
         for(LineForm item : list) {
            mainNewsListHist.addAll( mainNewsListRepository.findMainNewsListsByDateBetweenAndWord(fromTime, toTime, item.getWord()));
            System.out.println(item.getWord());//검찰 출석 조사
@@ -76,10 +76,10 @@ public class LineController {
             System.out.println(item.getWord());
         }
 
-        for (LineForm item : list2){
-            System.out.println(item.getWord() + ' ' + item.getCounts() + ' ' + item.getDate());
-            System.out.println(7);
-        }
+        //for (LineForm item : list2){
+           // System.out.println(item.getWord() + ' ' + item.getCounts() + ' ' + item.getDate());
+           // System.out.println(7);
+        //}//확인 기능
 
         return list2;     // 상위 10개
     }
