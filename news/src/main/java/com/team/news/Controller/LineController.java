@@ -40,6 +40,9 @@ public class LineController {
     public List<LineForm> line() {
 
         List<LineForm> list = new ArrayList<>();
+        List<LineForm> list2 = new ArrayList<>();
+        List<MainNewsList> mainNewsListHist = new ArrayList<>();
+        int count=0;
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
@@ -53,13 +56,31 @@ public class LineController {
         String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
 
         List<MainNewsList> mainNewsLists = mainNewsListRepository.findByDateBetweenAndTotalWeightGreaterThanOrderByTotalWeightDescCountsDesc(fromTime, toTime, 0);
+
+        
         for (MainNewsList item : mainNewsLists) {
                 list.add(new LineForm(item.getWord(), item.getCounts(), item.getDate()));
+                count++;
+                System.out.println(item.getWord());
+                if(count == 3 )
+                    break;
         }
-        for (LineForm item : list.subList(0, 7)){
+
+        for(LineForm item : list) {
+           mainNewsListHist.addAll( mainNewsListRepository.findMainNewsListsByDateBetweenAndWord(fromTime, toTime, item.getWord()));
+           System.out.println(item.getWord());//검찰 출석 조사
+        }
+
+        for (MainNewsList item : mainNewsListHist) {
+            list2.add(new LineForm(item.getWord(),item.getCounts(),item.getDate()));
+            System.out.println(item.getWord());
+        }
+
+        for (LineForm item : list2){
             System.out.println(item.getWord() + ' ' + item.getCounts() + ' ' + item.getDate());
+            System.out.println(7);
         }
-        System.out.println(list.subList(0,7));
-        return list.subList(0, 7);     // 상위 10개
+
+        return list2;     // 상위 10개
     }
 }

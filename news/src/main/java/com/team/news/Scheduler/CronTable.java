@@ -12,10 +12,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 
 
 /**
@@ -52,7 +50,7 @@ public class CronTable {
 //    public void monthJob() {
 //
 //    }
-//
+
 
     //서버 시작하고 10초후에 실행 후 30분마다 실행
     @Scheduled(initialDelay = 10000, fixedDelay = 1800000)
