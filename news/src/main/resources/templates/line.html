@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
+        google.charts.load('current', {'packages':['line']});
         google.charts.setOnLoadCallback(drawChart);
-
+        var inputdata1 = [];
+        var inputdata2 = [];
+        var inputdata3 = [];
         $(document).ready(function() {
             var data = null;
 
@@ -18,7 +19,31 @@
                 contentType: "application/json",
                 async: false,
                 data: JSON.stringify(data),
-                success: function (result) {
+                success: function (data) {
+                    var i=0;
+                    for (i; i < data.length; i++) {
+                        inputdata1.push( [ data[i].word, data[i].counts, data[i].date ] );
+                        if(data[i].word !== data[i+1].word)
+                        {
+                            i++;
+                            break;
+                        }
+                        // document.write(data[i].counts);
+                        //document.write(inputdata1[0][0]);
+                        //document.write(inputdata1[0][1]);
+                    }
+
+                    for (i; i < data.length; i++) {
+                        inputdata2.push( [ data[i].word, data[i].counts, data[i].date ] );
+                        if(data[i].word !== data[i+1].word)
+                        {
+                            i++;
+                            break;
+                        }
+                    }
+                    for (i; i < data.length; i++) {
+                        inputdata3.push( [ data[i].word, data[i].counts, data[i].date ] );
+                    }
                 },
                 error: function () {
                     alert("fail");
@@ -27,30 +52,39 @@
         });
 
         function drawChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Year', 'Sales', 'Expenses'],
-                ['2004',  1000,      400],
-                ['2005',  1170,      460],
-                ['2006',  660,       1120],
-                ['2007',  1030,      540]
+
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'date');
+            data.addColumn('number', inputdata1[0][0]);
+            data.addColumn('number', inputdata2[0][0]);
+            data.addColumn('number', inputdata3[0][0]);
+            //var parts =inputdata1[0][2].split('/');
+            data.addRows([
+                [1,  inputdata1[0][1], inputdata2[0][1], inputdata3[0][1]],
+                [2,  inputdata1[1][1], inputdata2[1][1], inputdata3[1][1]],
+                [3,  inputdata1[2][1], inputdata2[2][1], inputdata3[2][1]]
             ]);
 
             var options = {
-                title: 'Company Performance',
-                curveType: 'function',
-                legend: { position: 'bottom' }
+                chart: {
+                    title: 'Box Office Earnings in First Two Weeks of Opening',
+                    subtitle: 'in millions of dollars (USD)'
+                },
+                width: 900,
+                height: 500
             };
 
-            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+            var chart = new google.charts.Line(document.getElementById('linechart_material'));
 
-            chart.draw(data, options);
+            chart.draw(data, google.charts.Line.convertOptions(options));
         }
     </script>
 </head>
 <body>
-<div id="curve_chart" style="width: 900px; height: 500px"></div>
+<div id="linechart_material" style="width: 900px; height: 500px"></div>
 </body>
 <body>
+
 
 </body>
 </html>
