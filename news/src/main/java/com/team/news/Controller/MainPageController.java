@@ -113,9 +113,8 @@ public class MainPageController {
         logger.info("WCFormList size:" + WCFormList.size());
 
         for (WCForm item : WCFormList) {
-            System.out.println(item.getWord() + " " + item.getTotalWeight() + " " + item.getIdList().size());
+//            System.out.println(item.getWord() + " " + item.getTotalWeight() + " " + item.getIdList().size());
             list.add(new WCForm(item.getWord(), item.getTotalWeight(), item.getIdList()));
-
         }
 
         logger.info("wordcloud 개수 : " + WCFormList.size() + "개");

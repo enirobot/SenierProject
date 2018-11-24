@@ -42,13 +42,7 @@ public class LineController {
         List<LineForm> list = new ArrayList<>();
         List<LineForm> list2 = new ArrayList<>();
         List<MainNewsList> mainNewsListHist = new ArrayList<>();
-        int count=0;
-
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.HOUR, -2);     // 2시간 전
-        String beforeTime = date.format(cal.getTime());
-        System.out.println(beforeTime);
+        int count = 0;
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         LocalDateTime now = LocalDateTime.now();    // 현재 시간
