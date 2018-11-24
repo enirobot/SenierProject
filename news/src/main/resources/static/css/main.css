@@ -116,6 +116,22 @@ input, select, textarea {
 		overflow: hidden;
 	}
 
+	#modal_list td{
+		text-align: left;
+	}
+
+	#modal_list .td1{
+		width:120px;
+	}
+	#modal_list .td2{
+		padding-left: 25px;
+		width: 490px;
+	}
+
+	#modal_list .td3{
+		padding-left: 23px;
+	}
+
 /* Type */
 
 	html {
