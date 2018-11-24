@@ -1,34 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Game</title>
     <style type="text/css">
         .container{
             width: 100%;
             height: 100%;
             text-align: center;
+            padding: 2px;
         }
-        .term_1{
+        .term_left{
             width: 50%;
             height: 90%;
             background-color : #00D3B7;
             float: left;
         }
-        .term_2{
+        .term_right{
             width: 50%;
             height: 90%;
             background-color : #a7d379;
             float: right;
         }
+
         .pack{
             margin-top: 40%;
             display: inline-block;
             width: 60%;
             height: 20%;
-            background-color: #555555;
+            background-color: #ffffff;
+        }
+        .element, .button_ele{
+            margin:3px;
+            height: 30%;
         }
         .score_bar{
+            float: bottom;
             width: 95%;
             height: 10%;
             background-color: #eeeeee;
@@ -53,21 +61,112 @@
 </head>
 <body>
     <div class="container">
-        <div class = "term_1">
-            <div class="pack"></div>
+        <div class = "term_left" >
+            <div class="pack">
+            </div>
         </div>
-        <div class = "term_2">
-            <div class="pack"></div>
+        <div class = "term_right">
+            <div class="pack">
+            </div>
         </div>
         <div class="score_bar"></div>
     </div>
     <script type="text/javascript">
 
-        var req = new XMLHttpRequest();
+        $button_ele = null;
+        $pack_in_wc = null;
+        $pack_in_button = null;
+        $pack = null;
 
-        req.open("POST","game",true);
-        //alert("fefe");
-        alert(req.getAttribute("yaho"));
+        var word = [];
+        var count = [];
+        var image = [];
+        var already_rand = [];
+
+        $pack_in_wc = $('<div id="word" class="element"></div><div id="count" class="element"></div>');
+        $pack_in_button = $('<div id="word" class="element"></div><div id="button1" class="button_ele">UP</div><div id="button2" class="button_ele">DOWN</div>');
+
+        $l_pack = $('.term_left .pack');
+        $r_pack = $('.term_right .pack');
+
+        $(document).ready(function() {
+
+
+            $.ajax({
+                url: "/getKeyword",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(null)
+            }).done(function (data){
+                for (var i = 0; i < data.length; i++) {
+                        word.push(data[i].word);
+                        count.push(parseInt(data[i].totalWeight));
+                        image.push(data[i].imageUrl);
+                        //inputdata.push([data[i].word, data[i].totalWeight]);
+                        //document.writeln(data[i].word +  " "+ parseInt(data[i].totalWeight)) ;
+                }
+                main(0);
+            });
+
+        });
+        function main(before_num) {
+
+            $l_pack.append($pack_in_wc);
+            $r_pack.append($pack_in_button);
+
+            if(before_num == 0)
+                var l_num = RandomNum();
+            else
+                var l_num = before_num;
+            var r_num = RandomNum();
+
+            $l_pack.children('#word').html(word[l_num]);
+            $l_pack.children('#count').html(count[l_num]);
+            $r_pack.children('#word').html(word[r_num]);
+
+            $(".button_ele").click(function() {
+                $r_pack.children().remove();
+                $pack_in_wc.clone().appendTo($r_pack);
+                $r_pack.children('#word').html(word[r_num]);
+                $r_pack.children('#count').html(count[r_num]);
+            });
+            $("#button1").click(function() {
+                if(count[l_num] > count[r_num])
+                    alert("틀림1");
+                else
+                {
+                    $l_pack.children().remove();
+                    $r_pack.children().remove();
+                    main(r_num);
+                }
+            });
+            $("#button2").click(function() {
+                if(count[l_num] > count[r_num]) {
+                    $l_pack.children().remove();
+                    $r_pack.children().remove();
+                    main(r_num);
+                }else
+                    alert("틀림2");
+            });
+        }
+        function RandomNum() // 한번도 나오지 않은 랜덤한 숫자 생성
+        {
+            var rand = Math.floor(Math.random() * (word.length -1));
+
+            if(!already_rand.includes(rand)){ //사용하지 않은 숫자이면
+                already_rand.push(rand);
+                return rand;
+            }
+            else{
+                RandomNum();
+            }
+            return -1;
+        }
+
+
+
+
 
     </script>
 </body>
