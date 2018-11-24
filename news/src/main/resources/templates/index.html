@@ -6,9 +6,8 @@
 -->
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<script th:src="@{/js/lib/wordcloud2.js}"></script> <!-- 추가 -->
-		<title>Lens by HTML5 UP</title>
+		<script type="text/javascript" th:src="@{https://www.gstatic.com/charts/loader.js}"></script>
+		<title>R뉴스</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" th:href="@{/css/main.css}" />
@@ -36,7 +35,7 @@
 				<!-- Thumbnail -->
 					<section id="thumbnails">
 						<article>
-							<a class="thumbnail" th:href="@{/images/fulls/01.jpg}" data-position="left center"><img th:src="@{/images/thumbs/wordcloud.jpg}" alt="" />
+                            <a class="thumbnail" th:href="@{/images/fulls/01.jpg}" data-position="left center"><img th:src="@{/images/thumbs/wordcloud.jpg}" alt="" /></a>
 								<h2>WordCloud</h2>
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 						</article>
@@ -73,114 +72,14 @@
 
 			</div>
 
-		<!-- Scripts -->
-			<script th:src="@{/js/jquery.min.js}"></script>
-			<script th:src="@{/js/browser.min.js}"></script>
-			<script th:src="@{/js/breakpoints.min.js}"></script>
-			<script th:src="@{/js/main.js}"></script>
+			<!-- Scripts -->
+			<script th:src="@{/js/app/jquery.min.js}"></script>
+			<script th:src="@{/js/app/browser.min.js}"></script>
+			<script th:src="@{/js/app/breakpoints.min.js}"></script>
+			<script th:src="@{/js/app/main.js}"></script>
+			<script th:src="@{/js/app/sankey.js}"></script>
+			<script th:src="@{/js/lib/wordcloud2.js}"></script> <!-- 추가 -->
+
 
 	</body>
 </html>
-
-
-
-<script type="text/javascript">
-    // var div = document.getElementById("surrounding_div");
-    // var canvas = document.getElementById("canvas_cloud");
-    var canvas = document.getElementById("canvas_cloud")
-    var arr = [];
-
-    // canvas.height = div.offsetHeight;
-    // canvas.width  = div.offsetWidth;
-
-    //html이 로딩되고 실행
-    $(document).ready(function(){
-        var data = null;
-
-
-        $.ajax({
-            url: "/WordCloud",
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            success: function(result) {
-
-                // arr = [];
-                arr.length = 0;
-
-                for (var i = 0; i < result.length; i++) {
-                    arr.push( [ result[i].word,
-                        result[i].totalWeight,
-                        result[i].idList ] );
-                }
-
-                var options = {
-                    list : arr,
-                    gridSize: Math.round(2 * document.getElementById('canvas_cloud').offsetWidth / 1024),
-                    weightFactor: function (size) {
-                        return Math.pow(size, 2) * document.getElementById('canvas_cloud').offsetWidth / 1024;
-                    },
-                    weightFactor: 7,
-                    minSize: 3,
-                    figPath: "circle",
-                    click: function(item) {
-                        alert("word : " + item[0] + " totalWeight : " + item[1]);
-                        location.href= "/mainNewsList?"+item[2];
-                    }
-                }
-
-                WordCloud(document.getElementById('canvas_cloud'), options);
-            },
-            error : function () {
-                alert("fail");
-            }
-        })
-    });
-
-    $('input[id="search"]').keydown(function() {
-        if (event.keyCode === 13) {
-
-            $.ajax({
-                url: "/findKeyword",
-                type: "POST",
-                dataType: "json",
-                contentType: "application/json",
-                data: JSON.stringify( document.getElementById('search').value ),
-                success: function(result) {
-
-                    // arr = [];    // 완전 초기화
-                    arr.length = 0;
-
-                    for (var i = 0; i < result.length; i++) {
-                        arr.push( [ result[i].word,
-                            result[i].counts,
-                            result[i].idList ] );
-                    }
-
-                    var options = {
-                        list : arr,
-                        gridSize: Math.round(2 * document.getElementById('canvas_cloud').offsetWidth / 1024),
-                        weightFactor: function (size) {
-                            return Math.pow(size, 2) * document.getElementById('canvas_cloud').offsetWidth / 1024;
-                        },
-                        weightFactor: 5,
-                        minSize: 3,
-                        figPath: "circle",
-                        click: function(item) {
-                            alert("word : " + item[0] + " count : " + item[1]);
-                            location.href= "/mainSearchNewsList?" + item[2];
-                        }
-                    }
-
-                    WordCloud(document.getElementById('canvas_cloud'), options);
-                },
-                error : function () {
-                    alert("fail");
-                }
-            })
-
-        }
-    });
-
-</script>

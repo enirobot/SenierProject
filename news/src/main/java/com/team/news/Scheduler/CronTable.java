@@ -12,10 +12,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 
 
 /**
@@ -52,7 +50,8 @@ public class CronTable {
 //    public void monthJob() {
 //
 //    }
-//
+
+
     //서버 시작하고 10초후에 실행 후 30분마다 실행
     @Scheduled(initialDelay = 10000, fixedDelay = 1800000)
     public void Job() {
@@ -61,8 +60,8 @@ public class CronTable {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         LocalDateTime now = LocalDateTime.now();    // 현재 시간
 
-        String fromTime = dateFormat.format(now.minusHours(3));         // 3시간 전
-        String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
+//        String fromTime = dateFormat.format(now.minusHours(3));         // 3시간 전
+//        String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
         String MorphologicalTime = dateFormat.format(now.minusMinutes(40));
 
         logger.info("web crawling start");
