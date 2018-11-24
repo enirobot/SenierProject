@@ -413,10 +413,10 @@ var main = (function($) { var _ = {
                     $parent: $this,
                     $slide: null,
                     $slideImage: null,
-					$slideElement: null,
                     $slideCaption: null,
                     $slideCanvasContainer: null,
 					$slideSankeyContainer: null,
+					$slideLineContainer: null,
                     url: $thumbnail.attr('href'),
                     loaded: false
                 };
@@ -425,7 +425,6 @@ var main = (function($) { var _ = {
                 $this.attr('tabIndex', '-1');
 
                 // Slide.
-
 				if (index == 0) {
                     // Create elements.
                     // s.$slide = $('<div class="slide"><canvas id="canvas""></canvas><div class="caption"></div></div>');
@@ -436,12 +435,8 @@ var main = (function($) { var _ = {
                         			'<div class="caption"></div>' +
 								'</div>');
 
-                    // Image.
-                    s.$slideImage = s.$slide.children('.image');
                     s.$slideCanvasContainer = s.$slide.children('.canvasContainer');
-				} else {
-                    // Create elements.
-                    // s.$slide = $('<div class="slide"><canvas id="canvas""></canvas><div class="caption"></div></div>');
+				} else if (index == 1) {
                     s.$slide = $('<div class="slide">' +
 									'<div class="sankeyContainer">' +
 										'<div id="sankey_major"></div>' +
@@ -451,54 +446,20 @@ var main = (function($) { var _ = {
 									'<div class="caption"></div>' +
 								'</div>');
 
-                    // Image.
-                    s.$slideImage = s.$slide.children('.image');
-                    // s.$slideElement = s.$slide.children(".element");
                     s.$slideSankeyContainer = s.$slide.children('.sankeyContainer');
+				} else {
+                    s.$slide = $('<div class="slide">' +
+                        			'<div class="lineContainer">' +
+                        				'<div id="linechart_material"></div>' +
+                        			'</div>' +
+                        			'<div class="caption"></div>' +
+                        		'</div>');
+
+                    s.$slideLineContainer = s.$slide.children('.lineContainer');
 				}
 
-
-                // // Create elements.
-                // // s.$slide = $('<div class="slide"><canvas id="canvas""></canvas><div class="caption"></div></div>');
-                // s.$slide = $('<div class="slide">' +
-				// 				'<div class="sankeyContainer">' +
-				// 				'<div id="sankey_major"></div>' +
-				// 				'<div id="sankey_minor"></div>' +
-				// 				'<div id="sankey_sports"></div>' +
-				// 				'</div>' +
-				// 				'<div class="canvasContainer">' +
-				// 					'<canvas id="canvas"></canvas>' +
-				// 				'</div>' +
-				// 				'<div class="caption"></div>' +
-				// 			'</div>');
-				//
-				//
-                // // Image.
-                // s.$slideImage = s.$slide.children('.image');
-                // // s.$slideElement = s.$slide.children(".element");
-				// s.$slideCanvasContainer = s.$slide.children('.canvasContainer');
-				// s.$slideSankeyContainer = s.$slide.children('.sankeyContainer');
-
-                //_.$thumbnails.children().eq(0).$slideElement.load("../html/sankey.html");
-				//s.$slideElement.load("../html/sankey.html");
-				switch (index) {
-					case 0:
-                        // s.$slideElement.load("../html/main.html");
-                        break;
-
-					case 1:
-                        // s.$slideElement.load("../html/sankey.html");
-                        break;
-
-                    case 2:
-                        // s.$slideElement.load("../html/line.html");
-                        break;
-                }
-
-                // // Set background stuff.
-                // s.$slideImage
-                //     .css('background-image', '')
-                //     .css('background-position', ($thumbnail.data('position') || 'center'));
+				// image
+                s.$slideImage = s.$slide.children('.image');
 
                 // Caption.
                 s.$slideCaption = s.$slide.find('.caption');
@@ -597,10 +558,6 @@ var main = (function($) { var _ = {
                         var canvas = oldSlide.$slideCanvasContainer.children()[0];
                         var context = canvas.getContext('2d');
                         context.clearRect(0, 0, canvas.width, canvas.height);
-
-                        // var charts = oldSlide.$slideSankeyContainer.children();
-                        // for (var i = 0; i <= charts.length; i++)
-                        // 	charts[i] = "";
                     }
 			}
 
@@ -695,10 +652,9 @@ var main = (function($) { var _ = {
 						// canvas를 매개변수로 넘겨줌
 						_.wordcloud_load(newSlide.$slideCanvasContainer.children()[0]);
 					} else if (index == 1) {
-
-                        $(document).ready(function(){
-							initSankey(newSlide.$slideSankeyContainer.children());
-                        });
+						initSankey(newSlide.$slideSankeyContainer.children());
+					} else if (index == 2) {
+						initLineChart(newSlide.$slideLineContainer.children()[0]);
 					}
 	},
 
