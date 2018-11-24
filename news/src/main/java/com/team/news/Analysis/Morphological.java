@@ -59,6 +59,7 @@ public class Morphological {
                     }
 
                     else {
+
                         WCNode wcTemp = wordList.get(keyword);  // 키워드에 해당되는 값 가져옴
                         wcTemp.sumCounts(1);    // 카운트 1씩 증가
                         wcTemp.sumTotalWeight(item.getWeight());    // 가중치
