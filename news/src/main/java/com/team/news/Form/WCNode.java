@@ -11,11 +11,13 @@ public class WCNode {
     private int counts;
     private double totalWeight;
     private int totalEmtionWeight;
+    private int totalComment;
     private List<MainNewsItem> mainNewsItems;
 
-    public WCNode(int counts, double totalWeight) {
+    public WCNode(int counts, double totalWeight,int totalComment) {
         this.counts = counts;
         this.totalWeight = totalWeight;
+        this.totalComment=totalComment;
         this.mainNewsItems = new ArrayList<MainNewsItem>();
     }
 
@@ -47,6 +49,10 @@ public class WCNode {
         this.totalWeight = this.totalWeight + totalWeight;
     }
 
+    public void sumComment(int totalComment) {
+        this.totalComment = this.totalComment +totalComment;
+    }
+
     public void sumTotalEmotionWeight(int totalEmtionWeight) {this.totalEmtionWeight = this.totalEmtionWeight + totalEmtionWeight; }
 
     public List<MainNewsItem> getMainNewsItems() {
@@ -67,5 +73,9 @@ public class WCNode {
 
     public void setTotalEmtionWeight(int totalEmtionWeight) {
         this.totalEmtionWeight = totalEmtionWeight;
+    }
+
+    public int getTotalCommentCount() {
+        return totalComment;
     }
 }

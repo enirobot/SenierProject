@@ -24,14 +24,14 @@
             })
 
             $.ajax({
-                url: "/bubble_sports_post",
+                url: "/sankey_sports_post",
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify(null),
                 success: function(data) {
                     for (var i = 0; i < data.length; i++) {
-                        inputdata3.push( [ data[i].source, data[i].destination, data[i].value ] );
+                        inputdata3.push( [ data[i].source, data[i].destination,data[i].keyword, data[i].value ] );
                     }
 
                     google.charts.load('current', {'packages':['sankey']});
@@ -77,7 +77,7 @@
         function drawChart3() {
             var data = google.visualization.arrayToDataTable([
                 ['ID', 'Life Expectancy', 'Fertility Rate', 'Region',     'Population'],
-                ['CAN',    80.66,              1.67,      'North America',  33739900],
+                ['언론사',    80.66,              1.67,      'North America',  33739900],
                 ['DEU',    79.84,              1.36,      'Europe',         81902307],
                 ['DNK',    78.6,               1.84,      'Europe',         5523095],
                 ['EGY',    72.73,              2.78,      'Middle East',    79716203],

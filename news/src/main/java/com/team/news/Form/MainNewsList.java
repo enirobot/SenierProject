@@ -18,15 +18,17 @@ public class MainNewsList {
     private int counts;
     private String date;
     private double totalWeight;
+    private int totalCount;
     private List<MainNewsItem> newsItems;
 
     public MainNewsList(){}
 
-    public MainNewsList(String word, int counts, String date, double totalWeight, List<MainNewsItem> mainNewsItems) {
+    public MainNewsList(String word, int counts, String date, double totalWeight, int totalCount ,List<MainNewsItem> mainNewsItems) {
         this.word = word;
         this.counts = counts;
         this.date = date;
         this.totalWeight = totalWeight;
+        this.totalCount=totalCount;
         this.newsItems = mainNewsItems;
     }
 

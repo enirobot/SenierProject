@@ -90,7 +90,7 @@ public class CronTable {
         logger.info("web sankey_sports_analysis end");
 
         logger.info("web bubble_analysis start");
-        morphological.bubble_analysis(newsRepository,graphRepository2,mongoTemplate);//bubble부분추가
+        morphological.bubble_analysis(newsRepository,graphRepository2,mongoTemplate,mainNewsListRepository);//bubble부분추가
         logger.info("web bubble_analysis end");
 
         System.out.println("--CronTable end--");

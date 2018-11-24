@@ -44,7 +44,7 @@ public class Morphological {
                         continue;
 
                     if (!wordList.containsKey(keyword)) {
-                        wordList.put(keyword, new WCNode(1, item.getWeight()));
+                        wordList.put(keyword, new WCNode(1, item.getWeight(),item.getComment_count()));///////////
                         wordList.get(keyword).add( new MainNewsItem(
                                                     item.getTitle(),
                                                     item.getCompany(),
@@ -56,6 +56,7 @@ public class Morphological {
                         WCNode wcTemp = wordList.get(keyword);  // 키워드에 해당되는 값 가져옴
                         wcTemp.sumCounts(1);    // 카운트 1씩 증가
                         wcTemp.sumTotalWeight(item.getWeight());
+                        wcTemp.sumComment(item.getComment_count());/////////////////////////////
                         wcTemp.sumTotalEmotionWeight(item.getEmtion_weight());
                         wcTemp.add( new MainNewsItem(
                                         item.getTitle(),
@@ -78,6 +79,7 @@ public class Morphological {
                     item.getCounts(),
                     currentTime,
                     item.getTotalWeight(),
+                    item.getTotalCommentCount(),/////
                     item.getMainNewsItems()));
 
         }
@@ -183,6 +185,9 @@ public class Morphological {
         category.add("농구");
         category.add("e스포츠");
 
+        ArrayList<String> totalcomment = new ArrayList<String>();
+
+
         addList(sankeyFormList, company, category, newsrepository);
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
@@ -194,7 +199,7 @@ public class Morphological {
         graphRepository.save(sankeyFormList);
     }
 
-    public void bubble_analysis(NewsRepository newsrepository, GraphRepository2 graphRepository2, MongoTemplate mongoTemplate)
+    public void bubble_analysis(NewsRepository newsrepository, GraphRepository2 graphRepository2, MongoTemplate mongoTemplate, MainNewsListRepository repository3)
     {
 
         BubbleFormAndDate bubbleFormList = new BubbleFormAndDate();
@@ -217,7 +222,7 @@ public class Morphological {
         category.add("농구");
         category.add("e스포츠");
 
-        addList2(bubbleFormList, company, category, newsrepository);
+        addList2(bubbleFormList, company, category, newsrepository,repository3);
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         Calendar cal = Calendar.getInstance();
@@ -253,7 +258,7 @@ public class Morphological {
         }
     }
     private void addList2( BubbleFormAndDate bubbleFormAndDate, ArrayList<String> company,
-                          ArrayList<String> category, NewsRepository repository) {
+                          ArrayList<String> category, NewsRepository repository,MainNewsListRepository repository2) {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         Calendar cal = Calendar.getInstance();
@@ -267,6 +272,8 @@ public class Morphological {
                 tmp.source = company.get(i);
                 tmp.destination = category.get(j);
                 tmp.value = repository.countByCategoryLikeAndCompanyAndDateGreaterThanEqual(category.get(j), company.get(i),beforeTime);
+                tmp.totalcommentcount=1;
+                tmp.keyword="hi";
 
                 if(tmp.value != 0) {
                     bubbleFormAndDate.addBubbleitems(tmp);

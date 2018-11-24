@@ -3,6 +3,13 @@ package com.team.news.Form;
 public class BubbleForm {
     public String source;
     public String destination;
+    public String keyword;
+    public String runningtime;
+    public int totalcommentcount;
+    public int weight;
+    public String category;
+    public int count;
+
     public int value;
 
     public BubbleForm() {}
