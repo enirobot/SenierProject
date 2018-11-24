@@ -862,11 +862,11 @@ var main = (function($) { var _ = {
 
 					$("#modal_list").append(
 						"<tr>" +
-							"<td>" + result[i].date + "</td>" +
-                        	"<td>" +
+							"<td class='td1'>" + result[i].date + "</td>" +
+                        	"<td class='td2'>" +
 								"<a href=" + result[i].url + ">" + result[i].title + "</a>" +
 							"</td>" +
-                        	"<td>" + result[i].company + "</td>" +
+                        	"<td class='td3'>" + result[i].company + "</td>" +
 						"</tr>"
 					);
                 }
