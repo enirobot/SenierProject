@@ -1,13 +1,11 @@
 package com.team.news.Controller;
 
-import com.team.news.Form.GameDataForm;
-import com.team.news.Form.MainNewsList;
-import com.team.news.Form.WCForm;
+import com.team.news.Form.*;
+
+
 import com.team.news.Repository.MainNewsListRepository;
 import com.team.news.Repository.NewsRepository;
-import com.team.news.WebCrawler.CrawlingNaver;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.bson.types.ObjectId;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -18,10 +16,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -37,32 +35,29 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.limi
 public class GameController {
 
     private final MongoTemplate mongoTemplate;
-    private WebDriver driver;
-    private ChromeOptions options;
+    private final MainNewsListRepository mainNewsListRepository;
+    private final NewsRepository newsRepository;
+    private String fromTime;
+    private String toTime;
+    private HashMap<String, List<String>> newsMap;
 
     @Autowired
-    public GameController(MongoTemplate mongoTemplate) {
+    public GameController(MongoTemplate mongoTemplate, MainNewsListRepository mainNewsListRepository, NewsRepository newsRepository) {
         this.mongoTemplate = mongoTemplate;
-
+        this.mainNewsListRepository=mainNewsListRepository;
+        this.newsRepository=newsRepository;
     }
-
 
     @GetMapping("/game")
     public String main(Model model) throws Exception {
-        String os = System.getProperty("os.name");
 
-        if (os.equals("Windows 10")) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-        }
+        newsMap = new HashMap<String, List<String>>();
 
-        if (os.equals("Mac OS X")) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver");
-        }
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+        LocalDateTime now = LocalDateTime.now();    // 현재 시간
 
-        options = new ChromeOptions();
-        options.addArguments("headless");
-
-        driver = new ChromeDriver(options);
+        fromTime = dateFormat.format(now.minusDays(1));         // 3시간 전
+        toTime = dateFormat.format(now.minusHours(0));
 
         return "game";
     }
@@ -71,13 +66,8 @@ public class GameController {
     @PostMapping("/getKeyword")
     public List keyword()
     {
+        int cnt = 0;
         List<GameDataForm> list = new ArrayList<>();
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
-        LocalDateTime now = LocalDateTime.now();    // 현재 시간
-
-        String fromTime = dateFormat.format(now.minusDays(6));         // 3시간 전
-        String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
-
         Aggregation agg = newAggregation(
                 match(Criteria.where("date").gte(fromTime).lte(toTime)
                         .and("totalWeight").gt(0)
@@ -93,14 +83,31 @@ public class GameController {
         List<WCForm> WCFormList = result.getMappedResults();
 
         for (WCForm item : WCFormList) {
-            //System.out.println(item.getWord() + " " + item.getTotalWeight() + " " + item.getIdList().size());
-            //list.add(new WCForm(item.getWord(), item.getTotalWeight(), item.getIdList()));
-            driver.get("https://www.google.co.kr/");
-
+            System.out.println(item.getWord() + " " + item.getTotalWeight());
+            newsMap.put(item.getWord(),item.getIdList());
             list.add(new GameDataForm(item.getWord(),item.getTotalWeight(),"url" ));
         }
 
         return list;
+    }
+
+    @ResponseBody
+    @PostMapping("/getNewsList")
+    public  List<MainNewsItem> newslist(@RequestBody String word)
+    {
+        word = word.replace("\"","");
+
+        List<MainNewsItem> idList = new ArrayList<>();
+        List<MainNewsList> mainNewsList;
+
+        mainNewsList = mainNewsListRepository.findByIdIn( newsMap.get(word) );
+
+        for (MainNewsList item : mainNewsList)
+            for (MainNewsItem tem: item.getNewsItems()) {
+                    idList.add(tem);
+            }
+
+        return idList;
     }
 
 
