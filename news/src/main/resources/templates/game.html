@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <head>
     <meta charset="UTF-8">
     <title>Game</title>
@@ -14,32 +15,34 @@
         .term_left{
             width: 50%;
             height: 90%;
-            background-color : #00D3B7;
+            /*background-color : #00D3B7;*/
             float: left;
         }
         .term_right{
             width: 50%;
             height: 90%;
-            background-color : #a7d379;
+            /*background-color : #a7d379;*/
             float: right;
         }
+        #word{
+            margin:5px;
+            height: 5%;
+        }
+        #count{
+            margin: 3px;
+            height: 10%;
+            padding-top: 15px;
+        }
+        .button_ele{
+            margin: 1px;
+            height: 6%;
+        }
 
-        .pack{
-            margin-top: 40%;
-            display: inline-block;
-            width: 60%;
-            height: 20%;
-            background-color: #ffffff;
-        }
-        .element, .button_ele{
-            margin:3px;
-            height: 30%;
-        }
         .score_bar{
-            float: bottom;
             width: 95%;
             height: 10%;
-            background-color: #eeeeee;
+            /*background-color: #000000;*/
+            float: bottom;
         }
 
         body {
@@ -54,6 +57,13 @@
             bottom: 0;
             right: 0;
         }
+        .wordTree{
+            width:100%;
+            height:70%;
+        }
+        .end_box{
+            text-align: center;
+        }
 
 
 
@@ -62,14 +72,12 @@
 <body>
     <div class="container">
         <div class = "term_left" >
-            <div class="pack">
-            </div>
+
         </div>
         <div class = "term_right">
-            <div class="pack">
-            </div>
+
         </div>
-        <div class="score_bar"></div>
+        <div class="score_bar"> 점수 : 0</div>
     </div>
     <script type="text/javascript">
 
@@ -80,18 +88,18 @@
 
         var word = [];
         var count = [];
-        var image = [];
         var already_rand = [];
+        var score = 0;
 
         $pack_in_wc = $('<div id="word" class="element"></div><div id="count" class="element"></div>');
         $pack_in_button = $('<div id="word" class="element"></div><div id="button1" class="button_ele">UP</div><div id="button2" class="button_ele">DOWN</div>');
+        $pack_in_chart = $('<div class="wordTree"></div>');
+        $end_box = $('<div class="end_box">Game over</div>');
 
-        $l_pack = $('.term_left .pack');
-        $r_pack = $('.term_right .pack');
+        $l_term = $('.term_left ');
+        $r_term = $('.term_right ');
 
         $(document).ready(function() {
-
-
             $.ajax({
                 url: "/getKeyword",
                 type: "POST",
@@ -102,9 +110,6 @@
                 for (var i = 0; i < data.length; i++) {
                         word.push(data[i].word);
                         count.push(parseInt(data[i].totalWeight));
-                        image.push(data[i].imageUrl);
-                        //inputdata.push([data[i].word, data[i].totalWeight]);
-                        //document.writeln(data[i].word +  " "+ parseInt(data[i].totalWeight)) ;
                 }
                 main(0);
             });
@@ -112,8 +117,10 @@
         });
         function main(before_num) {
 
-            $l_pack.append($pack_in_wc);
-            $r_pack.append($pack_in_button);
+            $l_term.append($pack_in_wc);
+            $l_term.append($pack_in_chart);
+            $r_term.append($pack_in_button);
+            $pack_in_chart.clone().appendTo($r_term);
 
             if(before_num == 0)
                 var l_num = RandomNum();
@@ -121,33 +128,41 @@
                 var l_num = before_num;
             var r_num = RandomNum();
 
-            $l_pack.children('#word').html(word[l_num]);
-            $l_pack.children('#count').html(count[l_num]);
-            $r_pack.children('#word').html(word[r_num]);
+            getNewsList(word[l_num], 0);
+            getNewsList(word[r_num], 1);
+
+            $l_term.children('#word').html(word[l_num]);
+            $l_term.children('#count').html(count[l_num]);
+            $r_term.children('#word').html(word[r_num]);
 
             $(".button_ele").click(function() {
-                $r_pack.children().remove();
-                $pack_in_wc.clone().appendTo($r_pack);
-                $r_pack.children('#word').html(word[r_num]);
-                $r_pack.children('#count').html(count[r_num]);
+                $r_term.children().remove();
+                $pack_in_wc.clone().appendTo($r_term);
+                $r_term.children('#word').html(word[r_num]);
+                $r_term.children('#count').html(count[r_num]);
             });
             $("#button1").click(function() {
-                if(count[l_num] > count[r_num])
-                    alert("틀림1");
+                if(count[l_num] > count[r_num]){
+                    alert("틀림");
+                    $r_term.append($end_box);
+                }
                 else
                 {
-                    $l_pack.children().remove();
-                    $r_pack.children().remove();
+                    $('.score_bar').html('점수 : '+(++score));
+                    $l_term.children().remove();
+                    $r_term.children().remove();
                     main(r_num);
                 }
             });
             $("#button2").click(function() {
                 if(count[l_num] > count[r_num]) {
-                    $l_pack.children().remove();
-                    $r_pack.children().remove();
+                    $('.score_bar').html('점수 : '+(++score));
+                    $l_term.children().remove();
+                    $r_term.children().remove();
                     main(r_num);
                 }else
-                    alert("틀림2");
+                    alert("틀림");
+                    $r_term.append($end_box);
             });
         }
         function RandomNum() // 한번도 나오지 않은 랜덤한 숫자 생성
@@ -163,9 +178,43 @@
             }
             return -1;
         }
+        function getNewsList(word, num)
+        {
+            var title = [];
+
+            $.ajax({
+                url: "/getNewsList",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(word)
+            }).done(function (data){
+                for (var i = 0; i < data.length; i++) {
+                    var temp=[];
+                    temp.push(data[i].title);
+                    title.push(temp);
+                }
+                google.charts.load('current', {packages:['wordtree']});
+                google.charts.setOnLoadCallback(function(){drawChart(title, word, num);});
+            });
 
 
+        }
 
+        function drawChart(title, word, num) {
+            //console.log(JSON.stringify(title));
+            var data = google.visualization.arrayToDataTable(title);
+
+            var options = {
+                maxFontSize: 14,
+                wordtree: {
+                    format: 'implicit',
+                    word: word
+                }
+            };
+            var chart = new google.visualization.WordTree($('.wordTree')[num]);
+            chart.draw(data, options);
+        }
 
 
     </script>
