@@ -447,9 +447,7 @@ var main = (function($) { var _ = {
 				} else if (index == 1) {
                     s.$slide = $('<div class="slide">' +
 									'<div class="sankeyContainer">' +
-										'<div id="sankey_major"></div>' +
-										'<div id="sankey_minor"></div>' +
-										'<div id="sankey_sports"></div>' +
+										'<div id="sankey"></div>' +
 									'</div>' +
 									'<div class="caption"></div>' +
 								'</div>');
@@ -664,7 +662,7 @@ var main = (function($) { var _ = {
 						// canvas를 매개변수로 넘겨줌
 						_.wordcloud_load(newSlide.$slideCanvasContainer.children()[0]);
 					} else if (index == 1) {
-						initSankey(newSlide.$slideSankeyContainer.children());
+						initSankey(newSlide.$slideSankeyContainer.children()[0]);
 					} else if (index == 2) {
 						initLineChart(newSlide.$slideLineContainer.children()[0]);
 					}
@@ -841,8 +839,6 @@ var main = (function($) { var _ = {
 
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
-                console.log("canvas width : " + window.innerWidth);
-                console.log("canvas height : " + window.innerHeight);
 
                 WordCloud(canvas, options);
             },

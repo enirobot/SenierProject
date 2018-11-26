@@ -3,7 +3,7 @@ package com.team.news.Analysis;
 import com.mongodb.Block;
 import com.mongodb.client.DistinctIterable;
 import com.team.news.Form.*;
-import com.team.news.Repository.GraphRepository;
+import com.team.news.Repository.SankeyRepository;
 import com.team.news.Repository.MainNewsListRepository;
 import com.team.news.Repository.NewsRepository;
 import org.bitbucket.eunjeon.seunjeon.Analyzer;
@@ -96,8 +96,11 @@ public class Morphological {
         logger.info("형태소분석 : " + list.size() + "개");
     }
 
-    public void sankey_major_analysis(NewsRepository newsrepository, GraphRepository graphRepository, MongoTemplate mongoTemplate)
+    public void sankey_major_analysis(NewsRepository newsrepository, SankeyRepository sankeyRepository, MongoTemplate mongoTemplate)
     {
+        int sankeySize = 0;
+        ArrayList<SankeyForm> sankeyForms;
+        List<SankeyForm> revSankeyForms;
         SankeyFormAndDate sankeyFormList = new SankeyFormAndDate();
         sankeyFormList.setGroup("major");
 
@@ -123,42 +126,68 @@ public class Morphological {
             }
         });
 
-        addList(sankeyFormList, company.subList(0,company.size()/2), category, newsrepository, 0);
-        addList(sankeyFormList, company.subList(company.size()/2,company.size()), category, newsrepository, 1);
+        sankeyForms = getSankeyFormList(company, category, newsrepository);
+        sankeySize = sankeyForms.size();
+
+        revSankeyForms = sankeyForms.subList(sankeySize / 2, sankeySize);
+
+
+        sankeyForms = new ArrayList<>( sankeyForms.subList(0, sankeySize / 2 ) );
+
+        for (SankeyForm item : revSankeyForms) {
+            SankeyForm temp = new SankeyForm();
+
+            temp.setSource( item.getDestination() );
+            temp.setDestination( item.getSource() );
+            temp.setValue( item.getValue() );
+
+            sankeyForms.add( temp );
+        }
+
+        sankeyFormList.setSankeyitems( sankeyForms );
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
         String currentTime = date.format(cal.getTime());
         sankeyFormList.setDate(currentTime);
 
-        graphRepository.save(sankeyFormList);
+        sankeyRepository.save(sankeyFormList);
     }
-    private void addList( SankeyFormAndDate sankeyFormAndDate, List<String> company,
-                          List<String> category, NewsRepository repository, int flag) {
+    private ArrayList<SankeyForm> getSankeyFormList( List<String> company, List<String> category, NewsRepository repository) {
+        String companyName;
+        String destinationName;
+        int value;
+
+        ArrayList<SankeyForm> sankeyFormArrayList = new ArrayList<>();
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         Calendar cal = Calendar.getInstance();
         cal.add( Calendar.HOUR, -2 );    // 2시간 이내
         String beforeTime = date.format(cal.getTime());
 
+
         for(int i=0;i<company.size();i++){
+            companyName = company.get(i);
+
             for(int j=0;j<category.size();j++)
             {
+                destinationName = category.get(j);
+                value = repository.countByCategoryLikeAndCompanyAndDateGreaterThanEqual(destinationName,
+                        companyName,
+                        beforeTime);
+
                 SankeyForm tmp = new SankeyForm();
-                if (flag == 0) {
-                    tmp.source = company.get(i);
-                    tmp.destination = category.get(j);
-                }
-                else{
-                    tmp.source = category.get(j);
-                    tmp.destination = company.get(i);
-                }
-                tmp.value = repository.countByCategoryLikeAndCompanyAndDateGreaterThanEqual(category.get(j), company.get(i),beforeTime);
-                if(tmp.value != 0) {
-                    sankeyFormAndDate.addSankeyitems(tmp);
+                tmp.setSource(companyName);
+                tmp.setDestination(destinationName);
+                tmp.setValue(value);
+
+                if(value != 0) {
+                    sankeyFormArrayList.add(tmp);
                 }
             }
         }
+
+        return sankeyFormArrayList;
     }
 
 }
