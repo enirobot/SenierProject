@@ -433,12 +433,14 @@ var main = (function($) { var _ = {
                         				'<canvas id="canvas"></canvas>' +
                         			'</div>' +
                         			'<div class="caption"></div>' +
-									// '<div id="myModal" class="modal">' +
-									// 	'<div class="modal_content">' +
-									// 		'<span class="close">&times;</span>' +
-									// 		'<a> dddddddddddddddddd </a>' +
-									// 	'</div>' +
-									// '</div>' +
+
+                        '<div id="myModal" class="modal">\n' +
+                        '<div class="modal-content">\n' +
+                        '<span class="close">&times;</span>\n' +
+                        '<table id="modal_list">\n' +
+                        '</table>' +
+                        '</div>' +
+                        '</div>' +
 								'</div>');
 
                     s.$slideCanvasContainer = s.$slide.children('.canvasContainer');
@@ -544,6 +546,7 @@ var main = (function($) { var _ = {
 				newSlide = _.slides[index];
 
         oldIndex = _.current;
+        _.hide();
 
         // Update current.
 			_.current = index;
@@ -564,6 +567,9 @@ var main = (function($) { var _ = {
                         var canvas = oldSlide.$slideCanvasContainer.children()[0];
                         var context = canvas.getContext('2d');
                         context.clearRect(0, 0, canvas.width, canvas.height);
+
+                        // 모달 내용 초기화 후 비활성화
+						modalClose();
                     }
 			}
 
@@ -833,9 +839,10 @@ var main = (function($) { var _ = {
                     }
                 }
 
-
-                canvas.width = parent.offsetWidth;
-                canvas.height = parent.offsetHeight;
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                console.log("canvas width : " + window.innerWidth);
+                console.log("canvas height : " + window.innerHeight);
 
                 WordCloud(canvas, options);
             },
@@ -847,7 +854,7 @@ var main = (function($) { var _ = {
     },
 
     sampleModalPopup: function(idList){
-		console.log(idList);
+		// console.log(idList);
 
 		$.ajax({
 			url: "/newsList",
@@ -856,12 +863,12 @@ var main = (function($) { var _ = {
 			contentType: "application/json",
 			data: JSON.stringify(idList),
 			success: function(result) {
-				console.log(result);
+				// console.log(result);
 
 				for (var i = 0; i < result.length; i++) {
 
 					$("#modal_list").append(
-						"<tr>" +
+						"<tr class='newsListRow'>" +
 							"<td class='td1'>" + result[i].date + "</td>" +
                         	"<td class='td2'>" +
 								"<a href=" + result[i].url + ">" + result[i].title + "</a>" +
