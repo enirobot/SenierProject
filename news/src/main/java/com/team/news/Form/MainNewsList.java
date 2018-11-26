@@ -18,17 +18,19 @@ public class MainNewsList {
     private int counts;
     private String date;
     private double totalWeight;
-    private  int totalEmotionWeight;
+    private int totalEmotionWeight;
+    private int totalcommentCount;
     private List<MainNewsItem> newsItems;
 
     public MainNewsList(){}
 
-    public MainNewsList(String word, int counts, String date, double totalWeight, int totalEmotionWeight, List<MainNewsItem> mainNewsItems) {
+    public MainNewsList(String word, int counts, String date, double totalWeight, int totalEmotionWeight,int totalcommentCount, List<MainNewsItem> mainNewsItems) {
         this.word = word;
         this.counts = counts;
         this.date = date;
         this.totalWeight = totalWeight;
         this.totalEmotionWeight = totalEmotionWeight;
+        this.totalcommentCount=totalcommentCount;
         this.newsItems = mainNewsItems;
     }
 
@@ -51,6 +53,15 @@ public class MainNewsList {
     public int getCounts() {
         return counts;
     }
+    public  int getCommentcounts() {
+        return totalcommentCount;
+    }
+
+    public  int getReactioninfo() {
+        return totalEmotionWeight;
+    }
+
+    public double getTotalweight() { return totalWeight; }
 
     public void setCounts(int counts) {
         this.counts = counts;

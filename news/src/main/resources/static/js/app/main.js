@@ -413,10 +413,10 @@ var main = (function($) { var _ = {
                     $parent: $this,
                     $slide: null,
                     $slideImage: null,
-					$slideElement: null,
                     $slideCaption: null,
                     $slideCanvasContainer: null,
 					$slideSankeyContainer: null,
+					$slideLineContainer: null,
                     url: $thumbnail.attr('href'),
                     loaded: false
                 };
@@ -425,7 +425,6 @@ var main = (function($) { var _ = {
                 $this.attr('tabIndex', '-1');
 
                 // Slide.
-
 				if (index == 0) {
                     // Create elements.
                     // s.$slide = $('<div class="slide"><canvas id="canvas""></canvas><div class="caption"></div></div>');
@@ -434,14 +433,18 @@ var main = (function($) { var _ = {
                         				'<canvas id="canvas"></canvas>' +
                         			'</div>' +
                         			'<div class="caption"></div>' +
+
+                        '<div id="myModal" class="modal">\n' +
+                        '<div class="modal-content">\n' +
+                        '<span class="close">&times;</span>\n' +
+                        '<table id="modal_list">\n' +
+                        '</table>' +
+                        '</div>' +
+                        '</div>' +
 								'</div>');
 
-                    // Image.
-                    s.$slideImage = s.$slide.children('.image');
                     s.$slideCanvasContainer = s.$slide.children('.canvasContainer');
-				} else {
-                    // Create elements.
-                    // s.$slide = $('<div class="slide"><canvas id="canvas""></canvas><div class="caption"></div></div>');
+				} else if (index == 1) {
                     s.$slide = $('<div class="slide">' +
 									'<div class="sankeyContainer">' +
 										'<div id="sankey_major"></div>' +
@@ -451,54 +454,20 @@ var main = (function($) { var _ = {
 									'<div class="caption"></div>' +
 								'</div>');
 
-                    // Image.
-                    s.$slideImage = s.$slide.children('.image');
-                    // s.$slideElement = s.$slide.children(".element");
                     s.$slideSankeyContainer = s.$slide.children('.sankeyContainer');
+				} else {
+                    s.$slide = $('<div class="slide">' +
+                        			'<div class="lineContainer">' +
+                        				'<div id="linechart_material"></div>' +
+                        			'</div>' +
+                        			'<div class="caption"></div>' +
+                        		'</div>');
+
+                    s.$slideLineContainer = s.$slide.children('.lineContainer');
 				}
 
-
-                // // Create elements.
-                // // s.$slide = $('<div class="slide"><canvas id="canvas""></canvas><div class="caption"></div></div>');
-                // s.$slide = $('<div class="slide">' +
-				// 				'<div class="sankeyContainer">' +
-				// 				'<div id="sankey_major"></div>' +
-				// 				'<div id="sankey_minor"></div>' +
-				// 				'<div id="sankey_sports"></div>' +
-				// 				'</div>' +
-				// 				'<div class="canvasContainer">' +
-				// 					'<canvas id="canvas"></canvas>' +
-				// 				'</div>' +
-				// 				'<div class="caption"></div>' +
-				// 			'</div>');
-				//
-				//
-                // // Image.
-                // s.$slideImage = s.$slide.children('.image');
-                // // s.$slideElement = s.$slide.children(".element");
-				// s.$slideCanvasContainer = s.$slide.children('.canvasContainer');
-				// s.$slideSankeyContainer = s.$slide.children('.sankeyContainer');
-
-                //_.$thumbnails.children().eq(0).$slideElement.load("../html/sankey.html");
-				//s.$slideElement.load("../html/sankey.html");
-				switch (index) {
-					case 0:
-                        // s.$slideElement.load("../html/main.html");
-                        break;
-
-					case 1:
-                        // s.$slideElement.load("../html/sankey.html");
-                        break;
-
-                    case 2:
-                        // s.$slideElement.load("../html/line.html");
-                        break;
-                }
-
-                // // Set background stuff.
-                // s.$slideImage
-                //     .css('background-image', '')
-                //     .css('background-position', ($thumbnail.data('position') || 'center'));
+				// image
+                s.$slideImage = s.$slide.children('.image');
 
                 // Caption.
                 s.$slideCaption = s.$slide.find('.caption');
@@ -577,6 +546,7 @@ var main = (function($) { var _ = {
 				newSlide = _.slides[index];
 
         oldIndex = _.current;
+        _.hide();
 
         // Update current.
 			_.current = index;
@@ -598,9 +568,8 @@ var main = (function($) { var _ = {
                         var context = canvas.getContext('2d');
                         context.clearRect(0, 0, canvas.width, canvas.height);
 
-                        // var charts = oldSlide.$slideSankeyContainer.children();
-                        // for (var i = 0; i <= charts.length; i++)
-                        // 	charts[i] = "";
+                        // 모달 내용 초기화 후 비활성화
+						modalClose();
                     }
 			}
 
@@ -695,10 +664,9 @@ var main = (function($) { var _ = {
 						// canvas를 매개변수로 넘겨줌
 						_.wordcloud_load(newSlide.$slideCanvasContainer.children()[0]);
 					} else if (index == 1) {
-
-                        $(document).ready(function(){
-							initSankey(newSlide.$slideSankeyContainer.children());
-                        });
+						initSankey(newSlide.$slideSankeyContainer.children());
+					} else if (index == 2) {
+						initLineChart(newSlide.$slideLineContainer.children()[0]);
 					}
 	},
 
@@ -862,17 +830,19 @@ var main = (function($) { var _ = {
                     figPath: "circle",
                     // backgroundColor: "white",
                     click: function(item) {
-                        alert("word : " + item[0] + " totalWeight : " + item[1]);
-                        location.href= "/mainNewsList?"+item[2];
+                        // alert("word : " + item[0] + " totalWeight : " + item[1]);
 
+                        // location.href= "/mainNewsList?"+item[2];
+                        _.sampleModalPopup(item[2]);
                         //popup 창
 						// window.open("/mainNewsList?"+item[2], "newsList", 'height=' + screen.height + ',width=' + screen.width + 'fullscreen=yes')
                     }
                 }
 
-
-                canvas.width = parent.offsetWidth;
-                canvas.height = parent.offsetHeight;
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                console.log("canvas width : " + window.innerWidth);
+                console.log("canvas height : " + window.innerHeight);
 
                 WordCloud(canvas, options);
             },
@@ -882,6 +852,40 @@ var main = (function($) { var _ = {
         })
 
     },
+
+    sampleModalPopup: function(idList){
+		// console.log(idList);
+
+		$.ajax({
+			url: "/newsList",
+			type: "POST",
+			dataType: "json",
+			contentType: "application/json",
+			data: JSON.stringify(idList),
+			success: function(result) {
+				// console.log(result);
+
+				for (var i = 0; i < result.length; i++) {
+
+					$("#modal_list").append(
+						"<tr class='newsListRow'>" +
+							"<td class='td1'>" + result[i].date + "</td>" +
+                        	"<td class='td2'>" +
+								"<a href=" + result[i].url + ">" + result[i].title + "</a>" +
+							"</td>" +
+                        	"<td class='td3'>" + result[i].company + "</td>" +
+						"</tr>"
+					);
+                }
+
+				modalOpen();
+
+				},
+			error : function () {
+				alert("fail");
+			}
+		});
+	},
 
 
 }; return _; })(jQuery); main.init();

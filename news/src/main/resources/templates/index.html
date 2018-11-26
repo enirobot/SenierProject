@@ -11,8 +11,11 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" th:href="@{/css/main.css}" />
+		<link rel="stylesheet" th:href="@{/css/modal.css}"/>
 		<noscript><link rel="stylesheet" th:href="@{/css/noscript.css}" /></noscript>
 	</head>
+
+
 	<body class="is-preload-0 is-preload-1 is-preload-2">
 
 		<!-- Main -->
@@ -59,7 +62,6 @@
 							<h2>Heat Map</h2>
 							<p>In pellentesque cursus velit id posuere. Donec vehicula nulla.</p>
 						</article>
-
 					</section>
 
 				<!-- Footer -->
@@ -70,7 +72,20 @@
 						</ul>
 					</footer>
 
+				<!--&lt;!&ndash; The Modal &ndash;&gt;-->
+				<!--<div id="myModal" class="modal">-->
+
+					<!--&lt;!&ndash; Modal content &ndash;&gt;-->
+					<!--<div class="modal-content">-->
+						<!--<span class="close">&times;</span>-->
+						<!--<table id="modal_list">-->
+						<!--</table>-->
+					<!--</div>-->
+
+				<!--</div>-->
+
 			</div>
+
 
 			<!-- Scripts -->
 			<script th:src="@{/js/app/jquery.min.js}"></script>
@@ -78,6 +93,8 @@
 			<script th:src="@{/js/app/breakpoints.min.js}"></script>
 			<script th:src="@{/js/app/main.js}"></script>
 			<script th:src="@{/js/app/sankey.js}"></script>
+			<script th:src="@{/js/app/lineChart.js}"></script>
+			<script th:src="@{/js/app/modal.js}"></script>
 			<script th:src="@{/js/lib/wordcloud2.js}"></script> <!-- 추가 -->
 
 
