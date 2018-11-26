@@ -25,6 +25,10 @@ public class SankeyFormAndDate {
         return sankeyitems;
     }
 
+    public void setSankeyitems(List<SankeyForm> sankeyitems) {
+        this.sankeyitems = sankeyitems;
+    }
+
     public String getDate() {return date;}
 
     public String toString() {return "SankeyFormAndDate : date="+date+", group="+group;}

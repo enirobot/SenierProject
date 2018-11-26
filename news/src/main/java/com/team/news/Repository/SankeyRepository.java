@@ -7,7 +7,7 @@ import org.springframework.lang.Nullable;
 
 import java.util.List;
 
-public interface GraphRepository extends MongoRepository<SankeyFormAndDate, String> {
+public interface SankeyRepository extends MongoRepository<SankeyFormAndDate, String> {
 
     @Nullable
     SankeyFormAndDate findTopByGroupOrderByDateDesc(String group);
