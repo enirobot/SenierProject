@@ -19,7 +19,7 @@
                 contentType: "application/json",
                 async: false,
                 data: JSON.stringify(data),
-                success: function (data) {//안정된 상태일 때 단어 총 3개로 파싱
+                success: function (data) {//단어 총 3개로 각각에 대한 결과를 위해 리스트를 단어별로 파싱
                     var i=0;
                     for (i; i < data.length; i++) {
                         inputdata1.push( [ data[i].word, data[i].counts, data[i].date ] );
@@ -57,7 +57,7 @@
             data.addColumn('date', 'Date');
             data.addColumn('number', inputdata1[0][0]);
             data.addColumn('number', inputdata2[0][0]);
-            //data.addColumn('number', inputdata3[0][0]); //안정된 상태일 때
+            data.addColumn('number', inputdata3[0][0]); //상위 3개
 
             var arr=[];
             //시간 파싱
@@ -72,15 +72,13 @@
                 arr[i] = new Date(newDate);
             }
             data.addRows([
-                //임시
-                [arr[0],  inputdata1[0][1], inputdata2[0][1]],
-                [arr[1],  inputdata1[1][1], inputdata2[1][1]],
-                [arr[2],  inputdata1[2][1], inputdata2[2][1]],
-                [arr[3],  inputdata1[3][1], inputdata2[3][1]],
-                [arr[4],  inputdata1[4][1], inputdata2[4][1]],
-                [arr[5],  inputdata1[5][1], inputdata2[5][1]]
-                //[3,  inputdata1[2][1], inputdata2[2][1], inputdata3[2][1]]
-                //3개일때 --> 안정된 상태
+                [arr[0],inputdata1[0][1],inputdata2[0][1],inputdata3[0][1]],
+                [arr[1],inputdata1[1][1],inputdata2[1][1],inputdata3[1][1]],
+                [arr[2],inputdata1[2][1],inputdata2[2][1],inputdata3[2][1]],
+                [arr[3],inputdata1[3][1],inputdata2[3][1],inputdata3[3][1]],
+                [arr[4],inputdata1[4][1],inputdata2[4][1],inputdata3[4][1]],
+                [arr[5],inputdata1[5][1],inputdata2[5][1],inputdata3[5][1]]
+                //3개일때
             ]);
 
             var options = {
