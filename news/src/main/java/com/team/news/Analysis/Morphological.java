@@ -49,7 +49,7 @@ public class Morphological {
                     if (!wordList.containsKey(keyword)) {
                         WCNode wcNode = new WCNode(1,
                                 item.getWeight(),
-                                item.getEmtion_weight());
+                                item.getEmtion_weight(),1);//1
                         wcNode.add(new MainNewsItem(
                                 item.getTitle(),
                                 item.getCompany(),
@@ -64,6 +64,7 @@ public class Morphological {
                         wcTemp.sumCounts(1);    // 카운트 1씩 증가
                         wcTemp.sumTotalWeight(item.getWeight());    // 가중치
                         wcTemp.sumTotalEmotionWeight(item.getEmtion_weight());
+                        wcTemp.sumTotalComment(item.getComment_count());//////////////////
                         wcTemp.add( new MainNewsItem(
                                         item.getTitle(),
                                         item.getCompany(),
@@ -86,6 +87,7 @@ public class Morphological {
                     currentTime,
                     item.getTotalWeight(),
                     item.getTotalEmtionWeight(),
+                    item.getTotalCommentCount(),/////
                     item.getMainNewsItems()));
         }
 
