@@ -93,7 +93,7 @@ public class MainPageController {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         LocalDateTime now = LocalDateTime.now();    // 현재 시간
 
-        String fromTime = dateFormat.format(now.minusHours(10));         // 3시간 전
+        String fromTime = dateFormat.format(now.minusHours(3));         // 3시간 전
         String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
 
         Aggregation agg = newAggregation(
@@ -113,7 +113,8 @@ public class MainPageController {
         logger.info("WCFormList size:" + WCFormList.size());
 
         for (WCForm item : WCFormList) {
-//            System.out.println(item.getWord() + " " + item.getTotalWeight() + " " + item.getIdList().size());
+           // System.out.println(item.getWord() + " " + item.getTotalWeight() + " " + item.getIdList().size());
+
             list.add(new WCForm(item.getWord(), item.getTotalWeight(), item.getIdList()));
         }
 
