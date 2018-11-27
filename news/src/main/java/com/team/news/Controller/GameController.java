@@ -102,10 +102,18 @@ public class GameController {
 
         mainNewsList = mainNewsListRepository.findByIdIn( newsMap.get(word) );
 
-        for (MainNewsList item : mainNewsList)
-            for (MainNewsItem tem: item.getNewsItems()) {
+
+
+        for (MainNewsList item : mainNewsList) {
+            for (MainNewsItem tem : item.getNewsItems()) {
+                if(!idList.contains(tem.getTitle()))
                     idList.add(tem);
+                if (idList.size() > 10)
+                    break;
             }
+            if (idList.size() > 10)
+                break;
+        }
 
         return idList;
     }
