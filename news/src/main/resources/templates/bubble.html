@@ -19,8 +19,8 @@
                 success: function(data) {
                         inputdata1.push(['word','totalweight','totalcomment','totalemotionweight','counts']);
                     for (var i = 0; i < data.length; i++) {
-                        inputdata1.push( [data[i].word, data[i].totalWeight,data[i].totalcommentCount,"Europe",data[i].counts]);
-                        //  console.log([data[i].word+data[i].totalWeight+" "+data[i].totalcommentCount+" "+data[i].totalEmotionWeight+" "+data[i].counts]);
+                        inputdata1.push( [data[i].word, data[i].totalWeight,data[i].totalcommentCount,data[i].totalEmotionWeight,data[i].counts]);
+                          console.log([data[i].word+data[i].totalWeight+" "+data[i].totalcommentCount+" "+data[i].totalEmotionWeight+" "+data[i].counts]);
                     }
                     var timeout1 = setInterval(function () {
                         if (google.visualization !== undefined) {
@@ -43,6 +43,7 @@
                 hAxis: {title: 'Total weight'},
                 vAxis: {title: 'Commentcount'},
                 colorAxis: {colors: ['yellow', 'red']},////////////////
+
                 bubble: {textStyle: {fontSize: 11}}
             };
 
