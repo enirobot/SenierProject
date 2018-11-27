@@ -491,14 +491,16 @@ var main = (function($) { var _ = {
                         '</div>');
 
                     s.$slideBubbleContainer = s.$slide.children('.bubbleContainer');
-				} else {
+				} else if(index == 5){
 					s.$slide = $(
 						'<div id="gameContainer"></div>'
 					);
 
-                    $('#viewer').load('game.html');
-
-                }
+                    $('#gameContainer').load('/templates/game.html');
+                } else {
+                    s.$slide = $(
+                    );
+				}
 
 				// image
                 s.$slideImage = s.$slide.children('.image');
