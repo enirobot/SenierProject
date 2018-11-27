@@ -26,6 +26,9 @@ public interface NewsRepository extends MongoRepository<News, String> {
     List<News> findAllById(List<String> list);
 
     @Nullable
+    List<News> findByIdIn(List<String> idList);
+
+    @Nullable
     List<News> findNewsByTitleIsLike(String title);
 
     @Nullable

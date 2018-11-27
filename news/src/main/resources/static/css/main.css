@@ -1249,68 +1249,52 @@ input, select, textarea {
 			text-align: center;
 		}
 
+		/* 검색창 UI */
+			#viewer .slide .searchBar {
+				left: 50%;
+				transform: translateX(-50%);
 
-			/*#viewer .slide .searchBar {*/
-				/*left: 50%;*/
-				/*transform: translateX(-50%);*/
+				background-color: rgba( 255, 255, 255, 0 );
+				top: 2%;
+				width: auto;
+				height: 5%;
+				position: fixed;
+			}
 
-				/*background-color: rgba( 255, 255, 255, 0 );*/
-				/*top: 2%;*/
-				/*width: auto;*/
-				/*height: 5%;*/
-				/*position: fixed;*/
-			/*}*/
-
-			/*#viewer .slide .searchBar .input {*/
-				/*float: left;*/
-				/*width: auto;*/
+			#viewer .slide .searchBar .input {
+				float: left;
+				width: auto;
+				height: 100%;
 				/*height: 100%;*/
-				/*!*height: 100%;*!*/
-				/*!*margin: auto;*!*/
-			/*}*/
+				/*margin: auto;*/
+			}
 
-			/*#viewer .slide .searchBar .button {*/
-				/*float: right;*/
-				/*height: 100%;*/
-				/*margin-left: 10px;*/
-				/*!*margin: 0;*!;*/
-			/*}*/
+			#viewer .slide .searchBar .button {
+				float: right;
+				height: 100%;
+				margin-left: 10px;
+				/*margin: 0;*/;
+			}
 
-			/*@media (max-width: 480px) {*/
-				/*#viewer .slide .searchBar {*/
-					/*display: inline-block;*/
+			@media (max-width: 480px) {
+				#viewer .slide .searchBar {
+					display: inline-block;
 
-					/*top: 1%;*/
-					/*width: auto;*/
-					/*height: 5%;*/
-					/*background-color: rgba( 255, 255, 255, 0 );*/
-					/*position: fixed;*/
-				/*}*/
+					top: 1%;
+					width: auto;
+					height: 5%;
+					background-color: rgba( 255, 255, 255, 0 );
+					position: fixed;
+				}
 
-				/*#viewer .slide .searchBar .input {*/
-					/*float: left;*/
-					/*width: 60%;*/
+				#viewer .slide .searchBar .input {
+					float: left;
+					width: 60%;
+					height: 100%;
 					/*height: 100%;*/
-					/*!*height: 100%;*!*/
-					/*!*margin: auto;*!*/
-				/*}*/
-			/*}*/
-
-			/*#viewer .slide .surchBar .surchBar_input {*/
-				/*padding: 10px;*/
-				/*width: 80%;*/
-				/*border: 0px;*/
-				/*outline: none;*/
-				/*float: left;*/
-			/*}*/
-
-			/*#viewer .slide .surchBar .surchBar_button {*/
-				/*padding: 10px;*/
-				/*width: 80%;*/
-				/*border: 0px;*/
-				/*outline: none;*/
-				/*float: left;*/
-			/*}*/
+					/*margin: auto;*/
+				}
+			}
 
 
 
