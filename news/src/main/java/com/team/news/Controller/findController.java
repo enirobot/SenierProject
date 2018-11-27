@@ -37,7 +37,7 @@ public class findController {
 	@PostMapping("/findKeyword")
     public List<WCSearchForm> findKeyword(@RequestBody String data) {
 
-        System.out.println(data);
+//        System.out.println(data);
 
         List<WCSearchForm> list = new ArrayList<>();
         HashMap<String, WCSearchNode> wordList = new HashMap<>();
@@ -83,7 +83,7 @@ public class findController {
                                 String.valueOf(k.getValue().getCounts()),
                                 k.getValue().getIdList())));
 
-        System.out.println(list.size() + "개");
+//        System.out.println(list.size() + "개");
 
         if (list.size() > 10) {
             return list.subList(0, 10);

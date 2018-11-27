@@ -473,7 +473,7 @@ var main = (function($) { var _ = {
                         		'</div>');
 
                     s.$slideLineContainer = s.$slide.children('.lineContainer');
-				} else if(index==3){
+				} else if(index == 3){
                     s.$slide = $('<div class="slide">' +
                         '<div class="pieContainer">' +
                         '<div id="piechart"></div>' +
@@ -482,11 +482,7 @@ var main = (function($) { var _ = {
                         '</div>');
 
                     s.$slidePieContainer = s.$slide.children('.pieContainer');
-
-
-                }
-
-				else if(index==4){
+                } else if(index == 4){
                     s.$slide = $('<div class="slide">' +
                         '<div class="bubbleContainer">' +
                         '<div id="bubblechart"></div>' +
@@ -495,8 +491,14 @@ var main = (function($) { var _ = {
                         '</div>');
 
                     s.$slideBubbleContainer = s.$slide.children('.bubbleContainer');
+				} else {
+					s.$slide = $(
+						'<div id="gameContainer"></div>'
+					);
 
-				}
+                    $('#viewer').load('game.html');
+
+                }
 
 				// image
                 s.$slideImage = s.$slide.children('.image');
@@ -714,10 +716,9 @@ var main = (function($) { var _ = {
 						initSankey(newSlide.$slideSankeyContainer.children()[0]);
 					} else if (index == 2) {
 						initLineChart(newSlide.$slideLineContainer.children()[0]);
-					} else if(index==3){
+					} else if(index == 3) {
 						initPie(newSlide.$slidePieContainer.children()[0]);
-					}
-					else if (index == 4){
+					} else if (index == 4) {
                         initBubble(newSlide.$slideBubbleContainer.children()[0]);
 					}
 	},

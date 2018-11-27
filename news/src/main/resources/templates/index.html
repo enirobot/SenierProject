@@ -12,6 +12,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" th:href="@{/css/main.css}" />
 		<link rel="stylesheet" th:href="@{/css/modal.css}"/>
+		<link rel="stylesheet" th:href="@{/css/game.css}"/>
 		<noscript><link rel="stylesheet" th:href="@{/css/noscript.css}" /></noscript>
 	</head>
 
@@ -40,27 +41,32 @@
 						<article>
                             <a class="thumbnail" th:href="@{/images/fulls/01.jpg}" data-position="left center"><img th:src="@{/images/thumbs/wordcloud.jpg}" alt="" /></a>
 								<h2>WordCloud</h2>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+							<p>현재 이슈가 되고 있는 키워드</p>
 						</article>
 						<article>
 							<a class="thumbnail" th:href="@{/images/fulls/02.jpg}"><img th:src="@{/images/thumbs/sankey.jpg}" alt="" /></a>
 							<h2>Sankey Diagram</h2>
-							<p>Sed velit lacus, laoreet at venenatis convallis in lorem tincidunt.</p>
+							<p>언론사가 작성한 뉴스 카테고리</p>
 						</article>
 						<article>
-							<a class="thumbnail" th:href="@{/images/fulls/03.jpg}" data-position="top center"><img th:src="@{/images/thumbs/03.jpg}" alt="" /></a>
+							<a class="thumbnail" th:href="@{/images/fulls/03.jpg}" data-position="top center"><img th:src="@{/images/thumbs/line.jpg}" alt="" /></a>
 							<h2>Line Chart</h2>
-							<p>Maecenas eleifend tellus ut turpis eleifend, vitae pretium faucibus.</p>
+							<!--<p>Maecenas eleifend tellus ut turpis eleifend, vitae pretium faucibus.</p>-->
 						</article>
 						<article>
 							<a class="thumbnail" th:href="@{/images/fulls/04.jpg}"><img th:src="@{/images/thumbs/pie.jpg}" alt="" /></a>
 							<h2>Pie Chart</h2>
-							<p>Tristique in nulla vel congue. Sed sociis natoque parturient nascetur.</p>
+							<!--<p>Tristique in nulla vel congue. Sed sociis natoque parturient nascetur.</p>-->
 						</article>
 						<article>
-							<a class="thumbnail" th:href="@{/images/fulls/05.jpg}" data-position="top center"><img th:src="@{/images/thumbs/bubblechart.jpg}" alt="" /></a>
+							<a class="thumbnail" th:href="@{/images/fulls/05.jpg}" data-position="top center"><img th:src="@{/images/thumbs/bubble.jpg}" alt="" /></a>
 							<h2>Bubble chart</h2>
-							<p>In pellentesque cursus velit id posuere. Donec vehicula nulla.</p>
+							<!--<p>In pellentesque cursus velit id posuere. Donec vehicula nulla.</p>-->
+						</article>
+						<article>
+							<a class="thumbnail" th:href="@{/images/fulls/06.jpg}"><img th:src="@{/images/thumbs/game.jpg}" alt="" /></a>
+							<h2>UpDownGame</h2>
+							<!--<p>Tristique in nulla vel congue. Sed sociis natoque parturient nascetur.</p>-->
 						</article>
 					</section>
 
@@ -97,6 +103,7 @@
 			<script th:src="@{/js/app/modal.js}"></script>
 			<script th:src="@{/js/app/pie.js}"></script>
 			<script th:src="@{/js/app/bubble.js}"></script>
+			<script th:src="@{/js/app/game.js}"></script>
  			<script th:src="@{/js/lib/wordcloud2.js}"></script> <!-- 추가 -->
 
 

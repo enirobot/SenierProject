@@ -1,90 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<head>
-    <meta charset="UTF-8">
-    <title>Game</title>
-    <style type="text/css">
-        .container{
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            padding: 2px;
-        }
-        .term_left{
-            width: 50%;
-            height: 90%;
-            /*background-color : #00D3B7;*/
-            float: left;
-            position: relative;
-        }
-        .term_right{
-            width: 50%;
-            height: 90%;
-            float: right;
-            position: relative;
-        }
-        #word{
-            margin:5px;
-            height: 5%;
-        }
-        #count{
-            margin: 3px;
-            height: 10%;
-            padding-top: 15px;
-        }
-        .button{
-            margin: 1px;
-            height: 6%;
-        }
-
-        .score_bar{
-            width: 95%;
-            height: 10%;
-            /*background-color: #000000;*/
-            float: bottom;
-        }
-
-        body {
-            -webkit-font-smoothing: antialiased;
-            font-family: rooney-sans,sans-serif;
-            font-size: 16px;
-            line-height: 1.3;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-
-        }
-        .wordTree{
-            width:100%;
-            height:70%;
-            background: none;
-        }
-        .end_box{
-            text-align: center;
-        }
-
-
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div class = "term_left">
-
-    </div>
-    <div class = "term_right">
-
-    </div>
-    <div class="score_bar"> 점수 : 0</div>
-</div>
-
-<script type="text/javascript">
-
+function initGame() {
     $button_ele = null;
     $pack_in_wc = null;
     $pack_in_button = null;
@@ -128,7 +42,7 @@
         $l_term = $('.term_left ');
         $r_term = $('.term_right ');
 
-         $r_term.animate({opacity : '0'},1);
+        $r_term.animate({opacity : '0'},1);
 
         $l_term.append($pack_in_wc);
         $l_term.append($pack_in_chart);
@@ -162,18 +76,18 @@
                 $l_term.animate({opacity : '0'},1000);
                 $r_term.animate({left:'-50%'},1000,
                     function(){
-                    $('.score_bar').html('점수 : ' +(++cnt));
-                    $r_term.children().remove();  // 버튼 지움
-                    $r_term.append($pack_in_wc);
-                    $r_term.append($pack_in_chart); // 단어, 카운트, 차트 붙임
-                    $r_term.children('#word').html(word[r_num]);
-                    $r_term.children('#count').html(count[r_num]);  // 단어 카운트 값 입력
-                    getNewsList(word[r_num], 1); // 차트 입력
-                    $r_term.children().remove();
-                    $r_term.removeAttr('style');
-                    $l_term.removeAttr('style');
-                    main(r_num);
-                });
+                        $('.score_bar').html('점수 : ' +(++cnt));
+                        $r_term.children().remove();  // 버튼 지움
+                        $r_term.append($pack_in_wc);
+                        $r_term.append($pack_in_chart); // 단어, 카운트, 차트 붙임
+                        $r_term.children('#word').html(word[r_num]);
+                        $r_term.children('#count').html(count[r_num]);  // 단어 카운트 값 입력
+                        getNewsList(word[r_num], 1); // 차트 입력
+                        $r_term.children().remove();
+                        $r_term.removeAttr('style');
+                        $l_term.removeAttr('style');
+                        main(r_num);
+                    });
             }
             else
             {
@@ -258,6 +172,4 @@
         var chart = new google.visualization.WordTree($('.wordTree')[num]);
         chart.draw(data, options);
     }
-</script>
-</body>
-</html>
+}

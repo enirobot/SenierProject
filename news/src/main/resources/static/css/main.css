@@ -1248,51 +1248,53 @@ input, select, textarea {
 
 			text-align: center;
 		}
-			#viewer .slide .searchBar {
-				left: 50%;
-				transform: translateX(-50%);
 
-				background-color: rgba( 255, 255, 255, 0 );
-				top: 2%;
-				width: auto;
-				height: 5%;
-				position: fixed;
-			}
 
-			#viewer .slide .searchBar .input {
-				float: left;
-				width: auto;
-				height: 100%;
+			/*#viewer .slide .searchBar {*/
+				/*left: 50%;*/
+				/*transform: translateX(-50%);*/
+
+				/*background-color: rgba( 255, 255, 255, 0 );*/
+				/*top: 2%;*/
+				/*width: auto;*/
+				/*height: 5%;*/
+				/*position: fixed;*/
+			/*}*/
+
+			/*#viewer .slide .searchBar .input {*/
+				/*float: left;*/
+				/*width: auto;*/
 				/*height: 100%;*/
-				/*margin: auto;*/
-			}
+				/*!*height: 100%;*!*/
+				/*!*margin: auto;*!*/
+			/*}*/
 
-			#viewer .slide .searchBar .button {
-				float: right;
-				height: 100%;
-				margin-left: 10px;
-				/*margin: 0;*/;
-			}
+			/*#viewer .slide .searchBar .button {*/
+				/*float: right;*/
+				/*height: 100%;*/
+				/*margin-left: 10px;*/
+				/*!*margin: 0;*!;*/
+			/*}*/
 
-			@media (max-width: 480px) {
-				#viewer .slide .searchBar {
-					display: inline-block;
+			/*@media (max-width: 480px) {*/
+				/*#viewer .slide .searchBar {*/
+					/*display: inline-block;*/
 
-					top: 1%;
-					width: auto;
-					height: 5%;
-					background-color: rgba( 255, 255, 255, 0 );
-					position: fixed;
-				}
+					/*top: 1%;*/
+					/*width: auto;*/
+					/*height: 5%;*/
+					/*background-color: rgba( 255, 255, 255, 0 );*/
+					/*position: fixed;*/
+				/*}*/
 
-				#viewer .slide .searchBar .input {
-					float: left;
-					width: 60%;
-					height: 100%;
+				/*#viewer .slide .searchBar .input {*/
+					/*float: left;*/
+					/*width: 60%;*/
 					/*height: 100%;*/
-					/*margin: auto;*/
-				}
-			}
+					/*!*height: 100%;*!*/
+					/*!*margin: auto;*!*/
+				/*}*/
+			/*}*/
 
 			/*#viewer .slide .surchBar .surchBar_input {*/
 				/*padding: 10px;*/
@@ -1318,13 +1320,14 @@ input, select, textarea {
 				background-image: -webkit-linear-gradient(bottom, rgba(16,16,16,0.75), rgba(16,16,16,0.25) 80%, rgba(16,16,16,0));
 				background-image: -ms-linear-gradient(bottom, rgba(16,16,16,0.75), rgba(16,16,16,0.25) 80%, rgba(16,16,16,0));
 				background-image: linear-gradient(bottom, rgba(16,16,16,0.75), rgba(16,16,16,0.25) 80%, rgba(16,16,16,0));
-				padding: 2em 2em 0.75em 2em ;
-				position: absolute;
+				padding: 1em 1em 0em 1em ;
+				position: fixed;
 				bottom: 0;
 				left: 0;
 				width: 100%;
 				color: rgba(255, 255, 255, 0.5);
 				z-index: 1;
+				font-size: 1em;
 			}
 
 				#viewer .slide .caption h2, #viewer .slide .caption h3, #viewer .slide .caption h4, #viewer .slide .caption h5, #viewer .slide .caption h6 {
