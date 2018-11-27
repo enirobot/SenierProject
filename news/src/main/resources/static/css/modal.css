@@ -10,23 +10,27 @@
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    font-size: 13px;
 }
 
 /* Modal Content/Box */
 .modal-content {
     background-color: #fefefe;
-    margin: 10% auto; /* 15% from the top and centered */
+    margin: 10% auto; /* 10% from the top and centered */
     padding: 10px;
     border: 1px solid #888;
-    width: 90%; /* Could be more or less, depending on screen size */
+    width: 100%; /* Could be more or less, depending on screen size */
+    height: auto;
+    text-align: center;
 }
 
 
-/* The Close Button */
+/*!* The Close Button *!*/
 .close {
+    display: inline-block;
     color: #aaa;
-    float: left;
-    font-size: 28px;
+    float: inherit;
+    font-size: 20px;
     font-weight: bold;
 }
 
@@ -36,6 +40,51 @@
     text-decoration: none;
     cursor: pointer;
 }
+
+/* modal의 리스트 속성 */
+.modal-content #modal_list {
+    width: 100%;
+    text-align: center;
+}
+
+.modal-content #modal_list .newsListRow {
+    width: 100%;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border-top: 0.1px solid #F2F2F2;
+    /*border-bottom: 1px solid #555555;*/
+}
+
+.newsListTable{
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.newsListTable .newsList_tr1{
+    width: 100%;
+}
+
+.newsListTable .newsList_tr1 .newsList_cell{
+    width: 100%;
+}
+
+.newsListTable .newsList_tr2{
+    width: 100%;
+}
+
+.newsListTable .newsList_tr2 .newsList_cell_left{
+    text-align: right;
+    padding-right: 10%;
+    width: 50%;
+}
+
+.newsListTable .newsList_tr2 .newsList_cell_right{
+    text-align: left;
+    width: 50%;
+}
+
+
 
 @media (min-width: 768px) {
 
@@ -51,6 +100,7 @@
         overflow: auto; /* Enable scroll if needed */
         background-color: rgb(0,0,0); /* Fallback color */
         background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        font-size: 100%;
     }
 
     /* Modal Content/Box */
@@ -69,12 +119,5 @@
         float: right;
         font-size: 28px;
         font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
     }
 }

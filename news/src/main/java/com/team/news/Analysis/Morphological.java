@@ -96,6 +96,8 @@ public class Morphological {
         logger.info("형태소분석 : " + list.size() + "개");
     }
 
+
+
     public void sankey_major_analysis(NewsRepository newsrepository, SankeyRepository sankeyRepository, MongoTemplate mongoTemplate)
     {
         int sankeySize = 0;
@@ -153,6 +155,8 @@ public class Morphological {
 
         sankeyRepository.save(sankeyFormList);
     }
+
+
     private ArrayList<SankeyForm> getSankeyFormList( List<String> company, List<String> category, NewsRepository repository) {
         String companyName;
         String destinationName;
