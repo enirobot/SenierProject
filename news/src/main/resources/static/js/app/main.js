@@ -420,6 +420,7 @@ var main = (function($) { var _ = {
 					$slideLineContainer: null,
 					$slideBubbleContainer: null,
 					$slidepieContainer:null,
+                    $slideGameContainer:null,
                     url: $thumbnail.attr('href'),
                     loaded: false
                 };
@@ -493,10 +494,12 @@ var main = (function($) { var _ = {
                     s.$slideBubbleContainer = s.$slide.children('.bubbleContainer');
 				} else if(index == 5){
 					s.$slide = $(
-						'<div id="gameContainer"></div>'
-					);
-
-                    $('#gameContainer').load('/templates/game.html');
+						'<div class="slide">'+
+						'<div class="gameContainer">' +
+                        '</div>'+
+						 '</div>');
+                    // s.$slideGameContainer = s.$slide.children(".gameContainer");
+					s.$slide.children('.gameContainer').load('/game');
                 } else {
                     s.$slide = $(
                     );
