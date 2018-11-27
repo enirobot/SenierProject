@@ -17,9 +17,9 @@
                 contentType: "application/json",
                 data: JSON.stringify(null),
                 success: function(data) {
-                        inputdata1.push(['word','totalweight','totalcomment','totalemotionweight','counts']);
+                        inputdata1.push(['키워드','총가중치','기사수','감정수치','총댓글수']);
                     for (var i = 0; i < data.length; i++) {
-                        inputdata1.push( [data[i].word, data[i].totalWeight,data[i].totalcommentCount,data[i].totalEmotionWeight,data[i].counts]);
+                        inputdata1.push( [data[i].word, data[i].totalWeight,data[i].counts,data[i].totalEmotionWeight,data[i].totalcommentCount]);
                           console.log([data[i].word+data[i].totalWeight+" "+data[i].totalcommentCount+" "+data[i].totalEmotionWeight+" "+data[i].counts]);
                     }
                     var timeout1 = setInterval(function () {
@@ -39,12 +39,12 @@
             var data = google.visualization.arrayToDataTable(inputdata1);
 
             var options = {
-                title: 'bubble chart',
-                hAxis: {title: 'Total weight'},
-                vAxis: {title: 'Commentcount'},
-                colorAxis: {colors: ['yellow', 'red']},////////////////
+                title: 'Bubble chart(-부정적인키워드+긍정적인키워드)',
+                hAxis: {title: 'TotalWeight(가중치)'},
+                vAxis: {minValue:0,maxValue:15,title: 'Count(기사수)'},
+                colorAxis: {minValue:-10,maxValue:50,colors: ['yellow', 'red']},////////////////
 
-                bubble: {textStyle: {fontSize: 11}}
+                bubble: {textStyle: {fontSize: 10}}
             };
 
             var chart = new google.visualization.BubbleChart(document.getElementById('bubble'));
@@ -55,7 +55,7 @@
 </head>
 <body>
 메이져 언론사
-<div class="layer" id="bubble" style="width: 700px; height: 700px;"></div>
+<div class="layer" id="bubble" style="width: 1100px; height: 1100px;"></div>
 
 
 </body>
