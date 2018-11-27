@@ -456,7 +456,7 @@ var main = (function($) { var _ = {
 				} else {
                     s.$slide = $('<div class="slide">' +
                         			'<div class="lineContainer">' +
-                        				'<div id="linechart_material"></div>' +
+                        				'<div id="linechart"></div>' +
                         			'</div>' +
                         			'<div class="caption"></div>' +
                         		'</div>');
