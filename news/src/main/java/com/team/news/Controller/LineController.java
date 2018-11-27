@@ -68,40 +68,6 @@ public class LineController {
         String fromTime = dateFormat.format(now.minusHours(3));         // 3시간 전
         String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
 
-     //   List<MainNewsList> mainNewsLists = mainNewsListRepository.findByDateBetweenAndTotalWeightGreaterThanOrderByTotalWeightDescCountsDesc(fromTime, toTime, 0);
-
-//        for (MainNewsList item : mainNewsLists) {
-//
-//                list.add(new LineForm(item.getWord(), item.getCounts(), item.getDate()));
-//                count++;
-//
-//                for(MainNewsList item2: mainNewsLists){
-//                    if(item.getWord().equals(item2.getWord()))
-//                        continue;
-//                    else {
-//                        list.add(new LineForm(item2.getWord(), item2.getCounts(), item2.getDate()));
-//                        count++;
-//
-//                        for(MainNewsList item3: mainNewsLists){
-//                            if(item3.getWord().equals(item.getWord())||item3.getWord().equals(item2.getWord()))
-//                                continue;
-//                            else {
-//                                list.add(new LineForm(item3.getWord(), item3.getCounts(), item3.getDate()));
-//                                count++;
-//                                break;
-//                            }
-//                        }
-//                        break;
-//                    }
-//
-//                }
-//
-//                //System.out.println(item.getWord());
-//                if(count == 3 )
-//                    break;
-//        }
-
-        //
         Aggregation agg = newAggregation(
                 match(Criteria.where("date").gte(fromTime).lte(toTime)
                         .and("totalWeight").gt(0)

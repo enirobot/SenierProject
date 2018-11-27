@@ -117,29 +117,62 @@ input, select, textarea {
 		overflow: hidden;
 	}
 
-	/* modal의 리스트 속성 */
-	.modal-content #modal_list {
-		max-width: 100%;
-		margin: auto;
-		text-align: center;
-	}
+	/*!* modal의 리스트 속성 *!*/
+	/*.modal-content #modal_list {*/
+		/*max-width: 100%;*/
+		/*margin: auto;*/
+		/*text-align: center;*/
+	/*}*/
 
-	.modal-content #modal_list .newsListRow {
-		width: 100%;
-	}
+	/*.modal-content #modal_list .newsListRow {*/
+		/*width: 100%;*/
+		/*padding-bottom: 5px;*/
+		/*padding-top: 5px;*/
+		/*border-top: 0.1px solid #F2F2F2;*/
+		/*!*border-bottom: 1px solid #555555;*!*/
+	/*}*/
 
-	.modal-content #modal_list .td1{
-		width: 15%;
-	}
-	.modal-content #modal_list .td2{
-		/*padding-left: 25px;*/
-		width: 70%;
-	}
+	/*.modal-content #modal_list .newsListRow .td1{*/
+		/*float: left;*/
+		/*text-align: center;*/
+		/*width: 50%;*/
+	/*}*/
 
-	.modal-content #modal_list .td3{
-		/*padding-left: 23px;*/
-		width: 15%;
-	}
+	/*.modal-content #modal_list .newsListRow .td2{*/
+		/*float: left;*/
+		/*text-align: center;*/
+		/*width: 50%;*/
+	/*}*/
+
+	/*.modal-content #modal_list .newsListRow .td3{*/
+		/*!*padding-left: 23px;*!*/
+		/*width: 100%;*/
+	/*}*/
+
+	/*@media screen and (min-width: 480px) {*/
+		/*.modal-content #modal_list {*/
+			/*max-width: 100%;*/
+			/*margin: auto;*/
+			/*text-align: center;*/
+		/*}*/
+
+		/*.modal-content #modal_list .newsListRow {*/
+			/*width: 100%;*/
+		/*}*/
+
+		/*.modal-content #modal_list .td1{*/
+			/*width: 15%;*/
+		/*}*/
+		/*.modal-content #modal_list .td2{*/
+			/*!*padding-left: 25px;*!*/
+			/*width: 70%;*/
+		/*}*/
+
+		/*.modal-content #modal_list .td3{*/
+			/*!*padding-left: 23px;*!*/
+			/*width: 15%;*/
+		/*}*/
+	/*}*/
 
 /* Type */
 
@@ -1212,7 +1245,73 @@ input, select, textarea {
 			opacity: 1;
 			z-index: 1;
 			background-color: white;
+
+			text-align: center;
 		}
+			#viewer .slide .searchBar {
+				left: 50%;
+				transform: translateX(-50%);
+
+				background-color: rgba( 255, 255, 255, 0 );
+				top: 2%;
+				width: auto;
+				height: 5%;
+				position: fixed;
+			}
+
+			#viewer .slide .searchBar .input {
+				float: left;
+				width: auto;
+				height: 100%;
+				/*height: 100%;*/
+				/*margin: auto;*/
+			}
+
+			#viewer .slide .searchBar .button {
+				float: right;
+				height: 100%;
+				margin-left: 10px;
+				/*margin: 0;*/;
+			}
+
+			@media (max-width: 480px) {
+				#viewer .slide .searchBar {
+					display: inline-block;
+
+					top: 1%;
+					width: auto;
+					height: 5%;
+					background-color: rgba( 255, 255, 255, 0 );
+					position: fixed;
+				}
+
+				#viewer .slide .searchBar .input {
+					float: left;
+					width: 60%;
+					height: 100%;
+					/*height: 100%;*/
+					/*margin: auto;*/
+				}
+			}
+
+			/*#viewer .slide .surchBar .surchBar_input {*/
+				/*padding: 10px;*/
+				/*width: 80%;*/
+				/*border: 0px;*/
+				/*outline: none;*/
+				/*float: left;*/
+			/*}*/
+
+			/*#viewer .slide .surchBar .surchBar_button {*/
+				/*padding: 10px;*/
+				/*width: 80%;*/
+				/*border: 0px;*/
+				/*outline: none;*/
+				/*float: left;*/
+			/*}*/
+
+
+
  		/* 그림 밑 글씨 */
 			#viewer .slide .caption {
 				background-image: -moz-linear-gradient(bottom, rgba(16,16,16,0.75), rgba(16,16,16,0.25) 80%, rgba(16,16,16,0));
@@ -1305,7 +1404,9 @@ input, select, textarea {
 		}
 
 			body.fullscreen #viewer .inner .toggle {
+				x-index: 1;
 				background-image: url("images/open.svg");
+
 			}
 
 		body.is-preload-1 #viewer {
@@ -1350,6 +1451,7 @@ input, select, textarea {
 
 			#viewer .inner .toggle {
 				background-size: 32px 32px;
+				x-index: 1;
 			}
 
 			#viewer .inner .nav-next,
@@ -1360,6 +1462,7 @@ input, select, textarea {
 
 			body.fullscreen #viewer .inner .toggle {
 				background-image: url("images/open-small.svg");
+				x-index: 1;
 			}
 
 		}
@@ -1381,6 +1484,7 @@ input, select, textarea {
 				#viewer .inner .toggle {
 					background-image: url("images/close-small.svg") !important;
 					background-size: 32px 32px;
+					x-index: 1;
 				}
 
 				body.fullscreen #viewer {

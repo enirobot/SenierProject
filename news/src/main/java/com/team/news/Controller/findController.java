@@ -37,6 +37,7 @@ public class findController {
 	@PostMapping("/findKeyword")
     public List<WCSearchForm> findKeyword(@RequestBody String data) {
 
+        System.out.println(data);
 
         List<WCSearchForm> list = new ArrayList<>();
         HashMap<String, WCSearchNode> wordList = new HashMap<>();
@@ -44,7 +45,7 @@ public class findController {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.HOUR_OF_DAY, -1000 );    // 24시간 이내
+        cal.add( Calendar.HOUR_OF_DAY, -3 );    // 24시간 이내
         String beforeTime = date.format(cal.getTime());
 
         List<News> news = newsRepository.findNewsByTitleLikeAndDateGreaterThanEqual( data.replaceAll("\"", ""), beforeTime );
@@ -84,7 +85,11 @@ public class findController {
 
         System.out.println(list.size() + "개");
 
-        return list.subList(0, 10);
+        if (list.size() > 10) {
+            return list.subList(0, 10);
+        } else {
+            return list;
+        }
     }
 
     // 정렬할 때 사용할 comparator 정의

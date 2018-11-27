@@ -261,6 +261,7 @@ var main = (function($) { var _ = {
 
 					});
 
+
 		// Main.
 
 			// Touch gestures.
@@ -417,6 +418,7 @@ var main = (function($) { var _ = {
                     $slideCanvasContainer: null,
 					$slideSankeyContainer: null,
 					$slideLineContainer: null,
+					$slideSurchBar: null,
                     url: $thumbnail.attr('href'),
                     loaded: false
                 };
@@ -428,20 +430,28 @@ var main = (function($) { var _ = {
 				if (index == 0) {
                     // Create elements.
                     // s.$slide = $('<div class="slide"><canvas id="canvas""></canvas><div class="caption"></div></div>');
-                    s.$slide = $('<div class="slide">' +
-                        			'<div class="canvasContainer">' +
-                        				'<canvas id="canvas"></canvas>' +
-                        			'</div>' +
-                        			'<div class="caption"></div>' +
 
-                        '<div id="myModal" class="modal">\n' +
-                        '<div class="modal-content">\n' +
-                        '<span class="close">&times;</span>\n' +
-                        '<table id="modal_list">\n' +
-                        '</table>' +
+                    s.$slide = $('<div class="slide">' +
+                        '<div class="canvasContainer">' +
+                        	'<canvas id="canvas"></canvas>' +
+                        '</div>' +
+                        '<div class="caption"></div>' +
+
+                        // '<div class="searchBar">' +
+						// 	'<span>' +
+						// 		'<input class="input" id="searchWordCloud" type="text" placeholder="검색어 입력">' +
+						// 		'<button class="button" type="submit">검색</button>' +
+						// 	'</span>' +
+                        // '</div>' +
+
+                        '<div id="myModal" class="modal">' +
+                        '<div class="modal-content">' +
+                        '<span class="close">&times;</span>' +		// 모달 닫기
+                        '<div id="modal_list">' +
                         '</div>' +
                         '</div>' +
-								'</div>');
+                        '</div>' +
+                        '</div>');
 
                     s.$slideCanvasContainer = s.$slide.children('.canvasContainer');
 				} else if (index == 1) {
@@ -510,6 +520,21 @@ var main = (function($) { var _ = {
 					_.switchTo(0, true);
 
 			});
+
+        // $( '.button' ).click( function() {
+        //     console.log("버튼 눌림")
+		//
+        //     _.findWordCloud()
+        // } );
+		//
+        // $('#searchWordCloud').keydown( function () {
+		//
+        //     if (event.keyCode === 13) {
+        //         console.log("엔터 눌림")
+		//
+        //         _.findWordCloud();
+        //     }
+        // })
 
 	},
 
@@ -823,7 +848,7 @@ var main = (function($) { var _ = {
                     // weightFactor: function (size) {
                     //     return Math.pow(size, 2) * parent.offsetWidth / 1024;
                     // },
-                    weightFactor: 5,
+                    weightFactor: 7,
                     minSize: 3,
                     figPath: "circle",
                     // backgroundColor: "white",
@@ -832,6 +857,7 @@ var main = (function($) { var _ = {
 
                         // location.href= "/mainNewsList?"+item[2];
                         _.sampleModalPopup(item[2]);
+
                         //popup 창
 						// window.open("/mainNewsList?"+item[2], "newsList", 'height=' + screen.height + ',width=' + screen.width + 'fullscreen=yes')
                     }
@@ -862,16 +888,42 @@ var main = (function($) { var _ = {
 				// console.log(result);
 
 				for (var i = 0; i < result.length; i++) {
+					console.log(window.innerWidth);
 
-					$("#modal_list").append(
-						"<tr class='newsListRow'>" +
-							"<td class='td1'>" + result[i].date + "</td>" +
-                        	"<td class='td2'>" +
-								"<a href=" + result[i].url + ">" + result[i].title + "</a>" +
-							"</td>" +
-                        	"<td class='td3'>" + result[i].company + "</td>" +
-						"</tr>"
-					);
+                    $("#modal_list").append(
+                        // "<div class='newsListRow'>" +
+                        // 	"<div class = 'newsList_div1'>" +
+                        // 	"	<a href=" + result[i].url + ">" + result[i].title + "</a>" +
+                        // 	"</div>" +
+						// 	"<div class='newsList_div2'>" +
+						// 		"<div class='left_div'>" + result[i].company + "</div>" +
+						// 		"<div class='right_div'>" + result[i].date + "</div>" +
+						// 	"</div>" +
+                        // "</div>"
+						"<div class='newsListRow'>" +
+						"<table class='newsListTable'>" +
+							"<tbody>" +
+								"<tr class='newsList_tr1'>" +
+									"<td class='newsList_cell' colspan='2'>" +
+										"<a href=" + result[i].url + ">" + result[i].title + "</a>" +
+									"</td>" +
+								"</tr>" +
+								"<tr class='newsList_tr2'>" +
+									"<td class='newsList_cell_left'>" + result[i].company + "</td>" +
+									"<td class='newsList_cell_right'>" + result[i].date + "</td>" +
+								"</tr>" +
+							"</tbody>" +
+						"</table>" +
+						"</div>"
+
+                        // "<div class='newsListRow'>" +
+						// 	"<div class = 'td1'>" +
+						// 	"	<a href=" + result[i].url + ">" + result[i].title + "</a>" +
+						// 	"</div>" +
+						// 	"<div class='td2'>" + result[i].company + "</div>" +
+						// 	"<div class='td3'>" + result[i].date + "</div>" +
+                        // "</div>"
+                    );
                 }
 
 				modalOpen();
@@ -882,7 +934,6 @@ var main = (function($) { var _ = {
 			}
 		});
 	},
-
 
 }; return _; })(jQuery); main.init();
 
