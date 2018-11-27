@@ -407,6 +407,8 @@ public class CrawlingNaver {
                 - news.getReaction_list(2) - news.getReaction_list(3);
         news.setEmtion_weight(emotion_weight);
 
+        news.setEmtion_weight(emotion_weight);/////////////
+
     }
     public void ParseContent(WebDriver driver, News news)
     {
