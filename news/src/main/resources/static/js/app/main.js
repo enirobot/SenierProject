@@ -548,22 +548,6 @@ var main = (function($) { var _ = {
 					_.switchTo(0, true);
 
 			});
-
-        $( '.button' ).click( function() {
-            console.log("버튼 눌림")
-
-            _.findWordCloud()
-        } );
-
-        $('#searchWordCloud').keydown( function () {
-
-            if (event.keyCode === 13) {
-                console.log("엔터 눌림")
-
-                _.findWordCloud();
-            }
-        })
-
 	},
 
 	/**
