@@ -1257,42 +1257,52 @@ input, select, textarea {
 				background-color: rgba( 255, 255, 255, 0 );
 				top: 2%;
 				width: auto;
-				height: 5%;
+				height: 4%;
 				position: fixed;
 			}
 
-			#viewer .slide .searchBar .input {
-				float: left;
-				width: auto;
+			#viewer .slide .searchBar .search_td_input{
 				height: 100%;
-				/*height: 100%;*/
-				/*margin: auto;*/
 			}
 
-			#viewer .slide .searchBar .button {
-				float: right;
+			#viewer .slide .searchBar .search_td_button{
 				height: 100%;
+			}
+
+			#viewer .slide .searchBar .search_td_input .input {
+				height: 100%;
+			}
+
+			#viewer .slide .searchBar .search_td_button .button {
 				margin-left: 10px;
-				/*margin: 0;*/;
 			}
 
 			@media (max-width: 480px) {
 				#viewer .slide .searchBar {
 					display: inline-block;
+					vertical-align: top;
 
 					top: 1%;
 					width: auto;
-					height: 5%;
+					height: 4%;
 					background-color: rgba( 255, 255, 255, 0 );
 					position: fixed;
 				}
 
-				#viewer .slide .searchBar .input {
-					float: left;
-					width: 50%;
+				#viewer .slide .searchBar .search_td_input{
 					height: 100%;
-					/*height: 100%;*/
-					/*margin: auto;*/
+				}
+
+				#viewer .slide .searchBar .search_td_button{
+					height: 100%;
+				}
+
+				#viewer .slide .searchBar .search_td_input .input {
+					height: 100%;
+				}
+
+				#viewer .slide .searchBar .search_td_button .button {
+					margin-left: 10px;
 				}
 			}
 

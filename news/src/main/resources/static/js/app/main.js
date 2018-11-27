@@ -439,12 +439,22 @@ var main = (function($) { var _ = {
                         '</div>' +
                         '<div class="caption"></div>' +
 
-                        '<div class="searchBar">' +
-							'<span>' +
-								'<input class="input" id="searchWordCloud" type="text" placeholder="검색어 입력">' +
-								'<button class="button" type="submit">검색</button>' +
-							'</span>' +
-                        '</div>' +
+						'<table class="searchBar">' +
+							'<tr>' +
+								'<td class="search_td_input">' +
+									'<input class="input" id="searchWordCloud" type="text" placeholder="검색어 입력">' +
+								'</td>' +
+								'<td class="search_td_button">' +
+									'<button class="button" type="submit">검색</button>' +
+								'</td>' +
+							'</tr>' +
+						'</table>' +
+                        // '<div class="searchBar">' +
+						// 	'<span>' +
+						// 		'<input class="input" id="searchWordCloud" type="text" placeholder="검색어 입력">' +
+						// 		'<button class="button" type="submit">검색</button>' +
+						// 	'</span>' +
+                        // '</div>' +
 
                         '<div id="myModal" class="modal">' +
                         '<div class="modal-content">' +
@@ -909,15 +919,6 @@ var main = (function($) { var _ = {
 					console.log(window.innerWidth);
 
                     $("#modal_list").append(
-                        // "<div class='newsListRow'>" +
-                        // 	"<div class = 'newsList_div1'>" +
-                        // 	"	<a href=" + result[i].url + ">" + result[i].title + "</a>" +
-                        // 	"</div>" +
-						// 	"<div class='newsList_div2'>" +
-						// 		"<div class='left_div'>" + result[i].company + "</div>" +
-						// 		"<div class='right_div'>" + result[i].date + "</div>" +
-						// 	"</div>" +
-                        // "</div>"
 						"<div class='newsListRow'>" +
 						"<table class='newsListTable'>" +
 							"<tbody>" +
@@ -933,14 +934,6 @@ var main = (function($) { var _ = {
 							"</tbody>" +
 						"</table>" +
 						"</div>"
-
-                        // "<div class='newsListRow'>" +
-						// 	"<div class = 'td1'>" +
-						// 	"	<a href=" + result[i].url + ">" + result[i].title + "</a>" +
-						// 	"</div>" +
-						// 	"<div class='td2'>" + result[i].company + "</div>" +
-						// 	"<div class='td3'>" + result[i].date + "</div>" +
-                        // "</div>"
                     );
                 }
 
