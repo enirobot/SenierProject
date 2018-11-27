@@ -13,7 +13,7 @@ public class BubbleForm {
     public String date;
     public BubbleForm(){}
 
-    public BubbleForm(String word, int counts, int totalcommentCount,int totalEmotionWeight, double totalWeight)
+    public BubbleForm(String word,int totalcommentCount, int counts, int totalEmotionWeight, double totalWeight)
     {
         this.word = word;
         this.counts = counts;

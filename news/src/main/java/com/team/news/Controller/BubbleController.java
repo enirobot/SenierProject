@@ -57,10 +57,10 @@ public class BubbleController {
             if(item.getCounts()<5||item.getTotalWeight()>3||item.getTotalWeight()<0.1)//카운트 20이하거름
                 continue;
 
-            list.add(new BubbleForm(item.getWord(), item.getCounts(), item.getCommentcounts(),item.getReactioninfo(),item.getTotalWeight()));
+            list.add(new BubbleForm(item.getWord(),item.getCommentcounts(), item.getCounts(), item.getReactioninfo(),item.getTotalWeight()));
             count++;
             System.out.println("check"+item.getWord()+item.getCounts());
-            if(count == 20 )
+            if(count == 25 )
                 break;
         }//값 10개까지만넣음
 
