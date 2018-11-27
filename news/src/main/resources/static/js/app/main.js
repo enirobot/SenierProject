@@ -438,12 +438,12 @@ var main = (function($) { var _ = {
                         '</div>' +
                         '<div class="caption"></div>' +
 
-                        // '<div class="searchBar">' +
-						// 	'<span>' +
-						// 		'<input class="input" id="searchWordCloud" type="text" placeholder="검색어 입력">' +
-						// 		'<button class="button" type="submit">검색</button>' +
-						// 	'</span>' +
-                        // '</div>' +
+                        '<div class="searchBar">' +
+							'<span>' +
+								'<input class="input" id="searchWordCloud" type="text" placeholder="검색어 입력">' +
+								'<button class="button" type="submit">검색</button>' +
+							'</span>' +
+                        '</div>' +
 
                         '<div id="myModal" class="modal">' +
                         '<div class="modal-content">' +
@@ -549,20 +549,20 @@ var main = (function($) { var _ = {
 
 			});
 
-        // $( '.button' ).click( function() {
-        //     console.log("버튼 눌림")
-		//
-        //     _.findWordCloud()
-        // } );
-		//
-        // $('#searchWordCloud').keydown( function () {
-		//
-        //     if (event.keyCode === 13) {
-        //         console.log("엔터 눌림")
-		//
-        //         _.findWordCloud();
-        //     }
-        // })
+        $( '.button' ).click( function() {
+            console.log("버튼 눌림")
+
+            _.findWordCloud()
+        } );
+
+        $('#searchWordCloud').keydown( function () {
+
+            if (event.keyCode === 13) {
+                console.log("엔터 눌림")
+
+                _.findWordCloud();
+            }
+        })
 
 	},
 
@@ -855,7 +855,6 @@ var main = (function($) { var _ = {
 
         var data = null;
         var arr = [];
-        var parent = document.getElementById("viewer");
 
         $.ajax({
             url: "/WordCloud",
@@ -888,7 +887,7 @@ var main = (function($) { var _ = {
                         // alert("word : " + item[0] + " totalWeight : " + item[1]);
 
                         // location.href= "/mainNewsList?"+item[2];
-                        _.sampleModalPopup(item[2]);
+                        _.sampleModalPopup(item[2], "/newsList");
 
                         //popup 창
 						// window.open("/mainNewsList?"+item[2], "newsList", 'height=' + screen.height + ',width=' + screen.width + 'fullscreen=yes')
@@ -907,11 +906,11 @@ var main = (function($) { var _ = {
 
     },
 
-    sampleModalPopup: function(idList){
+    sampleModalPopup: function(idList, server_url){
 		// console.log(idList);
 
 		$.ajax({
-			url: "/newsList",
+			url: server_url,
 			type: "POST",
 			dataType: "json",
 			contentType: "application/json",
@@ -966,6 +965,52 @@ var main = (function($) { var _ = {
 			}
 		});
 	},
+
+    findWordCloud: function () {
+
+        var arr = [];
+
+        $.ajax({
+            url: "/findKeyword",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify( $("#searchWordCloud").val() ),
+            success: function(result) {
+
+                arr.length = 0;
+
+                for (var i = 0; i < result.length; i++) {
+                    arr.push( [ result[i].word,
+                        result[i].counts,
+                        result[i].idList ] );
+                }
+
+                var options = {
+                    list : arr,
+                    // gridSize: Math.round(2 * document.getElementById('canvas').offsetWidth / 1024),
+                    // weightFactor: function (size) {
+                    //     return Math.pow(size, 2) * document.getElementById('canvas').offsetWidth / 1024;
+                    // },
+                    weightFactor: 7,
+                    minSize: 3,
+                    figPath: "circle",
+                    click: function(item) {
+                    	console.log(item[0]);
+                    	console.log(item[1]);
+                    	console.log(item[2]);
+
+                        _.sampleModalPopup(item[2], "/searchNewsList");
+                    }
+                }
+
+                WordCloud(document.getElementById('canvas'), options);
+            },
+            error : function () {
+                alert("fail");
+            }
+        })
+    },
 
 }; return _; })(jQuery); main.init();
 

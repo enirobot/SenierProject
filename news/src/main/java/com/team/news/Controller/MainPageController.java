@@ -132,13 +132,16 @@ public class MainPageController {
     @PostMapping("/newsList")
     public List<MainNewsItem> NewsList(@RequestBody List<String> data) {
 
+        for (String item: data)
+            System.out.println(item);
+
         List<MainNewsItem> idList = new ArrayList<>();
         List<MainNewsList> mainNewsList;
 
         // url 형식으로 들어오는 id의 list를 잘라내어 그것을 가지고 mainNewsItem들을 가져옴
-//        mainNewsList = mainNewsListRepository.findByIdIn(
-//                Arrays.asList(data.replaceAll("\"", "").split(",")));
         mainNewsList = mainNewsListRepository.findByIdIn( data );
+
+        System.out.println(mainNewsList.size());
 
         for (MainNewsList item : mainNewsList)
             for (MainNewsItem tem: item.getNewsItems())
