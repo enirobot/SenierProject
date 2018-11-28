@@ -45,7 +45,7 @@ public class BubbleController {
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         LocalDateTime now = LocalDateTime.now();    // 현재 시간db
-        String fromTime = dateFormat.format(now.minusHours(12));         // 2시간 전
+        String fromTime = dateFormat.format(now.minusHours(24));         // 2시간 전
         String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
 
         List<MainNewsList> mainNewsLists = mainNewsListRepository. findMainNewsListByDateGreaterThanEqual(fromTime);
