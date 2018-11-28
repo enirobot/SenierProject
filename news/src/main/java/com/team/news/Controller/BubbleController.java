@@ -50,7 +50,7 @@ public class BubbleController {
 
         List<MainNewsList> mainNewsLists = mainNewsListRepository. findMainNewsListByDateGreaterThanEqual(fromTime);
         //리스트에 값을 받아옴
-        System.out.println("check"+mainNewsLists);
+//        System.out.println("check"+mainNewsLists);
 
 
         for (MainNewsList item : mainNewsLists) {
@@ -59,15 +59,15 @@ public class BubbleController {
 
             list.add(new BubbleForm(item.getWord(),item.getCommentcounts(), item.getCounts(), item.getReactioninfo(),item.getTotalWeight()));
             count++;
-            System.out.println("check"+item.getWord()+item.getCounts());
+//            System.out.println("check"+item.getWord()+item.getCounts());
             if(count == 25 )
                 break;
         }//값 10개까지만넣음
 
 
-        for (BubbleForm bubbleForm : list) {
-            System.out.println(bubbleForm.getWord()+" "+bubbleForm.getCommentcounts()+" "+bubbleForm.getReactioninfo()+" "+bubbleForm.getTotalweight()+" "+bubbleForm.getCounts());
-        }
+//        for (BubbleForm bubbleForm : list) {
+//            System.out.println(bubbleForm.getWord()+" "+bubbleForm.getCommentcounts()+" "+bubbleForm.getReactioninfo()+" "+bubbleForm.getTotalweight()+" "+bubbleForm.getCounts());
+//        }
 
         return list;     // 10개넣어줌
 
