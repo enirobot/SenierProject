@@ -34,7 +34,7 @@ function initPie(pie_div){
 
         var options = {
             width: window.innerWidth,
-            height: window.innerHeight
+            height: 900
         };
 
         var chart = new google.visualization.PieChart(pie_div);
