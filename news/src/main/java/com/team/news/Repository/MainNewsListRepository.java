@@ -1,6 +1,7 @@
 package com.team.news.Repository;
 
 import com.team.news.Form.MainNewsList;
+import com.team.news.Form.News;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.lang.Nullable;
 
@@ -22,6 +23,7 @@ public interface MainNewsListRepository extends MongoRepository<MainNewsList, St
     @Nullable
     List<MainNewsList> findByDateBetweenOrderByTotalWeightDescCountsDesc(@Nullable String from, String to);
 
+
     // Date에서 from과 to 사이, totalWeight가 0이 아닌 값을 counts 내림차순, totalWeight 내림차순 하여 가져옴
     @Nullable
     List<MainNewsList> findByDateBetweenAndTotalWeightGreaterThanOrderByCountsDescTotalWeightDesc(@Nullable String from, String to, int weight);
@@ -33,8 +35,15 @@ public interface MainNewsListRepository extends MongoRepository<MainNewsList, St
     @Nullable
     List<MainNewsList> findMainNewsListByWordAndDateGreaterThanEqual(String word, String date);
 
+
+    @Nullable
+    MainNewsList findTopByWordAndDateGreaterThanEqualOrderByDateDesc(String word, String date);///추가한거
+
     @Nullable
     List<MainNewsList> findByIdIn(List<String> idList);
+
+    @Nullable
+    List<MainNewsList> findByDateGreaterThanEqual(@Nullable String date); // date 날짜 이후의 내용
 
 
     int countMainNewsListByDateGreaterThanEqualAndWord(String time, String word);

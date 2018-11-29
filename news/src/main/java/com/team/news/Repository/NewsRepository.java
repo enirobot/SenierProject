@@ -43,4 +43,6 @@ public interface NewsRepository extends MongoRepository<News, String> {
     int countByTitle(String title);
 
     int countByUrl(String url);
+
+    int countByCategoryLikeAndDateGreaterThanEqual(String category, String date);
 }

@@ -418,7 +418,12 @@ var main = (function($) { var _ = {
                     $slideCanvasContainer: null,
 					$slideSankeyContainer: null,
 					$slideLineContainer: null,
+<<<<<<< HEAD
 					$slideSurchBar: null,
+=======
+					$slideBubbleContainer: null,
+					$slidepieContainer:null,
+>>>>>>> ea19528e0e1e31c0e20da03354f3d13a3d659b14
                     url: $thumbnail.attr('href'),
                     loaded: false
                 };
@@ -463,7 +468,7 @@ var main = (function($) { var _ = {
 								'</div>');
 
                     s.$slideSankeyContainer = s.$slide.children('.sankeyContainer');
-				} else {
+				} else  if(index == 2){
                     s.$slide = $('<div class="slide">' +
                         			'<div class="lineContainer">' +
                         				'<div id="linechart"></div>' +
@@ -472,6 +477,29 @@ var main = (function($) { var _ = {
                         		'</div>');
 
                     s.$slideLineContainer = s.$slide.children('.lineContainer');
+				} else if(index==3){
+                    s.$slide = $('<div class="slide">' +
+                        '<div class="pieContainer">' +
+                        '<div id="piechart"></div>' +
+                        '</div>' +
+                        '<div class="caption"></div>' +
+                        '</div>');
+
+                    s.$slidePieContainer = s.$slide.children('.pieContainer');
+
+
+                }
+
+				else if(index==4){
+                    s.$slide = $('<div class="slide">' +
+                        '<div class="bubbleContainer">' +
+                        '<div id="bubblechart"></div>' +
+                        '</div>' +
+                        '<div class="caption"></div>' +
+                        '</div>');
+
+                    s.$slideBubbleContainer = s.$slide.children('.bubbleContainer');
+
 				}
 
 				// image
@@ -690,6 +718,11 @@ var main = (function($) { var _ = {
 						initSankey(newSlide.$slideSankeyContainer.children()[0]);
 					} else if (index == 2) {
 						initLineChart(newSlide.$slideLineContainer.children()[0]);
+					} else if(index==3){
+						initPie(newSlide.$slidePieContainer.children()[0]);
+					}
+					else if (index == 4){
+                        initBubble(newSlide.$slideBubbleContainer.children()[0]);
 					}
 	},
 
