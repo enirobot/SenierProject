@@ -94,7 +94,7 @@ public class MainPageController {
         LocalDateTime now = LocalDateTime.now();    // 현재 시간
 
         String fromTime = dateFormat.format(now.minusHours(3));         // 3시간 전
-        String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
+        String toTime = dateFormat.format(now.minusHours(1));           // 0시간 전
 
         Aggregation agg = newAggregation(
                 match(Criteria.where("date").gte(fromTime).lte(toTime)
@@ -113,8 +113,7 @@ public class MainPageController {
         logger.info("WCFormList size:" + WCFormList.size());
 
         for (WCForm item : WCFormList) {
-           // System.out.println(item.getWord() + " " + item.getTotalWeight() + " " + item.getIdList().size());
-
+//            System.out.println(item.getWord() + " " + item.getTotalWeight() + " " + item.getIdList().size());
             list.add(new WCForm(item.getWord(), item.getTotalWeight(), item.getIdList()));
         }
 
@@ -133,13 +132,16 @@ public class MainPageController {
     @PostMapping("/newsList")
     public List<MainNewsItem> NewsList(@RequestBody List<String> data) {
 
+//        for (String item: data)
+//            System.out.println(item);
+
         List<MainNewsItem> idList = new ArrayList<>();
         List<MainNewsList> mainNewsList;
 
         // url 형식으로 들어오는 id의 list를 잘라내어 그것을 가지고 mainNewsItem들을 가져옴
-//        mainNewsList = mainNewsListRepository.findByIdIn(
-//                Arrays.asList(data.replaceAll("\"", "").split(",")));
         mainNewsList = mainNewsListRepository.findByIdIn( data );
+
+//        System.out.println(mainNewsList.size());
 
         for (MainNewsList item : mainNewsList)
             for (MainNewsItem tem: item.getNewsItems())

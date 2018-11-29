@@ -83,7 +83,7 @@ public class GameController {
         List<WCForm> WCFormList = result.getMappedResults();
 
         for (WCForm item : WCFormList) {
-            System.out.println(item.getWord() + " " + item.getTotalWeight());
+//            System.out.println(item.getWord() + " " + item.getTotalWeight());
             newsMap.put(item.getWord(),item.getIdList());
             list.add(new GameDataForm(item.getWord(),item.getTotalWeight(),"url" ));
         }

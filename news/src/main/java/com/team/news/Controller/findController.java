@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -37,18 +39,20 @@ public class findController {
 	@PostMapping("/findKeyword")
     public List<WCSearchForm> findKeyword(@RequestBody String data) {
 
-        System.out.println(data);
+//        System.out.println(data);
 
         List<WCSearchForm> list = new ArrayList<>();
         HashMap<String, WCSearchNode> wordList = new HashMap<>();
         String temp;
 
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
-        Calendar cal = Calendar.getInstance();
-        cal.add( Calendar.HOUR_OF_DAY, -3 );    // 24시간 이내
-        String beforeTime = date.format(cal.getTime());
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+        LocalDateTime now = LocalDateTime.now();    // 현재 시간
 
-        List<News> news = newsRepository.findNewsByTitleLikeAndDateGreaterThanEqual( data.replaceAll("\"", ""), beforeTime );
+        String fromTime = dateFormat.format(now.minusHours(10));         // 3시간 전
+        String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
+
+
+        List<News> news = newsRepository.findNewsByTitleLikeAndDateGreaterThanEqual( data.replaceAll("\"", ""), fromTime );
 
 
         // 형태소 분석
@@ -83,7 +87,10 @@ public class findController {
                                 String.valueOf(k.getValue().getCounts()),
                                 k.getValue().getIdList())));
 
-        System.out.println(list.size() + "개");
+        for (WCSearchForm item : list) {
+            item.getIdList();
+        }
+//        System.out.println(list.size() + "개");
 
         if (list.size() > 10) {
             return list.subList(0, 10);
@@ -108,4 +115,26 @@ public class findController {
         }
     }
 
+    @ResponseBody
+    @PostMapping("/searchNewsList")
+    public List<MainNewsItem> NewsList(@RequestBody List<String> data) {
+
+//        for (String item: data)
+//            System.out.println(item);
+
+        List<MainNewsItem> idList = new ArrayList<>();
+        List<News> newsList;
+
+        newsList = newsRepository.findByIdIn( data );
+
+        for (News item: newsList) {
+            idList.add( new MainNewsItem(
+                    item.getTitle(),
+                    item.getCompany(),
+                    item.getDate(),
+                    item.getUrl()));
+        }
+
+        return idList;
+    }
 }

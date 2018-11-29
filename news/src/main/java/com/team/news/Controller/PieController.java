@@ -48,19 +48,19 @@ public class PieController {
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         LocalDateTime now = LocalDateTime.now();    // 현재 시간db
-        String fromTime = dateFormat.format(now.minusHours(2));         // 2시간 전
+        String fromTime = dateFormat.format(now.minusHours(12));         // 2시간 전
 
 
             for(int j=0;j<category.size();j++)
             {
                 categoryName = category.get(j);
-                System.out.println(category.get(j)+"이다");///////////////////////
+//                System.out.println(category.get(j)+"이다");///////////////////////
                 value = newsRepository.countByCategoryLikeAndDateGreaterThanEqual(categoryName, fromTime);
 
                 PieForm tmp = new PieForm();
                 tmp.setCategory(categoryName);
                 tmp.setValue(value);
-                System.out.println(tmp.value+"이다");///////////////////////
+//                System.out.println(tmp.value+"이다");///////////////////////
                if(value != 0) {
                     pieFormArrayList.add(tmp);
                }

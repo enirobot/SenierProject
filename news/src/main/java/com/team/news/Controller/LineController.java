@@ -42,7 +42,7 @@ public class LineController {
 
     @GetMapping("/line")
     public String main(Model model) {
-        System.out.println(33);
+//        System.out.println(33);
         return "line";
     }
 
@@ -61,8 +61,7 @@ public class LineController {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.HOUR, -2);     // 2시간 전
         String beforeTime = date.format(cal.getTime());
-        System.out.println(beforeTime);
-
+//        System.out.println(beforeTime);
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         LocalDateTime now = LocalDateTime.now();    // 현재 시간

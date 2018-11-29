@@ -33,6 +33,9 @@ function initBubble(bubble_div){
         var data = google.visualization.arrayToDataTable(inputdata1);
 
         var options = {
+
+            width: window.innerWidth,
+            height: window.innerHeight,
             title: 'Bubble chart(-부정적인키워드+긍정적인키워드)',
             hAxis: {title: 'TotalWeight(가중치)'},
             vAxis: {minValue:0,maxValue:15,title: 'Count(기사수)'},

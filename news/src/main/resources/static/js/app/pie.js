@@ -33,7 +33,8 @@ function initPie(pie_div){
         var data = google.visualization.arrayToDataTable(inputdata1);
 
         var options = {
-            title: 'Pie chart'
+            width: window.innerWidth,
+            height: 900
         };
 
         var chart = new google.visualization.PieChart(pie_div);

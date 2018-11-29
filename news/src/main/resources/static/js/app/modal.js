@@ -4,7 +4,7 @@ function modalOpen() {
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
 
-    modal.style.display = "block";
+    $('#myModal').fadeIn(120);
 
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {

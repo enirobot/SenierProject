@@ -418,12 +418,9 @@ var main = (function($) { var _ = {
                     $slideCanvasContainer: null,
 					$slideSankeyContainer: null,
 					$slideLineContainer: null,
-<<<<<<< HEAD
-					$slideSurchBar: null,
-=======
 					$slideBubbleContainer: null,
 					$slidepieContainer:null,
->>>>>>> ea19528e0e1e31c0e20da03354f3d13a3d659b14
+                    $slideGameContainer:null,
                     url: $thumbnail.attr('href'),
                     loaded: false
                 };
@@ -442,6 +439,16 @@ var main = (function($) { var _ = {
                         '</div>' +
                         '<div class="caption"></div>' +
 
+						'<table class="searchBar">' +
+							'<tr>' +
+								'<td class="search_td_input">' +
+									'<input class="input" id="searchWordCloud" type="text" placeholder="검색어 입력">' +
+								'</td>' +
+								'<td class="search_td_button">' +
+									'<button class="button" type="submit">검색</button>' +
+								'</td>' +
+							'</tr>' +
+						'</table>' +
                         // '<div class="searchBar">' +
 						// 	'<span>' +
 						// 		'<input class="input" id="searchWordCloud" type="text" placeholder="검색어 입력">' +
@@ -477,7 +484,7 @@ var main = (function($) { var _ = {
                         		'</div>');
 
                     s.$slideLineContainer = s.$slide.children('.lineContainer');
-				} else if(index==3){
+				} else if(index == 3){
                     s.$slide = $('<div class="slide">' +
                         '<div class="pieContainer">' +
                         '<div id="piechart"></div>' +
@@ -486,11 +493,7 @@ var main = (function($) { var _ = {
                         '</div>');
 
                     s.$slidePieContainer = s.$slide.children('.pieContainer');
-
-
-                }
-
-				else if(index==4){
+                } else if(index == 4){
                     s.$slide = $('<div class="slide">' +
                         '<div class="bubbleContainer">' +
                         '<div id="bubblechart"></div>' +
@@ -499,7 +502,17 @@ var main = (function($) { var _ = {
                         '</div>');
 
                     s.$slideBubbleContainer = s.$slide.children('.bubbleContainer');
-
+				} else if(index == 5){
+					s.$slide = $(
+						'<div class="slide">'+
+						'<div class="gameContainer">' +
+                        '</div>'+
+						 '</div>');
+                    // s.$slideGameContainer = s.$slide.children(".gameContainer");
+					s.$slide.children('.gameContainer').load('/game');
+                } else {
+                    s.$slide = $(
+                    );
 				}
 
 				// image
@@ -548,22 +561,6 @@ var main = (function($) { var _ = {
 					_.switchTo(0, true);
 
 			});
-
-        // $( '.button' ).click( function() {
-        //     console.log("버튼 눌림")
-		//
-        //     _.findWordCloud()
-        // } );
-		//
-        // $('#searchWordCloud').keydown( function () {
-		//
-        //     if (event.keyCode === 13) {
-        //         console.log("엔터 눌림")
-		//
-        //         _.findWordCloud();
-        //     }
-        // })
-
 	},
 
 	/**
@@ -718,10 +715,9 @@ var main = (function($) { var _ = {
 						initSankey(newSlide.$slideSankeyContainer.children()[0]);
 					} else if (index == 2) {
 						initLineChart(newSlide.$slideLineContainer.children()[0]);
-					} else if(index==3){
+					} else if(index == 3) {
 						initPie(newSlide.$slidePieContainer.children()[0]);
-					}
-					else if (index == 4){
+					} else if (index == 4) {
                         initBubble(newSlide.$slideBubbleContainer.children()[0]);
 					}
 	},
@@ -856,7 +852,6 @@ var main = (function($) { var _ = {
 
         var data = null;
         var arr = [];
-        var parent = document.getElementById("viewer");
 
         $.ajax({
             url: "/WordCloud",
@@ -889,7 +884,7 @@ var main = (function($) { var _ = {
                         // alert("word : " + item[0] + " totalWeight : " + item[1]);
 
                         // location.href= "/mainNewsList?"+item[2];
-                        _.sampleModalPopup(item[2]);
+                        _.sampleModalPopup(item[2], "/newsList");
 
                         //popup 창
 						// window.open("/mainNewsList?"+item[2], "newsList", 'height=' + screen.height + ',width=' + screen.width + 'fullscreen=yes')
@@ -908,11 +903,11 @@ var main = (function($) { var _ = {
 
     },
 
-    sampleModalPopup: function(idList){
+    sampleModalPopup: function(idList, server_url){
 		// console.log(idList);
 
 		$.ajax({
-			url: "/newsList",
+			url: server_url,
 			type: "POST",
 			dataType: "json",
 			contentType: "application/json",
@@ -924,15 +919,6 @@ var main = (function($) { var _ = {
 					console.log(window.innerWidth);
 
                     $("#modal_list").append(
-                        // "<div class='newsListRow'>" +
-                        // 	"<div class = 'newsList_div1'>" +
-                        // 	"	<a href=" + result[i].url + ">" + result[i].title + "</a>" +
-                        // 	"</div>" +
-						// 	"<div class='newsList_div2'>" +
-						// 		"<div class='left_div'>" + result[i].company + "</div>" +
-						// 		"<div class='right_div'>" + result[i].date + "</div>" +
-						// 	"</div>" +
-                        // "</div>"
 						"<div class='newsListRow'>" +
 						"<table class='newsListTable'>" +
 							"<tbody>" +
@@ -948,14 +934,6 @@ var main = (function($) { var _ = {
 							"</tbody>" +
 						"</table>" +
 						"</div>"
-
-                        // "<div class='newsListRow'>" +
-						// 	"<div class = 'td1'>" +
-						// 	"	<a href=" + result[i].url + ">" + result[i].title + "</a>" +
-						// 	"</div>" +
-						// 	"<div class='td2'>" + result[i].company + "</div>" +
-						// 	"<div class='td3'>" + result[i].date + "</div>" +
-                        // "</div>"
                     );
                 }
 
@@ -967,6 +945,52 @@ var main = (function($) { var _ = {
 			}
 		});
 	},
+
+    findWordCloud: function () {
+
+        var arr = [];
+
+        $.ajax({
+            url: "/findKeyword",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify( $("#searchWordCloud").val() ),
+            success: function(result) {
+
+                arr.length = 0;
+
+                for (var i = 0; i < result.length; i++) {
+                    arr.push( [ result[i].word,
+                        result[i].counts,
+                        result[i].idList ] );
+                }
+
+                var options = {
+                    list : arr,
+                    // gridSize: Math.round(2 * document.getElementById('canvas').offsetWidth / 1024),
+                    // weightFactor: function (size) {
+                    //     return Math.pow(size, 2) * document.getElementById('canvas').offsetWidth / 1024;
+                    // },
+                    weightFactor: 7,
+                    minSize: 3,
+                    figPath: "circle",
+                    click: function(item) {
+                    	console.log(item[0]);
+                    	console.log(item[1]);
+                    	console.log(item[2]);
+
+                        _.sampleModalPopup(item[2], "/searchNewsList");
+                    }
+                }
+
+                WordCloud(document.getElementById('canvas'), options);
+            },
+            error : function () {
+                alert("fail");
+            }
+        })
+    },
 
 }; return _; })(jQuery); main.init();
 
