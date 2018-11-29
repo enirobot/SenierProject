@@ -113,11 +113,8 @@ public class MainPageController {
         logger.info("WCFormList size:" + WCFormList.size());
 
         for (WCForm item : WCFormList) {
-<<<<<<< HEAD
            // System.out.println(item.getWord() + " " + item.getTotalWeight() + " " + item.getIdList().size());
-=======
-//            System.out.println(item.getWord() + " " + item.getTotalWeight() + " " + item.getIdList().size());
->>>>>>> 96f64f3d931f80a470019fbb3626f9d992652e75
+
             list.add(new WCForm(item.getWord(), item.getTotalWeight(), item.getIdList()));
         }
 
