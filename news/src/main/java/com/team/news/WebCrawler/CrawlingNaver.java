@@ -405,6 +405,7 @@ public class CrawlingNaver {
 
         int emotion_weight = news.getReaction_list(0) + news.getReaction_list(1)
                 - news.getReaction_list(2) - news.getReaction_list(3);
+        news.setEmtion_weight(emotion_weight);
 
     }
     public void ParseContent(WebDriver driver, News news)

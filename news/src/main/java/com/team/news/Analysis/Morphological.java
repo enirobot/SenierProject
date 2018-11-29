@@ -49,7 +49,7 @@ public class Morphological {
                     if (!wordList.containsKey(keyword)) {
                         WCNode wcNode = new WCNode(1,
                                 item.getWeight(),
-                                item.getEmtion_weight());
+                                item.getEmtion_weight(),1);
                         wcNode.add(new MainNewsItem(
                                 item.getTitle(),
                                 item.getCompany(),
@@ -64,6 +64,7 @@ public class Morphological {
                         wcTemp.sumCounts(1);    // 카운트 1씩 증가
                         wcTemp.sumTotalWeight(item.getWeight());    // 가중치
                         wcTemp.sumTotalEmotionWeight(item.getEmtion_weight());
+                        wcTemp.sumTotalComment(item.getComment_count());
                         wcTemp.add( new MainNewsItem(
                                         item.getTitle(),
                                         item.getCompany(),
@@ -86,6 +87,7 @@ public class Morphological {
                     currentTime,
                     item.getTotalWeight(),
                     item.getTotalEmtionWeight(),
+                    item.getTotalCommentCount(),
                     item.getMainNewsItems()));
         }
 
@@ -94,23 +96,14 @@ public class Morphological {
         logger.info("형태소분석 : " + list.size() + "개");
     }
 
-    public void sankey_major_analysis(NewsRepository newsrepository, GraphRepository graphRepository)
+    public void sankey_major_analysis(NewsRepository newsrepository, GraphRepository graphRepository, MongoTemplate mongoTemplate)
     {
         SankeyFormAndDate sankeyFormList = new SankeyFormAndDate();
         sankeyFormList.setGroup("major");
 
         ArrayList<String> company = new ArrayList<String>();
-        company.add("중앙일보");
-        company.add("국민일보");
-        company.add("한겨례");
-        company.add("KBS 뉴스");
-        company.add("MBC 뉴스");
-        company.add("JTBC");
-        company.add("YTN");
-        company.add("연합뉴스TV");
-
-
         ArrayList<String> category = new ArrayList<String>();
+
         category.add("정치");
         category.add("경제");
         category.add("사회");
@@ -118,92 +111,30 @@ public class Morphological {
         category.add("세계");
         category.add("IT/과학");
         category.add("연예");
+        category.add("스포츠");
 
-        addList(sankeyFormList, company, category, newsrepository);
+        DistinctIterable<String> distinct = mongoTemplate.getCollection("news").distinct("company", String.class);
+
+        distinct.forEach(new Block<String>() {
+            @Override
+            public void apply(final String result) {
+                    company.add(result);
+
+            }
+        });
+
+        addList(sankeyFormList, company.subList(0,company.size()/2), category, newsrepository, 0);
+        addList(sankeyFormList, company.subList(company.size()/2,company.size()), category, newsrepository, 1);
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
         String currentTime = date.format(cal.getTime());
-
         sankeyFormList.setDate(currentTime);
 
         graphRepository.save(sankeyFormList);
     }
-
-    public void sankey_minor_analysis(NewsRepository newsrepository, GraphRepository graphRepository, MongoTemplate mongoTemplate)
-    {
-        SankeyFormAndDate sankeyFormList = new SankeyFormAndDate();
-        sankeyFormList.setGroup("minor");
-
-        List<SankeyForm> list = new ArrayList<>();
-
-        DistinctIterable<String> distinct = mongoTemplate.getCollection("news").distinct("company", String.class);
-        ArrayList<String> company_else = new ArrayList<String>();
-        distinct.forEach(new Block<String>() {
-            @Override
-            public void apply(final String result) {
-                if(result != "중앙일보" || result != " 국민일보" || result != "한겨례" || result != "KBS 뉴스" || result != "MBC 뉴스" || result != "JTBC"
-                || result != "YTN" || result != "연합뉴스TV") {
-                    company_else.add(result);
-                }
-            }
-        });
-
-        ArrayList<String> category = new ArrayList<String>();
-        category.add("정치");
-        category.add("경제");
-        category.add("사회");
-        category.add("생활/문화");
-        category.add("세계");
-        category.add("IT/과학");
-        category.add("연예");
-
-        addList(sankeyFormList, company_else, category, newsrepository);
-
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-        Calendar cal = Calendar.getInstance();
-        String currentTime = date.format(cal.getTime());
-
-        sankeyFormList.setDate(currentTime);
-
-        graphRepository.save(sankeyFormList);
-    }
-
-    public void sankey_sports_analysis(NewsRepository newsrepository, GraphRepository graphRepository, MongoTemplate mongoTemplate)
-    {
-        SankeyFormAndDate sankeyFormList = new SankeyFormAndDate();
-        sankeyFormList.setGroup("sports");
-
-        DistinctIterable<String> distinct = mongoTemplate.getCollection("news").distinct("company", String.class);
-        ArrayList<String> company = new ArrayList<String>();
-        distinct.forEach(new Block<String>() {
-            @Override
-            public void apply(final String result) {
-                company.add(result);
-            }
-        });
-
-        ArrayList<String> category = new ArrayList<String>();
-        category.add("야구");
-        category.add("해외야구");
-        category.add("축구");
-        category.add("해외축구");
-        category.add("농구");
-        category.add("e스포츠");
-
-        addList(sankeyFormList, company, category, newsrepository);
-
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-        Calendar cal = Calendar.getInstance();
-        String currentTime = date.format(cal.getTime());
-
-        sankeyFormList.setDate(currentTime);
-
-        graphRepository.save(sankeyFormList);
-    }
-
-    private void addList( SankeyFormAndDate sankeyFormAndDate, ArrayList<String> company,
-                          ArrayList<String> category, NewsRepository repository) {
+    private void addList( SankeyFormAndDate sankeyFormAndDate, List<String> company,
+                          List<String> category, NewsRepository repository, int flag) {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         Calendar cal = Calendar.getInstance();
@@ -214,10 +145,15 @@ public class Morphological {
             for(int j=0;j<category.size();j++)
             {
                 SankeyForm tmp = new SankeyForm();
-                tmp.source = company.get(i);
-                tmp.destination = category.get(j);
+                if (flag == 0) {
+                    tmp.source = company.get(i);
+                    tmp.destination = category.get(j);
+                }
+                else{
+                    tmp.source = category.get(j);
+                    tmp.destination = company.get(i);
+                }
                 tmp.value = repository.countByCategoryLikeAndCompanyAndDateGreaterThanEqual(category.get(j), company.get(i),beforeTime);
-
                 if(tmp.value != 0) {
                     sankeyFormAndDate.addSankeyitems(tmp);
                 }
