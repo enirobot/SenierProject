@@ -1249,6 +1249,16 @@ input, select, textarea {
 			text-align: center;
 		}
 
+		#viewer .slide #piechart {
+			width: auto;
+			height: 100%;
+		}
+
+		#viewer .slide #linechart {
+			width: auto;
+			height: 100%;
+		}
+
 		/* 검색창 UI */
 			#viewer .slide .searchBar {
 				left: 50%;
@@ -1270,10 +1280,13 @@ input, select, textarea {
 			}
 
 			#viewer .slide .searchBar .search_td_input .input {
+				background-color: white;
+
 				height: 100%;
 			}
 
 			#viewer .slide .searchBar .search_td_button .button {
+				background-color: white;
 				margin-left: 10px;
 			}
 
@@ -1298,11 +1311,16 @@ input, select, textarea {
 				}
 
 				#viewer .slide .searchBar .search_td_input .input {
+					background-color: white;
 					height: 100%;
 				}
 
 				#viewer .slide .searchBar .search_td_button .button {
+					background-color: white;
 					margin-left: 10px;
+				}
+
+				#viewer .slide #piechart {
 				}
 			}
 

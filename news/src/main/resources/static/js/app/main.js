@@ -449,12 +449,6 @@ var main = (function($) { var _ = {
 								'</td>' +
 							'</tr>' +
 						'</table>' +
-                        // '<div class="searchBar">' +
-						// 	'<span>' +
-						// 		'<input class="input" id="searchWordCloud" type="text" placeholder="검색어 입력">' +
-						// 		'<button class="button" type="submit">검색</button>' +
-						// 	'</span>' +
-                        // '</div>' +
 
                         '<div id="myModal" class="modal">' +
                         '<div class="modal-content">' +

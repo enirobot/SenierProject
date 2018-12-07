@@ -78,8 +78,8 @@ function initLineChart(line_div) {
             [arr[2],inputdata1[2][1],inputdata2[2][1],inputdata3[2][1]],
             [arr[3],inputdata1[3][1],inputdata2[3][1],inputdata3[3][1]],
             [arr[4],inputdata1[4][1],inputdata2[4][1],inputdata3[4][1]],
-            [arr[5],inputdata1[5][1],inputdata2[5][1],inputdata3[5][1]]
-            //3개일때
+           [arr[5],inputdata1[5][1],inputdata2[5][1],inputdata3[5][1]]
+            // 3개일때
         ]);
 
         var options = {

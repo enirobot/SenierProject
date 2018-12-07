@@ -94,7 +94,7 @@ public class MainPageController {
         LocalDateTime now = LocalDateTime.now();    // 현재 시간
 
         String fromTime = dateFormat.format(now.minusHours(3));         // 3시간 전
-        String toTime = dateFormat.format(now.minusHours(1));           // 0시간 전
+        String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
 
         Aggregation agg = newAggregation(
                 match(Criteria.where("date").gte(fromTime).lte(toTime)

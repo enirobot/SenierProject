@@ -29,8 +29,11 @@ function initSankey(sankey_div){
         data.addColumn('number', 'Weight');
         data.addRows(inputdata);
 
-        var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
-            '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];
+        var colors = ['#e30004', '#df8400', '#06fb00', '#002dfd',
+            '#b05cd6', '#ff00b5', '#0066b4', '#0ff9ec'];
+
+        // var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
+        //     '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];
 
         // Sets chart options.
         var options = {

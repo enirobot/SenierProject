@@ -8,6 +8,7 @@ function modalOpen() {
 
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
+
         $("#modal_list").empty();
         modal.style.display = "none";
     }
@@ -15,6 +16,7 @@ function modalOpen() {
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
         if (event.target == modal) {
+
             $("#modal_list").empty();
             modal.style.display = "none";
         }
@@ -23,6 +25,7 @@ function modalOpen() {
 
 function modalClose() {
     var modal = document.getElementById('myModal');
+
     $("#modal_list").empty();
     modal.style.display = "none";
 }

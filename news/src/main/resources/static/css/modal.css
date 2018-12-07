@@ -7,14 +7,17 @@
     top: 0;
     width: 100%; /* Full width */
     height: 100%; /* Full height */
+    max-height: 100%;
     overflow: auto; /* Enable scroll if needed */
+
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
     font-size: 13px;
+    /*overflow: hidden;*/
 }
 
 /* Modal Content/Box */
-.modal-content {
+.modal .modal-content {
     background-color: #fefefe;
     margin: 10% auto; /* 10% from the top and centered */
     padding: 10px;
@@ -45,6 +48,7 @@
 .modal-content #modal_list {
     width: 100%;
     text-align: center;
+
 }
 
 .modal-content #modal_list .newsListRow {
@@ -94,7 +98,7 @@
     }
 
     /* Modal Content/Box */
-    .modal-content {
+    .modal .modal-content {
         background-color: #fefefe;
         margin: 15% auto; /* 15% from the top and centered */
         padding: 20px;
