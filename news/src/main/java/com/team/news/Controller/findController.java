@@ -48,7 +48,7 @@ public class findController {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         LocalDateTime now = LocalDateTime.now();    // 현재 시간
 
-        String fromTime = dateFormat.format(now.minusHours(10));         // 3시간 전
+        String fromTime = dateFormat.format(now.minusHours(220));         // 3시간 전
         String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
 
 

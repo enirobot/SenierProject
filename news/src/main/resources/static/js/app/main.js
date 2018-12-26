@@ -871,7 +871,7 @@ var main = (function($) { var _ = {
                     //     return Math.pow(size, 2) * parent.offsetWidth / 1024;
                     // },
                     weightFactor: 7,
-                    minSize: 3,
+                    minSize: 5,
                     figPath: "circle",
                     // backgroundColor: "white",
                     click: function(item) {

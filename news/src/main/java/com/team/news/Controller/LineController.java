@@ -59,13 +59,13 @@ public class LineController {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm ");
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.HOUR, -2);     // 2시간 전
+        cal.add(Calendar.HOUR, -216);     // 2시간 전
         String beforeTime = date.format(cal.getTime());
 //        System.out.println(beforeTime);
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         LocalDateTime now = LocalDateTime.now();    // 현재 시간
-        String fromTime = dateFormat.format(now.minusHours(4));         // 3시간 전
+        String fromTime = dateFormat.format(now.minusHours(221));         // 3시간 전
         String toTime = dateFormat.format(now.minusHours(0));           // 0시간 전
 
         Aggregation agg = newAggregation(

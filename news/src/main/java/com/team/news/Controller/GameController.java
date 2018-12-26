@@ -56,7 +56,7 @@ public class GameController {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         LocalDateTime now = LocalDateTime.now();    // 현재 시간
 
-        fromTime = dateFormat.format(now.minusDays(1));         // 3시간 전
+        fromTime = dateFormat.format(now.minusDays(216));         // 3시간 전
         toTime = dateFormat.format(now.minusHours(0));
 
         return "game";

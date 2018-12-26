@@ -29,7 +29,7 @@ public class CrawlingNaver {
     static final int MAX_PAGE = 20;
     private String url;
     private Document doc;
-    private Elements ele;// = doc.select("div.article");
+    private Elements ele; // = doc.select("div.article");
     private LocalDateTime today = LocalDateTime.now();
     private WebDriver driver;
     private WebDriver driver2;
